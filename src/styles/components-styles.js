@@ -76,3 +76,7 @@ export const StyledSearchView = styled.div`
         overflow-y: scroll;
     
 `
+
+export const StyledMeetingCard = styled.div`
+    
+`

@@ -2,6 +2,7 @@ import React from 'react'
 
 //components
 import Card from './Card'
+import MeetingCard from './MeetingCard';
 
 //styled
 import { StyledSearchView } from '../styles/components-styles';
@@ -17,9 +18,7 @@ const users = [
 export default function SearchView() {
     return (
         <StyledSearchView>
-            {
-                users.map(user => <Card />)
-            }
+            <MeetingCard/>
         </StyledSearchView>
     )
 }
