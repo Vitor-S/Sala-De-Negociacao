@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios';
 import { register_validation } from '../utils/yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -20,6 +20,8 @@ export default function Register() {
     })
     const [states, setStates] = useState([])
     const [cities, setCities] = useState([])
+
+    const [currentState, setCurrentState] = useState(undefined)
 
     useEffect(() => {        
         axios.get('https://servicodados.ibge.gov.br/api/v1/localidades/estados').then(res => {
@@ -65,6 +67,7 @@ export default function Register() {
                         <TextField error={Boolean(errors.state)} helperText={errors.state?.message} {...register('state')} {...params} label="Estado" 
                     />}
                     onChange={(ev, value) => {
+                        setCurrentState(value)
                         if(value != null){
                             axios.get(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${value}/distritos`)
                             .then((res) => {
@@ -81,6 +84,7 @@ export default function Register() {
 
                 <Autocomplete 
                     name='city'
+                    disabled={currentState == null || currentState == undefined}
                     options={cities}
                     renderInput={(params) => 
                         <TextField error={Boolean(errors.city)} helperText={errors.city?.message} {...register('city')} {...params} label="Cidade" 

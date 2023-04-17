@@ -1,9 +1,7 @@
 import React from 'react'
 
 //components
-import Card from '../components/Card'
-import SideBar from '../components/SideBar'
-import SearchView from '../components/SearchView'
+import Header from '../components/Header'
 
 //styles
 import { StyledHome } from '../styles/styles'
@@ -11,9 +9,8 @@ import { StyledHome } from '../styles/styles'
 export default function Home() {
   return (
     <StyledHome>
+        <Header/>
         <div className="home-container">
-            <SideBar/>
-            <SearchView/>
         </div>
     </StyledHome>
   )
