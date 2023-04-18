@@ -3,16 +3,20 @@ import axios from 'axios';
 import { register_validation } from '../utils/yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
+//service
+import { Api } from '../service/Api';
 
 //components
 import { TextField, Button, InputLabel, MenuItem, FormControl, Select, FormHelperText, Autocomplete } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
 //styles
 import { StyledRegister } from '../styles/styles';
 
 export default function Register() {
+
+    const navigate = useNavigate()
 
     //states
     const { register, handleSubmit, formState: { errors }} = useForm({
@@ -35,6 +39,7 @@ export default function Register() {
         <StyledRegister>
             <form className="container" 
                 onSubmit={handleSubmit((data) => {
+                    Api.createUserWithEmailAndPassword(data, navigate)
                     // firebaseCreateUser(data, () => navigate('/login'))
                     console.log(data)
                 })}>
@@ -91,11 +96,14 @@ export default function Register() {
                     />}
                 />
 
-                <TextField label="Confirmação de senha" {...register('check_password')} type='password'
+                <TextField 
+                    label="Confirmação de senha" 
+                    {...register('check_password')}
+                    type='password'
                     error={Boolean(errors.check_password)} 
                     helperText={errors.check_password?.message}/>
 
-                <TextField label="Bairro" {...register('neighborhood ')}
+                <TextField label="Bairro" {...register('neighborhood')}
                     error={Boolean(errors.neighborhood)} helperText={errors.neighborhood?.message}/>
 
                 <TextField label="Celular" {...register('phone')}

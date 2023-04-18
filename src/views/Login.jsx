@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup';
 import { login_validation } from '../utils/yup'
@@ -12,10 +12,10 @@ import GoogleIcon from '@mui/icons-material/Google';
 import { StyledLogin } from '../styles/styles';
 import login_bg from '../assets/login-bg.png'
 
-//firebase
-import Api from '../service/Api'
+//service
+import { Api } from '../service/Api'
 
-export default function Login() {
+export default function Login() {    
     
     const navigate = useNavigate()
 
@@ -31,7 +31,7 @@ export default function Login() {
                 </div>
                 <div className="form-container">
                     <form onSubmit={
-                        handleSubmit(data => Api.emailLogin(data.email, data.password, () => navigate('/')))
+                        handleSubmit(data => Api.signInWithEmailAndPassword(data.email, data.password, navigate))
                     }>
                         <span>LOGIN</span>
 
@@ -54,7 +54,7 @@ export default function Login() {
                                 Entrar
                             </Button>
 
-                            <Button onClick={() => Api.googleLogin()} variant="outlined" startIcon={<GoogleIcon />}>
+                            <Button onClick={() => Api.signInWithGooglePopup()} variant="outlined" startIcon={<GoogleIcon />}>
                                 Entrar com Google
                             </Button>
                         </div>

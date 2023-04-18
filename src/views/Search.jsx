@@ -1,5 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { Api, auth } from '../service/Api'
+
+import { getFirestore, collection, getDocs } from 'firebase/firestore'
 
 //components
 import TextField from '@mui/material/TextField'
@@ -10,19 +14,10 @@ import { Autocomplete, Button } from '@mui/material'
 //styled
 import { StyledSearch } from '../styles/styles'
 
-const users = [
-    {photo: 'https://marketplace.canva.com/EAFEits4-uw/1/0/1600w/canva-boy-cartoon-gamer-animated-twitch-profile-photo-oEqs2yqaL8s.jpg', name: 'Vitor', surname: 'Silva', supplier: true, area: 'Hardware'},
-    {photo: 'https://marketplace.canva.com/EAFEits4-uw/1/0/1600w/canva-boy-cartoon-gamer-animated-twitch-profile-photo-oEqs2yqaL8s.jpg', name: 'Pedro', surname: 'Silva', supplier: true, area: 'Hardware'},
-    {photo: 'https://marketplace.canva.com/EAFEits4-uw/1/0/1600w/canva-boy-cartoon-gamer-animated-twitch-profile-photo-oEqs2yqaL8s.jpg', name: 'Alex', surname: 'Silva', supplier: true, area: 'Hardware'},
-    {photo: 'https://marketplace.canva.com/EAFEits4-uw/1/0/1600w/canva-boy-cartoon-gamer-animated-twitch-profile-photo-oEqs2yqaL8s.jpg', name: 'Alvaro', surname: 'Silva', supplier: true, area: 'Hardware'},
-    {photo: 'https://marketplace.canva.com/EAFEits4-uw/1/0/1600w/canva-boy-cartoon-gamer-animated-twitch-profile-photo-oEqs2yqaL8s.jpg', name: 'Luiz', surname: 'Silva', supplier: true, area: 'Hardware'},
-    {photo: 'https://marketplace.canva.com/EAFEits4-uw/1/0/1600w/canva-boy-cartoon-gamer-animated-twitch-profile-photo-oEqs2yqaL8s.jpg', name: 'Gustavo', surname: 'Silva', supplier: true, area: 'Hardware'},
-    {photo: 'https://marketplace.canva.com/EAFEits4-uw/1/0/1600w/canva-boy-cartoon-gamer-animated-twitch-profile-photo-oEqs2yqaL8s.jpg', name: 'Jesus', surname: 'Silva', supplier: true, area: 'Hardware'},
-    {photo: 'https://marketplace.canva.com/EAFEits4-uw/1/0/1600w/canva-boy-cartoon-gamer-animated-twitch-profile-photo-oEqs2yqaL8s.jpg', name: 'Josué', surname: 'Silva', supplier: true, area: 'Hardware'},
-    {photo: 'https://marketplace.canva.com/EAFEits4-uw/1/0/1600w/canva-boy-cartoon-gamer-animated-twitch-profile-photo-oEqs2yqaL8s.jpg', name: 'Marcos', surname: 'Vinicius', supplier: false, area: 'Hardware'},
-]
+const db = getFirestore()
 
 export default function Search() {
+    const navigate = useNavigate()
 
     const [currentData, setCurrentData] = useState([])
 
@@ -32,10 +27,6 @@ export default function Search() {
 
     const [cities, setCities] = useState([])
     const [states, setStates] = useState([])
-
-    const supplierFilterRef = useRef()
-    const statesFilterRef = useRef()
-    const citiesFilterRef = useRef()
 
     // const apllyFilters = () => {
     //     const filters = [stateFilter, supplierFilter].filter(obj => obj != undefined)
@@ -48,27 +39,34 @@ export default function Search() {
 
     //     FirebaseGet(query(collection(db, 'users'), ...wheres), setCurrentData)
     // }
-
-    const clearRefs = () => {
-        supplierFilterRef.current.value = null
-        statesFilterRef.current.value = null
-        citiesFilterRef.current.value = null
-    }
-
-    const clearStates = () => {
-        setStatesFilter('undefined')
-        setSupplierFilter('undefined')
-        setCitiesFilter('undefined')
-    }
-
+    console.log(auth.currentUser == null)
+    
     useEffect(() => {
-        // FirebaseGet(usersRef, setCurrentData)
-        
+        //autologout
+        // if(auth.currentUser == null) navigate('/login')
+
+        //getting states for the filter
         axios.get('https://servicodados.ibge.gov.br/api/v1/localidades/estados').then(res => {
             const list = []
             res.data.forEach(obj => list.push(obj.sigla))
             setStates(list.sort())
         })
+    }, [])
+    
+    useEffect(() => {
+
+        //get all docs
+        (async () => {
+            const colRef = collection(db, 'users')
+            const snapShots = await getDocs(colRef)
+            
+            let docs = []
+            snapShots.forEach(doc => {
+                if(doc.id != auth.currentUser.uid) docs.push(doc.data())
+            })
+
+            setCurrentData(docs)
+        })()
     }, [])
 
     return (
@@ -88,7 +86,7 @@ export default function Search() {
                             name='supplier'
                             options={["Fornecedor", "Contratante"]}
                             sx={{ width: '80%' }}
-                            renderInput={(params) => <TextField inputRef={supplierFilterRef} {...params} label="Tipo" />}
+                            renderInput={(params) => <TextField {...params} label="Tipo" />}
                             onChange={(ev, value) => 
                                 setSupplierFilter(value == 'Fornecedor' ? {'supplier': true} :
                                     value == 'Contratante' ? {'supplier': false} : undefined)}
@@ -105,7 +103,7 @@ export default function Search() {
                             title='state'
                             options={states}
                             sx={{ width: '80%' }}
-                            renderInput={(params) => <TextField inputRef={statesFilterRef} {...params} label="Estado" />}
+                            renderInput={(params) => <TextField {...params} label="Estado" />}
                             onChange={(ev, value) => {
                                 setStatesFilter(value != null ? {'state': value} : undefined)
 
@@ -125,31 +123,24 @@ export default function Search() {
                             name='city'
                             options={cities}
                             sx={{ width: '80%' }}
-                            renderInput={(params) => <TextField inputRef={citiesFilterRef} {...params} label="Cidade" />}
+                            renderInput={(params) => <TextField {...params} label="Cidade" />}
                             onChange={(ev, value) => setCitiesFilter(value != null ? value : undefined)}
                         />
 
                         <div className="handle-filters">
-                            <Button color="error" onClick={() => {
-                                clearRefs()
-                                clearStates()
-                            }}>
-                                Limpar Filtros
-                            </Button>
-                            <Button color="primary"
-                                onClick={() => {
-                                    console.log('supplier: ' + supplierFilter.supplier)
-                                    console.log('states: ' + statesFilter.state)
-                                    console.log('cities: ' + citiesFilter)
-                                }}>
-                                Aplicar Filtros
+                            <Button 
+                                fullWidth
+                                color="primary"
+                                onClick={() => ''}>
+                                    Aplicar Filtros
                             </Button>
                         </div>
                     </div>
                 </div>
                 <div className="search-results">
                     {
-                        typeof users != 'undefined' && users.map(user => <Card user={user}/>)
+                        typeof currentData != 'undefined' && 
+                        currentData.map(user => <Card key={user.id} user={user}/>)
                     }
                 </div>
             </div>

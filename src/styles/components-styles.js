@@ -6,7 +6,7 @@ export const StyledCard = styled.div`
     @import url('https://fonts.googleapis.com/css?family=Dosis');
 
     display: flex;
-    width: 28%;
+    width: 27%;
     height: 150px;
     margin: 6px;
     padding: 5px 10px;
@@ -50,37 +50,6 @@ export const StyledCard = styled.div`
 
         span{
             font-size: 1.2rem;
-        }
-    }
-`
-
-export const StyledSideBar = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100%;
-    flex: 1;
-
-    .sidebar-header{
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 25px;
-
-        .photo{
-            flex: 1;
-            width: 70%;
-            border-radius: 50%;
-        }
-
-        .name{
-            flex: 4;
-            text-align: center;
-        }
-        
-        .exit{
-            flex: 1;
-            text-align: center;
         }
     }
 `

@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { Api, auth } from '../service/Api'
 
 import { StyledProfile, StyledEditModal } from '../styles/styles'
 
@@ -12,12 +13,28 @@ import EditIcon from '@mui/icons-material/Edit';
 import { TextField, Button } from '@mui/material';
 import Header from '../components/Header'
 
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 
 export default function Profile() {
     const { state } = useLocation()
 
+    const navigate = useNavigate()
+    
     const [modalState, setModalState] = useState(false)
+    const [userLogged, setUserLogged] = useState()
+
+    useEffect(() => {
+        Api.getCurrentUser(setUserLogged)
+    }, [])
+
+    const handleLocationClick = () => {
+
+        const destination = state.street.replaceAll(' ', '+') + '+' + state.city.replaceAll(' ', '+') + '+' + state.state.replaceAll(' ', '+')
+
+        const origin = userLogged.street.replaceAll(' ', '+') + '+' + userLogged.city.replaceAll(' ', '+') + '+' + userLogged.state.replaceAll(' ', '+')
+    
+        window.location = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}`
+    }
     
     return (
         <StyledProfile >
@@ -25,27 +42,32 @@ export default function Profile() {
             <div className="profile-container">
                 <div className="left-container">
                     <div className="info-container">
-                        <IconButton className='edit-profile' onClick={() => setModalState(true)}>
-                            <EditIcon />
-                        </IconButton>
+                        {
+                            state.id == auth.currentUser.uid ?
+                            <IconButton className='edit-profile' onClick={() => setModalState(true)}> 
+                                <EditIcon />
+                            </IconButton> : null
+                        }
                         <img src="https://pbs.twimg.com/media/FjU2lkcWYAgNG6d.jpg" alt="" className="profile-picture" />
                         <h2>{`${state.name}  ${state.surname}`}</h2>
-                        <h3>{`${state.supplier ? 'Fornecedor na área de ' : 'Lojista na área de '}` + state.area}</h3>
+                        <h3>{`${state.supplier ? 'Fornecedor de ' : 'Lojista de '}` + state.area}</h3>
                         <div className="locale">
                             <LocationOnIcon/>
-                            <span >{`${state.city}  ${state.state}`}</span>
+                            <span >{`${state.city},  ${state.state}`}</span>
                         </div>
                         <div className="social-medias">
                             <IconButton>
                                 <LocalPhoneIcon color='primary'/>
                             </IconButton>
-                            <IconButton>
+                            <IconButton onClick={() => window.location.href = "mailto:"+state.email}>
                                 <EmailIcon sx={{color: '#f9aa2a'}}/>
                             </IconButton>
-                            <IconButton>
+                            <IconButton onClick={() => {
+                                window.location.href = `https://api.whatsapp.com/send?phone=${state.phone}`
+                            }}>
                                 <WhatsAppIcon color='success'/>
                             </IconButton>
-                            <IconButton>
+                            <IconButton onClick={handleLocationClick}>
                                 <LocationOnIcon color='error'/>
                             </IconButton>
                         </div>

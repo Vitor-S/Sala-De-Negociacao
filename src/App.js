@@ -14,12 +14,17 @@ export default function App() {
     return (
         <Router>
             <Routes>
-                <Route path='/register' element={<Register />} />
+                <Route path='/' element={<Home />} />
                 <Route path='/login' element={<Login />} />
+                <Route path='/register' element={<Register />} />
                 <Route path='/search' element={<Search />} />
                 <Route path='/profile' element={<Profile />} />
+                <Route path='/ytb' component={() => {
+                    window.location.href = 'https://youtube.com/';
+                    return null;
+                }}/>
+
                 <Route path='/test' element={<Test />} />
-                <Route path='/' element={<Home />} />
             </Routes>
             <GlobalStyle />
         </Router>
