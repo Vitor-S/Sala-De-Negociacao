@@ -3,9 +3,7 @@ import { motion } from 'framer-motion'
 
 //components
 import Header from '../components/Header'
-import { useLocation, useNavigate } from 'react-router-dom'
-import ContentPasteSearchIcon from '@mui/icons-material/ContentPasteSearch';
-import LeakAddIcon from '@mui/icons-material/LeakAdd';
+import { useNavigate } from 'react-router-dom'
 
 //styles
 import { StyledHome } from '../styles/styles'

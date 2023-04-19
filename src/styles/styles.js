@@ -99,7 +99,11 @@ export const StyledLogin = styled.div`
 `
 
 export const StyledHome = styled.div`
-    @import url('https://fonts.googleapis.com/css2?family=Dosis&display=swap');
+
+    *{
+        margin: 0;
+        padding: 0;
+    }
 
     .home-body{
         height: 100vh;
