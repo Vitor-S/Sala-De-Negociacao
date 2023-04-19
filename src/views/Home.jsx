@@ -15,7 +15,7 @@ export default function Home() {
     return (
         <StyledHome>
             <Header />
-            <div className='home-body'>
+            {/* <div className='home-body'>
                 <section className="main-tip">
                     <div className="tip-info">
                         <div className="tip-info-container">
@@ -60,7 +60,7 @@ export default function Home() {
                     </div>
                     
                 </section>
-            </div>
+            </div> */}
         </StyledHome>
     )
 }
