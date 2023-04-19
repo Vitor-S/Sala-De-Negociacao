@@ -42,7 +42,7 @@ export default function Home() {
                     </div>
                     <div className="tip-info">
                         <div className="tip-info-container">
-                            <span className='tip-title' style={{ color: '#fff' }}>Conheça seu <span style={{ color: '#eb6e34' }}>público-alvo</span></span>
+                            <span className='tip-title'>Conheça seu <span style={{ color: '#fff' }}>público-alvo</span></span>
                             <p style={{ color: '#fff' }}>
                             É importante conhecer seu público-alvo para identificar parceiros que também atuem nesse mercado. Dessa forma, será mais fácil estabelecer parcerias que tragam benefícios mútuos.
                             </p>
@@ -57,7 +57,7 @@ export default function Home() {
                             <p>
                                 O conhecimento é um elemento fundamental para conseguir mais parceiros comerciais. Quanto mais você conhece o mercado em que atua, o perfil do seu público-alvo, as tendências do setor e as melhores práticas de negociação, mais preparado estará para identificar possíveis parceiros e estabelecer relações comerciais duradouras e benéficas para ambas as partes.
                             </p>
-                            <a href="https://resultadosdigitais.com.br/?s=neg%C3%B3cios" target='_blank' className='second-tip-link'>Saber mais</a>
+                            <a href="https://resultadosdigitais.com.br/marketing/publico-alvo-cliente-ideal-buyer-persona/" target='_blank' className='second-tip-link'>Saber mais</a>
                         </div>
                     </div>
                     
