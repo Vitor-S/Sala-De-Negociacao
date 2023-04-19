@@ -11,6 +11,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import TrendingFlatIcon from '@mui/icons-material/TrendingFlat';
 import Chip from '@mui/material/Chip';
 import TextField from '@mui/material/TextField';
+import { Button } from '@mui/material';
 
 import { StyledCalendar, StyledCalendarBack, StyledMeetingCard, StyledViewMeetings } from '../styles/components-styles'
 import { Api, db } from '../service/Api';
@@ -153,14 +154,20 @@ export function CalendarBack({ setVerse, day, sender, receiver }) {
                 </div>
                 <div className="calendarback-options">
 
-                    <button className="back" onClick={() => setVerse(true)}>
-                        <ArrowBackIosNewIcon fontSize='small' />
-                    </button>
+                    <Button 
+                        startIcon={<ArrowBackIosNewIcon fontSize='small' />}
+                        className="back" 
+                        onClick={() => setVerse(true)}>
+                            Voltar
+                    </Button>
                     {
                         sender.id != receiver.id ?
-                            <button className="add-event" type='submit'>
-                                <EventAvailableIcon />
-                            </button> : null
+                            <Button 
+                                startIcon={<EventAvailableIcon />}
+                                className="add-event" 
+                                type='submit'>
+                                    Enviar
+                            </Button> : null
                     }
                 </div>
                 <div className="calendarback-events">

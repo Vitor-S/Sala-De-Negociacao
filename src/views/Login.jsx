@@ -54,9 +54,9 @@ export default function Login() {
                                 Entrar
                             </Button>
 
-                            <Button onClick={() => Api.signInWithGooglePopup()} variant="outlined" startIcon={<GoogleIcon />}>
+                            {/* <Button onClick={() => Api.signInWithGooglePopup()} variant="outlined" startIcon={<GoogleIcon />}>
                                 Entrar com Google
-                            </Button>
+                            </Button> */}
                         </div>
                         <div>
                             Crie já sua conta ! <Link to='/register'>Registre-se</Link>

@@ -4,58 +4,65 @@ const light = '#8289f5'
 const middle = '#4a59e0'
 const middle_purple = '#4B31DE'
 
-const shadow = '-webkit-box-shadow: 0px 0px 10px 0px rgba(11,7,89,1); -moz-box-shadow: 0px 0px 19px 0px rgba(11,7,89,1); box-shadow: 0px 0px 10px 0px rgba(11,7,89,1);'
+const shadow = '-webkit-box-shadow: 0px 0px 4px 0px rgba(11,7,89,1); -moz-box-shadow: 0px 0px 19px 0px rgba(11,7,89,1); box-shadow: 0px 0px 4px 0px rgba(11,7,89,1);'
 
 export const StyledCard = styled.div`
     @import url('https://fonts.googleapis.com/css?family=Dosis');
 
-    display: flex;
     width: 27%;
     height: 150px;
-    margin: 6px;
-    padding: 5px 10px;
-    background-color: #fff;
-    ${shadow};
-    border-radius: 10px;
-    transition: 0.3s ease-out;
 
-    &:hover{
-        cursor: pointer;
-        scale: 1.02;
-    }
-
-    .photo-container{
+    .card-motion-container{
         display: flex;
-        justify-content: center;
-        align-items: center;
-        flex: 3;
+        margin: 6px;
+        padding: 5px 10px;
+        background-color: ${middle};
+        ${shadow};
+        border-radius: 2px;
+        transition: 0.3s ease-out;
+        color: #fff;
+        width: 100%;
         height: 100%;
-
-        img{
-            width: 70%;
-            border-radius: 50%;
+        
+        &:hover{
+            cursor: pointer;
+            scale: 1.02;
+        }
+    
+        .photo-container{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 3;
+            height: 100%;
+    
+            img{
+                width: 70%;
+                border-radius: 50%;
+            }
+        }
+    
+        .info-container{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            flex: 7;
+            height: 100%;
+    
+            h3, span{
+                font-family: 'Dosis';
+                font-size: 1.5rem;
+                text-align: center;
+            }
+    
+            span{
+                font-size: 1.2rem;
+            }
         }
     }
 
-    .info-container{
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: 10px;
-        flex: 7;
-        height: 100%;
-
-        h3, span{
-            font-family: 'Dosis';
-            font-size: 1.5rem;
-            text-align: center;
-        }
-
-        span{
-            font-size: 1.2rem;
-        }
-    }
 `
 
 export const StyledCalendar = styled.div`
@@ -179,6 +186,7 @@ export const StyledCalendarBack = styled.div`
             &:hover{
                 cursor: pointer;
                 background-color: #FFF;
+                color: #1E88E5;
             }
 
             &:hover svg{
@@ -221,7 +229,7 @@ export const StyledHeader = styled.div`
     @import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&family=Dancing+Script&display=swap');
 
     display: flex;
-    height: 60px;
+    height: 65px;
     background-color: ${middle};
     padding: 0 3%;
 
