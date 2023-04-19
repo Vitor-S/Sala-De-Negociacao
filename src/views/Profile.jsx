@@ -21,6 +21,7 @@ export default function Profile() {
 
     const [user, setUser] = useState(null);
     const [currentUser, setcurrentUser] = useState()
+    const [currentUserData, setCurrentUserData] = useState()
 
     const userId = useParams();    
   
@@ -31,18 +32,19 @@ export default function Profile() {
     useEffect(() => {
         auth.onAuthStateChanged((currentUser) => {
             setcurrentUser(currentUser);
+            Api.getDocById(currentUser.uid, setCurrentUserData)
         });
     }, [])
     
 
-    // const handleLocationClick = () => {
+    const handleLocationClick = () => {
 
-    //     const destination = state.street.replaceAll(' ', '+') + '+' + state.city.replaceAll(' ', '+') + '+' + state.state.replaceAll(' ', '+')
+        const destination = user.street.replaceAll(' ', '+') + '+' + user.city.replaceAll(' ', '+') + '+' + user.state.replaceAll(' ', '+')
 
-    //     const origin = userLogged.street.replaceAll(' ', '+') + '+' + userLogged.city.replaceAll(' ', '+') + '+' + userLogged.state.replaceAll(' ', '+')
+        const origin = currentUserData.street.replaceAll(' ', '+') + '+' + currentUserData.city.replaceAll(' ', '+') + '+' + currentUserData.state.replaceAll(' ', '+')
     
-    //     window.location = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}`
-    // }
+        window.location = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}`
+    }
     
     return (user != null) ? (
         <StyledProfile >
@@ -66,16 +68,20 @@ export default function Profile() {
                             <span >{`${user.city} ${user.state}`}</span>
                         </div>
                         <div className="social-medias">
-                            <IconButton onClick={() => console.log(currentUser)}>
+                            <IconButton >
                                 <LocalPhoneIcon color='primary'/>
                             </IconButton>
-                            <IconButton>
+                            <IconButton onClick={() => 
+                                window.location.href = "mailto:" + user.email
+                            }>
                                 <EmailIcon sx={{color: '#f9aa2a'}}/>
                             </IconButton>
-                            <IconButton>
+                            <IconButton onClick={() =>
+                                window.location.href =`https://api.whatsapp.com/send?phone=${user.phone}`
+                            }>
                                 <WhatsAppIcon color='success'/>
                             </IconButton>
-                            <IconButton>
+                            <IconButton onClick={handleLocationClick}>
                                 <LocationOnIcon color='error'/>
                             </IconButton>
                         </div>

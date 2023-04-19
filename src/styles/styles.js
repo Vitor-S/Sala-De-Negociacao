@@ -17,18 +17,30 @@ export const StyledRegister = styled.div`
         width: 60%;
         background-color: #fff;
 
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: repeat(5, 1fr);
+        display: flex;
+        flex-direction: column;
 
         padding: 50px;
-        gap: 25px;
+        gap: 20px;
+
+        .two-containers{
+            display: flex;
+            gap: 1%;
+        }
+
+        .left-container, .right-container{
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
 
         .span-2{
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            gap: 5px;
+            gap: 20px;
             grid-column: span 2;
         }
     }

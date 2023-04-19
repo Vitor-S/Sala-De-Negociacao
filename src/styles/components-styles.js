@@ -142,6 +142,7 @@ export const StyledCalendarBack = styled.div`
     background-color: #FFF;
     height: 430px;
     width: 350px;
+    padding-bottom: 10px;
 
 
     .calendarback-header{
@@ -161,7 +162,6 @@ export const StyledCalendarBack = styled.div`
         color: #FFF;
         height: 40px;
         
-
         button{
             width: 100%;
             height: 100%;
@@ -182,6 +182,8 @@ export const StyledCalendarBack = styled.div`
     }
 
     .calendarback-events{
+        height: 320px;
+
         .contact-people{
             width: 100%;
             display: flex;
@@ -227,5 +229,31 @@ export const StyledHeader = styled.div`
         text-decoration: none;
         font-family: 'Dosis';
         font-size: 1.3rem;
+    }
+`
+
+export const StyledViewMeetings = styled.div`
+    max-height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 100%;
+    overflow-y: scroll;
+`
+
+export const StyledMeetingCard = styled.div`
+    width: calc(100% - 40px);
+    padding: 15px 20px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    border-bottom :1px solid #000;
+    transition: 0.3s ease-out;
+
+    &:hover{
+        cursor: pointer;
     }
 `

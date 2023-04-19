@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react'
+import { meetingValidation } from '../utils/yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -10,8 +12,12 @@ import TrendingFlatIcon from '@mui/icons-material/TrendingFlat';
 import Chip from '@mui/material/Chip';
 import TextField from '@mui/material/TextField';
 
-import { StyledCalendar, StyledCalendarBack } from '../styles/components-styles'
-import { Api } from '../service/Api';
+import { StyledCalendar, StyledCalendarBack, StyledMeetingCard, StyledViewMeetings } from '../styles/components-styles'
+import { Api, db } from '../service/Api';
+
+import { useForm } from 'react-hook-form'
+
+import { addDoc, collection } from 'firebase/firestore';
 
 
 export default function Calendar({ userLoggedId, profileOwner, disabled }) {
@@ -21,7 +27,7 @@ export default function Calendar({ userLoggedId, profileOwner, disabled }) {
     useEffect(() => {
         Api.getDocById(userLoggedId, setUserLoggedData)
     }, [])
-    
+
 
     const [date, setDate] = useState(new Date())
     const [visibleFront, setVisibleFront] = useState(true)
@@ -107,52 +113,137 @@ export default function Calendar({ userLoggedId, profileOwner, disabled }) {
                         </div>
                     </>
                 ) : <CalendarBack
-                        setVerse={setVisibleFront} 
-                        day={dayClicked} 
-                        sender={`${userLoggedData.name} ${userLoggedData.surname}`}
-                        addressee={`${profileOwner.name} ${profileOwner.surname}`} />
+                        setVerse={setVisibleFront}
+                        day={dayClicked}
+                        sender={userLoggedData}
+                        receiver={profileOwner} />
             }
         </StyledCalendar>
     )
 }
 
-export function CalendarBack({ setVerse, day, sender, addressee }) {
+export function CalendarBack({ setVerse, day, sender, receiver }) {
+
+    const { register, handleSubmit, formState: { errors } } = useForm({
+        resolver: yupResolver(meetingValidation)
+    })
 
     return (
         <StyledCalendarBack>
-            <div className="calendarback-header">
-                <EventNoteIcon/>
-                Reunião para {day.toLocaleString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' })}
-            </div>
-            <div className="calendarback-options">
-                <button className="back" onClick={() => setVerse(true)}>
-                    <ArrowBackIosNewIcon fontSize='small' />
-                </button>
-                <button className="add-event">
-                    <EventAvailableIcon />
-                </button>
-            </div>
-            <div className="calendarback-events">
-                <div className="contact-people">
-                    <Chip avatar={<PersonIcon/>} label={sender} variant="outlined" />
-                        <TrendingFlatIcon/>
-                    <Chip avatar={<PersonIcon/>} label={addressee} variant="outlined" />
+            <form onSubmit={
+                handleSubmit(async (data) => {
+                    const finalData = {
+                        sender: sender.id,
+                        receiver: receiver.id,
+                        message: data.message,
+                        date: {
+                            day: day.getDate(),
+                            month: day.getMonth(),
+                            year: day.getFullYear()
+                        },
+                        tecnology: '',
+                    }
+                    const docRef = await addDoc(collection(db, "meetings"), finalData)
+                        .then(res => alert('Reunião Marcada'))
+                })
+            }>
+                <div className="calendarback-header">
+                    <EventNoteIcon />
+                    Reunião para {day.toLocaleString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' })}
                 </div>
-                <div className="date-info">
-                    <div>
-                        <span>Data da reunião: </span>
-                        {day.toLocaleString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' })}
-                    </div>
+                <div className="calendarback-options">
+
+                    <button className="back" onClick={() => setVerse(true)}>
+                        <ArrowBackIosNewIcon fontSize='small' />
+                    </button>
+                    {
+                        sender.id != receiver.id ?
+                            <button className="add-event" type='submit'>
+                                <EventAvailableIcon />
+                            </button> : null
+                    }
                 </div>
-                <div className="message">
-                    <TextField
-                        fullWidth
-                        placeholder="Escreva uma mensagem..."
-                        multiline
-                        rows={7}
-                    />
+                <div className="calendarback-events">
+                    {
+                        sender.id != receiver.id ?
+                            <>
+                                <div className="contact-people">
+                                    <Chip avatar={<PersonIcon />} label={sender.name + ' ' + sender.surname} variant="outlined" />
+                                    <TrendingFlatIcon />
+                                    <Chip avatar={<PersonIcon />} label={receiver.name + ' ' + receiver.surname} variant="outlined" />
+                                </div>
+                                <div className="date-info">
+                                    <div>
+                                        <span>Data da reunião: </span>
+                                        {day.toLocaleString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' })}
+                                    </div>
+                                </div>
+                                <div className="message">
+                                    <TextField
+                                        error={Boolean(errors.message)}
+                                        helperText={errors.message?.message}
+                                        type='submit'
+                                        fullWidth
+                                        placeholder="Escreva uma mensagem..."
+                                        multiline
+                                        rows={7}
+                                        {...register('message')}
+                                    />
+                                </div>
+                            </> : <ViewMeetings userLoggedId={sender.id} />
+                    }
                 </div>
-            </div>
+            </form>
         </StyledCalendarBack>
+    )
+}
+
+export function ViewMeetings({ userLoggedId }) {
+
+    const [myMeetings, setMyMeetings] = useState()
+
+    useEffect(() => {
+        Api.getReceivedMeetings('meetings', userLoggedId, setMyMeetings)
+    }, [])
+
+    let meetingComponents = []
+
+    if(myMeetings != null){
+         myMeetings.forEach(meeting => meetingComponents.push(<MeetingCard data={meeting} />))
+    }
+
+    return (
+        <StyledViewMeetings>
+            {meetingComponents}
+        </StyledViewMeetings>
+    )
+}
+
+
+export function MeetingCard({ data }) {
+
+    const [senderData, setSenderData] = useState()
+    const [receiverData, setReceiverData] = useState()
+
+    useEffect(() => {
+        Api.getDocById(data.sender, setSenderData)
+        Api.getDocById(data.receiver, setReceiverData)
+    }, [])
+
+    return (
+        <>
+            {
+                typeof senderData != 'undefined' ? 
+                <StyledMeetingCard>
+                        <div>Solicitante: {senderData.name} {senderData.surname}</div>
+                        <div>Destinatário: {receiverData.name} {receiverData.surname}</div>
+                        <span>Data da reunião: {data.date.day}/{data.date.month}/{data.date.year}</span>
+
+                        <div>Mensagem: </div>
+                        <span className='meeting-message'>{data.message}</span>
+
+                </StyledMeetingCard> : null
+            }
+        </>
     )
 }

@@ -103,6 +103,22 @@ export const Api = {
         setState(docs)
     },
 
+    getReceivedMeetings: async(col, id, setState) => {
+        const colRef = collection(db, col)
+        const snapShots = await getDocs(colRef)
+        
+        let docs = []
+        snapShots.forEach(doc => {
+            if((doc.data().receiver == id) || (doc.data().sender == id) ) docs.push(doc.data())
+        })
+
+        setState(docs)
+    },
+
+    getCurrentUser: async(setState) => {
+        setState(auth.currentUser)
+    },
+
     signOut: async (navigate) => {
         signOut(auth).then(() => {
             // Sign-out successful.

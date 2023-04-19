@@ -21,3 +21,7 @@ export const login_validation = yup.object().shape({
     email: yup.string().required('Campo Obrigatório').email('Email inválido').lowercase(),
     password: yup.string().required('Campo Obrigatório').min(6, 'Mínimo 6 caracteres')
 })
+
+export const meetingValidation = yup.object().shape({
+    message: yup.string().required('Digite uma mensagem')
+})
