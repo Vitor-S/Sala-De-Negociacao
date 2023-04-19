@@ -17,7 +17,7 @@ export default function Home() {
     return (
         <StyledHome>
             <Header />
-            <body>
+            <div className='home-body'>
                 <section className="main-tip">
                     <div className="tip-info">
                         <div className="tip-info-container">
@@ -62,7 +62,7 @@ export default function Home() {
                     </div>
                     
                 </section>
-            </body>
+            </div>
         </StyledHome>
     )
 }

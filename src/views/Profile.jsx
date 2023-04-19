@@ -12,6 +12,7 @@ import { IconButton } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import { TextField, Button } from '@mui/material';
 import Header from '../components/Header'
+import ChatIcon from '@mui/icons-material/Chat';
 
 import { useLocation, useNavigate, Link, useParams } from 'react-router-dom';
 
@@ -69,7 +70,7 @@ export default function Profile() {
                         </div>
                         <div className="social-medias">
                             <IconButton >
-                                <LocalPhoneIcon color='primary' />
+                                <ChatIcon color='primary' />
                             </IconButton>
                             <IconButton onClick={() =>
                                 window.location.href = "mailto:" + user.email
