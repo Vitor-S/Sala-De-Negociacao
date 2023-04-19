@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 
 import { StyledHeader } from '../styles/components-styles'
 import { Api, auth } from '../service/Api'
+import HandshakeIcon from '@mui/icons-material/Handshake';
 
 import { onAuthStateChanged } from 'firebase/auth'
 
@@ -19,19 +20,18 @@ export default function Header() {
         });
       }, [])
 
-    return (
+    return (userLogged != null && userLogged != undefined) ? (
         <StyledHeader>
-            {
-                (userLogged != null && userLogged != undefined) ? 
-                <div className="left-links">
-                    <Link to='/'>Home</Link>
+                <div className="header-logo">
+                    <HandshakeIcon fontSize='large' sx={{ color: '#fff' }}/>
+                    <span>Sala de Negociação</span>
+                </div>
+                <div className="header-links">
+                    <Link to='/'>Início</Link>
                     <Link to='/search'>Pesquisar</Link>
                     <Link to={`/profile/${userLogged.uid}`}>Perfil</Link>
+                    <a className='logout-link' onClick={() => Api.signOut(navigate)}>Sair</a>
                 </div>
-                : null
-            }
-            <a className='logout-link' onClick={() => Api.signOut(navigate)}>Sair</a>
-            
         </StyledHeader>
-    )
+    ) : null
 }

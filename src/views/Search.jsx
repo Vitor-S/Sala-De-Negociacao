@@ -61,7 +61,7 @@ export default function Search() {
     return (
         <StyledSearch>
             <Header/>    
-            <div className="search-container">
+            <div className="search-body">
                 <div className="search-filters">
                     <div className="search-area">
                         <TextField
@@ -72,6 +72,7 @@ export default function Search() {
                     <div className="filters-area">
 
                         <Autocomplete 
+                            
                             name='supplier'
                             options={["Fornecedor", "Contratante"]}
                             sx={{ width: '80%' }}

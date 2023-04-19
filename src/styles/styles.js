@@ -99,52 +99,121 @@ export const StyledLogin = styled.div`
 `
 
 export const StyledHome = styled.div`
-    width: 100vw;
-    height: 100vh;
-    background-color: ${middle};
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    gap: 20px;
+    @import url('https://fonts.googleapis.com/css2?family=Dosis&display=swap');
 
-    .home-container{
-        width: 80%;
-        height: 80%;
-        background-color: #FFF;
-        ${shadow};
-
-        display: flex;
-        justify-content: center;
-        align-items: center;
+    body{
+        height: 100vh;
     }
+
+    .main-tip{
+        display: flex;
+        height: 90%;
+        background-color: ${light};
+
+        .tip-info{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 90%;
+
+            .tip-info-container{
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+                width: 90%;
+                height: 45%;
+
+                span, p, a{
+                    font-family: 'Dosis', sans-serif;
+                }
+
+                span{
+                    font-size: 5rem;
+
+                    span{
+                        color: blue;
+                    }
+                }
+
+                p{
+                    font-size: 1.5rem;
+                }
+
+                a{
+                    font-size: 1.6rem;
+                    color: blue;
+                    text-decoration: none;
+                }
+            }
+        }
+
+        .tip-image{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 50%;
+
+            .tip-image-container{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 20px;
+                width: 70%;
+                height: 70%;
+
+                .section-image{
+                    aspect-ratio: 16/9;
+                    width: 100%;
+                    border-radius: 10px;
+                }
+            }
+        }
+    }
+
+    .second-tip{
+        background-color: ${middle_purple};
+
+        .tip-info-container{
+            span{
+                span{
+                    color: #fff
+                }
+            }
+        }
+
+        .second-tip-span{
+            color: #fff;
+        }
+
+        .second-tip-link{
+            color: #fff;
+        }
+    }
+    
 `
 
 export const StyledSearch = styled.div`
     width: 100vw;
     height: 100vh;
-    background-color: ${middle};
     display: flex;
-    justify-content: center;
-    align-items: center;
     flex-direction: column;
-    gap: 20px;
+    background-color: #FFF;
 
-    .search-container{
-        width: 80%;
-        height: 80%;
-        background-color: #FFF;
-        ${shadow};
-
+    .search-body{
+        width: 100vw;
+        height: 100%;
         display: flex;
-        justify-content: center;
-        align-items: center;
+        background-color: ${light};
 
         .search-filters{
             display: flex;
             flex-direction: column;
             flex: 3;
             height: 100%;
+
+            div{
+                background-color: #FFF;
+            }
 
             .search-area{
                 flex: 1.5;
@@ -195,19 +264,14 @@ export const StyledProfile = styled.div`
  
     width: 100vw;
     height: 100vh;
-    background-color: ${middle};
     display: flex;
-    justify-content: center;
-    align-items: center;
     flex-direction: column;
-    gap: 20px;
+    background-color: ${light};
 
-    .profile-container{
+    .profile-body{
+        width: 100vw;
+        height: 100%;
         display: flex;
-        width: 80%;
-        height: 80%;
-        background-color: #FFF;
-        ${shadow};
 
         .left-container{
             display: flex;
@@ -222,6 +286,7 @@ export const StyledProfile = styled.div`
                 -moz-box-shadow: 0px 0px 15px 2px rgba(0,0,0,0.75);
                 box-shadow: 0px 0px 15px 2px rgba(0,0,0,0.75); */
                 ${shadow}
+                background-color: #FFF;
 
                 display: flex;
                 flex-direction: column;
@@ -281,6 +346,7 @@ export const StyledProfile = styled.div`
             height: 100%;
 
             h2{
+                color: #FFF;
                 font-family: 'Dosis';
                 font-size: 1.6rem;
                 text-align: center;

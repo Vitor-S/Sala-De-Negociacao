@@ -1,5 +1,9 @@
 import styled from "styled-components"
 
+const light = '#8289f5'
+const middle = '#4a59e0'
+const middle_purple = '#4B31DE'
+
 const shadow = '-webkit-box-shadow: 0px 0px 10px 0px rgba(11,7,89,1); -moz-box-shadow: 0px 0px 19px 0px rgba(11,7,89,1); box-shadow: 0px 0px 10px 0px rgba(11,7,89,1);'
 
 export const StyledCard = styled.div`
@@ -62,6 +66,8 @@ export const StyledCalendar = styled.div`
     box-shadow: 0px 0px 10px 1px rgba(0,0,0,0.75);
     height: 430px;
     width: 350px;
+
+    background-color: #fff;
 
     .calendar-header{
         height: 80px;
@@ -211,17 +217,33 @@ export const StyledCalendarBack = styled.div`
 `
 
 export const StyledHeader = styled.div`
+    @import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&family=Dancing+Script&display=swap');
+
     display: flex;
-    justify-content: space-between;
-    width: 80%;
-    
-    .left-links{
+    height: 60px;
+    background-color: ${middle};
+    padding: 0 3%;
+
+    .header-logo{
+        flex: 3;
         display: flex;
-        gap: 20px;
+        align-items: center;
+        gap: 5%;
+
+        span{
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.4rem;
+            color: #fff;
+        }
     }
 
-    .logout-link:hover{
-        cursor: pointer;
+    .header-links{
+        flex: 4;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 10%;
     }
 
     a{
@@ -229,6 +251,11 @@ export const StyledHeader = styled.div`
         text-decoration: none;
         font-family: 'Dosis';
         font-size: 1.3rem;
+
+        &:hover{
+            cursor: pointer;
+            scale: 1.1;
+        }
     }
 `
 
