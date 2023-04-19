@@ -13,7 +13,7 @@ import {
 
 const app = initializeApp(firebaseConfig)
 export const auth = getAuth();
-const db = getFirestore()
+export const db = getFirestore(app)
 
 const createUserDocumentFromAuth = async (userAuth, data) => {
     const userDocRef = doc(db, 'users', userAuth.uid)
@@ -71,7 +71,7 @@ export const Api = {
                 const userSnapShot = await getDoc(userDocRef)
 
                 //redirect
-                navigate('/', { state: userSnapShot.data() })
+                navigate('/')
             })
             .catch((error) => {
                 const errorCode = error.code;
@@ -84,31 +84,29 @@ export const Api = {
         
     },
 
-    getCurrentUser: async (setState) => {
-        const colRef = collection(db, 'users')
+    getDocById: async (userId, setState) => {
+        const db = getFirestore()
+        const docRef = doc(db, 'users', userId)
+        const docSnap = await getDoc(docRef)
+        setState(docSnap.data())
+    } ,
+
+    getAllDocs: async (col, setState) => {
+        const colRef = collection(db, col)
         const snapShots = await getDocs(colRef)
+        
+        let docs = []
+        snapShots.forEach(doc => {
+            if(doc.id != auth.currentUser.uid) docs.push(doc.data())
+        })
 
-        const user = snapShots.docs.map(doc => {
-        if(doc.id == auth.currentUser.uid) setState(doc.data())
-    })
+        setState(docs)
     },
-
-    // getAllDocs: async (setState) => {
-    //     const colRef = collection(db, 'users')
-    //     const snapShots = await getDocs(colRef)
-
-    //     const docs = snapShots.docs.map(doc => {
-    //         const data = doc.data()
-    //         data.id == doc.id
-    //         return data
-    //     })
-    //     setState(docs)
-    // },
 
     signOut: async (navigate) => {
         signOut(auth).then(() => {
             // Sign-out successful.
-            navigate('/login', { state: 'name'})
+            navigate('/login')
           }).catch((error) => {
             // An error happened.
             alert(error)

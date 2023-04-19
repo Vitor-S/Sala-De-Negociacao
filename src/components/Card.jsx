@@ -9,10 +9,7 @@ export default function Card({ user }) {
     const navigate = useNavigate()
 
     const handleCardClick = () => {
-        console.log(user.id)
-        navigate('/profile', {
-            state: user
-        })
+        navigate(`/profile/${user.id}`)
     }
 
     return (

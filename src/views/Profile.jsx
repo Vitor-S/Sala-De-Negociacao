@@ -13,80 +13,96 @@ import EditIcon from '@mui/icons-material/Edit';
 import { TextField, Button } from '@mui/material';
 import Header from '../components/Header'
 
-import { useLocation, useNavigate, Link } from 'react-router-dom';
+import { useLocation, useNavigate, Link, useParams } from 'react-router-dom';
 
 export default function Profile() {
-    const { state } = useLocation()
-
-    const navigate = useNavigate()
     
     const [modalState, setModalState] = useState(false)
-    const [userLogged, setUserLogged] = useState()
 
+    const [user, setUser] = useState(null);
+    const [currentUser, setcurrentUser] = useState()
+
+    const userId = useParams();    
+  
     useEffect(() => {
-        Api.getCurrentUser(setUserLogged)
+        Api.getDocById(userId.id, setUser)
     }, [])
-
-    const handleLocationClick = () => {
-
-        const destination = state.street.replaceAll(' ', '+') + '+' + state.city.replaceAll(' ', '+') + '+' + state.state.replaceAll(' ', '+')
-
-        const origin = userLogged.street.replaceAll(' ', '+') + '+' + userLogged.city.replaceAll(' ', '+') + '+' + userLogged.state.replaceAll(' ', '+')
     
-        window.location = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}`
-    }
+    useEffect(() => {
+        auth.onAuthStateChanged((currentUser) => {
+            setcurrentUser(currentUser);
+        });
+    }, [])
     
-    return (
+
+    // const handleLocationClick = () => {
+
+    //     const destination = state.street.replaceAll(' ', '+') + '+' + state.city.replaceAll(' ', '+') + '+' + state.state.replaceAll(' ', '+')
+
+    //     const origin = userLogged.street.replaceAll(' ', '+') + '+' + userLogged.city.replaceAll(' ', '+') + '+' + userLogged.state.replaceAll(' ', '+')
+    
+    //     window.location = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}`
+    // }
+    
+    return (user != null) ? (
         <StyledProfile >
             <Header/>
             <div className="profile-container">
                 <div className="left-container">
                     <div className="info-container">
                         {
-                            state.id == auth.currentUser.uid ?
+                            (currentUser.uid == user.id) ? 
                             <IconButton className='edit-profile' onClick={() => setModalState(true)}> 
                                 <EditIcon />
                             </IconButton> : null
                         }
+                        
+                        
                         <img src="https://pbs.twimg.com/media/FjU2lkcWYAgNG6d.jpg" alt="" className="profile-picture" />
-                        <h2>{`${state.name}  ${state.surname}`}</h2>
-                        <h3>{`${state.supplier ? 'Fornecedor de ' : 'Lojista de '}` + state.area}</h3>
+                        <h2>{`${user.name} ${user.surname}`}</h2>
+                        <h3>Fornecedor de {user.area}</h3>
                         <div className="locale">
                             <LocationOnIcon/>
-                            <span >{`${state.city},  ${state.state}`}</span>
+                            <span >{`${user.city} ${user.state}`}</span>
                         </div>
                         <div className="social-medias">
-                            <IconButton>
+                            <IconButton onClick={() => console.log(currentUser)}>
                                 <LocalPhoneIcon color='primary'/>
                             </IconButton>
-                            <IconButton onClick={() => window.location.href = "mailto:"+state.email}>
+                            <IconButton>
                                 <EmailIcon sx={{color: '#f9aa2a'}}/>
                             </IconButton>
-                            <IconButton onClick={() => {
-                                window.location.href = `https://api.whatsapp.com/send?phone=${state.phone}`
-                            }}>
+                            <IconButton>
                                 <WhatsAppIcon color='success'/>
                             </IconButton>
-                            <IconButton onClick={handleLocationClick}>
+                            <IconButton>
                                 <LocationOnIcon color='error'/>
                             </IconButton>
                         </div>
                     </div>
                 </div>
                 <div className="right-container">
-                    <h2>Marque uma reunião com {state.name}</h2>
-                    <Calendar state={state} />
+                    {
+                        (currentUser.uid == user.id) ? 
+                        <h2>Verifique suas reuniões, {user.name} </h2>
+                        : <h2>Marque uma reunião com {user.name} </h2>
+                    }
+                    <Calendar userLoggedId={currentUser.uid} profileOwner={user}/>
                 </div>
             </div>
             {
-                modalState ? <EditModal setModal={setModalState}/> : null
+                modalState ? <EditModal 
+                                setModal={setModalState}
+                                owner={user}
+                                profileOwner={currentUser}/> : null
             }
-            
         </StyledProfile>
-    )
+    ) : null
 }
 
-function EditModal({ setModal }){
+function EditModal({ setModal, owner, profileOwner }){
+
+    console.log(owner, profileOwner)
 
     function handleCloseModal(ev){
         if(ev.target.className.includes('modal-wrapper')) setModal(false)

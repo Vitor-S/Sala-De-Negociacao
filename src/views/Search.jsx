@@ -39,7 +39,6 @@ export default function Search() {
 
     //     FirebaseGet(query(collection(db, 'users'), ...wheres), setCurrentData)
     // }
-    console.log(auth.currentUser == null)
     
     useEffect(() => {
         //autologout
@@ -56,17 +55,7 @@ export default function Search() {
     useEffect(() => {
 
         //get all docs
-        (async () => {
-            const colRef = collection(db, 'users')
-            const snapShots = await getDocs(colRef)
-            
-            let docs = []
-            snapShots.forEach(doc => {
-                if(doc.id != auth.currentUser.uid) docs.push(doc.data())
-            })
-
-            setCurrentData(docs)
-        })()
+        Api.getAllDocs('users', setCurrentData)
     }, [])
 
     return (

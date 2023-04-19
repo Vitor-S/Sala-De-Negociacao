@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -11,9 +11,17 @@ import Chip from '@mui/material/Chip';
 import TextField from '@mui/material/TextField';
 
 import { StyledCalendar, StyledCalendarBack } from '../styles/components-styles'
+import { Api } from '../service/Api';
 
 
-export default function Calendar({ state }) {
+export default function Calendar({ userLoggedId, profileOwner, disabled }) {
+
+    const [userLoggedData, setUserLoggedData] = useState()
+
+    useEffect(() => {
+        Api.getDocById(userLoggedId, setUserLoggedData)
+    }, [])
+    
 
     const [date, setDate] = useState(new Date())
     const [visibleFront, setVisibleFront] = useState(true)
@@ -54,7 +62,7 @@ export default function Calendar({ state }) {
         days.push(
             <IconButton
                 disabled={
-                    (i < today.getDate() && date.getMonth() == today.getMonth() && date.getFullYear() == today.getFullYear()) || (date.getFullYear() < today.getFullYear()) || (date.getFullYear() == today.getFullYear() && date.getMonth() < today.getMonth())
+                    (i < today.getDate() && date.getMonth() == today.getMonth() && date.getFullYear() == today.getFullYear()) || (date.getFullYear() < today.getFullYear()) || (date.getFullYear() == today.getFullYear() && date.getMonth() < today.getMonth()) || disabled
                 }
                 sx={{ fontFamily: 'Dosis', fontSize: '1.2rem' }}
                 color="primary"
@@ -101,8 +109,8 @@ export default function Calendar({ state }) {
                 ) : <CalendarBack
                         setVerse={setVisibleFront} 
                         day={dayClicked} 
-                        sender='Usuário Logado'
-                        addressee={`${state.name} ${state.surname}`} />
+                        sender={`${userLoggedData.name} ${userLoggedData.surname}`}
+                        addressee={`${profileOwner.name} ${profileOwner.surname}`} />
             }
         </StyledCalendar>
     )
@@ -127,7 +135,7 @@ export function CalendarBack({ setVerse, day, sender, addressee }) {
             <div className="calendarback-events">
                 <div className="contact-people">
                     <Chip avatar={<PersonIcon/>} label={sender} variant="outlined" />
-                    <TrendingFlatIcon/>
+                        <TrendingFlatIcon/>
                     <Chip avatar={<PersonIcon/>} label={addressee} variant="outlined" />
                 </div>
                 <div className="date-info">
