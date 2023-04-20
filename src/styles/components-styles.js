@@ -229,6 +229,7 @@ export const StyledHeader = styled.div`
     @import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&family=Dancing+Script&display=swap');
 
     display: flex;
+    min-height: 65px;
     height: 65px;
     background-color: ${middle};
     padding: 0 3%;
@@ -290,5 +291,22 @@ export const StyledMeetingCard = styled.div`
 
     &:hover{
         cursor: pointer;
+    }
+`
+
+export const StyledMessage = styled.div`
+    display: flex;
+    width: 100%;
+    justify-content: ${props => props.owner ? 'flex-end' : 'flex-start'};
+
+    div{
+        max-width: 80%;
+        display: inline-block;
+        flex-flow: flex-end;
+        padding: 10px;
+        width: auto;
+        background-color: ${props => props.owner ? middle : 'gray'};
+        color: #fff;
+        border-radius: 10px;
     }
 `

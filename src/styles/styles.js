@@ -205,7 +205,7 @@ export const StyledSearch = styled.div`
 
     .search-body{
         width: 100vw;
-        height: 100%;
+        height: calc(100% - 65px);
         display: flex;
         background-color: ${light};
 
@@ -286,9 +286,6 @@ export const StyledProfile = styled.div`
 
             .info-container{
                 position: relative;
-                /* -webkit-box-shadow: 0px 0px 15px 2px rgba(0,0,0,0.75);
-                -moz-box-shadow: 0px 0px 15px 2px rgba(0,0,0,0.75);
-                box-shadow: 0px 0px 15px 2px rgba(0,0,0,0.75); */
                 ${shadow}
                 background-color: #FFF;
 
@@ -315,15 +312,24 @@ export const StyledProfile = styled.div`
             }
 
             .profile-picture{
-                /* -webkit-box-shadow: 0px 0px 15px 2px rgba(0,0,0,0.75);
-                -moz-box-shadow: 0px 0px 15px 2px rgba(0,0,0,0.75);
-                box-shadow: 0px 0px 15px 2px rgba(0,0,0,0.75); */
+                display: flex;
+                justify-content: center;
+                align-items: center;
                 ${shadow}
+                aspect-ratio: 1/1;
                 width: 25%;
                 border-radius: 50%;
                 padding: 5px;
                 background-color: #FFF;
                 transform: translateY(-50%);
+                
+                &:hover{
+                    cursor: pointer;
+                }
+                
+                &:hover svg{
+                    opacity: 0.6;
+                }
             }
 
             h2{
@@ -381,6 +387,49 @@ export const StyledEditModal = styled.div`
 
         h3{
             font-family: 'Dosis';
+        }
+    }
+`
+
+export const StyledChat = styled.div`
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+
+    .container{
+        position: absolute;
+        top: 65px;
+        width: 100%;
+        height: calc(100% - 65px);
+        display: flex;
+    }
+
+    .left{
+        flex: 1;
+        background-color: ${light};
+    }
+
+    .right{
+        flex: 2.5;
+
+        .messages{
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 10px 30px;
+            width: calc(100% - 60px);
+            height: calc(80% - 20px);
+            overflow-y: scroll;
+        }
+        
+        .options{
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+            width: 100%;
+            height: 20%;
         }
     }
 `

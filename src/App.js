@@ -10,6 +10,7 @@ import Test from './views/Test'
 import Search from './views/Search'
 import Profile from './views/Profile'
 import Error from './views/Error'
+import Chat from './views/Chat'
 
 export default function App() {
     return (
@@ -21,6 +22,7 @@ export default function App() {
                 <Route path='/login' element={<Login />} />
                 <Route path='/register' element={<Register />} />
                 <Route path='/test' element={<Test />} />
+                <Route path='/chat' element={<Chat/>} />
                 <Route path='*' element={<Error/>}></Route>
             </Routes>
             <GlobalStyle />

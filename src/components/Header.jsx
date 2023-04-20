@@ -29,6 +29,7 @@ export default function Header() {
                 <div className="header-links">
                     <Link to='/'>Início</Link>
                     <Link to='/search'>Pesquisar</Link>
+                    <Link to='/chat'>Conversas</Link>
                     <Link to={`/profile/${userLogged.uid}`}>Perfil</Link>
                     <a className='logout-link' onClick={() => Api.signOut(navigate)}>Sair</a>
                 </div>

@@ -21,7 +21,7 @@ export default function Home() {
                         <div className="tip-info-container">
                             <span className='tip-title'>Nossa <span>dica</span> de hoje é</span>
                             <p>
-                            Defina seus objetivos: antes de buscar por parceiros comerciais, é importante que você defina claramente seus objetivos e metas. Isso ajudará a identificar parceiros que estejam alinhados com sua visão de negócio.
+                                Defina seus objetivos: antes de buscar por parceiros comerciais, é importante que você defina claramente seus objetivos e metas. Isso ajudará a identificar parceiros que estejam alinhados com sua visão de negócio.
                             </p>
                             <a href="https://resultadosdigitais.com.br/?s=objetivos" target='_blank'>Saber mais</a>
                         </div>
@@ -58,7 +58,6 @@ export default function Home() {
                             <a href="https://resultadosdigitais.com.br/marketing/publico-alvo-cliente-ideal-buyer-persona/" target='_blank' className='second-tip-link'>Saber mais</a>
                         </div>
                     </div>
-                    
                 </section>
             </div>
         </StyledHome>

@@ -71,6 +71,7 @@ export default function Calendar({ userLoggedId, profileOwner, disabled }) {
                 disabled={
                     (i < today.getDate() && date.getMonth() == today.getMonth() && date.getFullYear() == today.getFullYear()) || (date.getFullYear() < today.getFullYear()) || (date.getFullYear() == today.getFullYear() && date.getMonth() < today.getMonth()) || disabled
                 }
+                key={Math.random()}
                 sx={{ fontFamily: 'Dosis', fontSize: '1.2rem' }}
                 color="primary"
                 onClick={() => {

@@ -7,42 +7,41 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import Calendar from '../components/Calendar'
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import EmailIcon from '@mui/icons-material/Email';
-import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import { IconButton } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import { TextField, Button } from '@mui/material';
 import Header from '../components/Header'
 import ChatIcon from '@mui/icons-material/Chat';
 
-import { useLocation, useNavigate, Link, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export default function Profile() {
+    const navigate = useNavigate()
 
     const [modalState, setModalState] = useState(false)
 
     const [user, setUser] = useState(null);
-    const [currentUser, setcurrentUser] = useState()
-    const [currentUserData, setCurrentUserData] = useState()
+    const [userLogged, setUserLogged] = useState()
+    const [userLoggedData, setUserLoggedData] = useState()
 
     const userId = useParams();
-
+    
     useEffect(() => {
         Api.getDocById(userId.id, setUser)
-    }, [])
+    }, [userId])
 
     useEffect(() => {
-        auth.onAuthStateChanged((currentUser) => {
-            setcurrentUser(currentUser);
-            Api.getDocById(currentUser.uid, setCurrentUserData)
+        auth.onAuthStateChanged((userLogged) => {
+            setUserLogged(userLogged);
+            Api.getDocById(userLogged.uid, setUserLoggedData)
         });
     }, [])
-
 
     const handleLocationClick = () => {
 
         const destination = user.street.replaceAll(' ', '+') + '+' + user.city.replaceAll(' ', '+') + '+' + user.state.replaceAll(' ', '+')
 
-        const origin = currentUserData.street.replaceAll(' ', '+') + '+' + currentUserData.city.replaceAll(' ', '+') + '+' + currentUserData.state.replaceAll(' ', '+')
+        const origin = userLoggedData.street.replaceAll(' ', '+') + '+' + userLoggedData.city.replaceAll(' ', '+') + '+' + userLoggedData.state.replaceAll(' ', '+')
 
         window.location = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}`
     }
@@ -54,13 +53,13 @@ export default function Profile() {
                 <div className="left-container">
                     <div className="info-container">
                         {
-                            (currentUser.uid == user.id) ?
-                                <IconButton className='edit-profile' onClick={() => setModalState(true)}>
+                            (userLogged.uid == user.id) ?
+                                <IconButton 
+                                    className='edit-profile' 
+                                    onClick={() => setModalState(true)}>
                                     <EditIcon />
                                 </IconButton> : null
                         }
-
-
                         <img src="https://pbs.twimg.com/media/FjU2lkcWYAgNG6d.jpg" alt="" className="profile-picture" />
                         <h2>{`${user.name} ${user.surname}`}</h2>
                         <h3>Fornecedor de {user.area}</h3>
@@ -69,7 +68,8 @@ export default function Profile() {
                             <span >{`${user.city} ${user.state}`}</span>
                         </div>
                         <div className="social-medias">
-                            <IconButton >
+                            <IconButton 
+                                onClick={() => navigate(`/chat?logged=${userLogged.uid}&receiver=${user.id}`)}>
                                 <ChatIcon color='primary' />
                             </IconButton>
                             <IconButton onClick={() =>
@@ -90,17 +90,17 @@ export default function Profile() {
                 </div>
                 <div className="right-container">
                     {
-                        (currentUser.uid == user.id) ?
+                        (userLogged.uid == user.id) ?
                             <h2>Verifique suas reuniões, {user.name} </h2>
                             : <h2>Marque uma reunião com {user.name} </h2>
                     }
-                    <Calendar userLoggedId={currentUser.uid} profileOwner={user} />
+                    <Calendar userLoggedId={userLogged.uid} profileOwner={user} />
                 </div>
                 {
                     modalState ? <EditModal
                         setModal={setModalState}
                         owner={user}
-                        profileOwner={currentUser} /> : null
+                        profileOwner={userLogged} /> : null
                 }
             </div>
         </StyledProfile>

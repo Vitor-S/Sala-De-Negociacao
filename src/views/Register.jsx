@@ -39,7 +39,9 @@ export default function Register() {
         <StyledRegister>
             <form className="container"
                 onSubmit={handleSubmit((data) => {
+                    data.supplier = JSON.parse(data.supplier)
                     Api.createUserWithEmailAndPassword(data, navigate)
+                    // console.log(data)
                 })}>
                 <div className='two-containers'>
                     <div className="left-container">
@@ -69,9 +71,11 @@ export default function Register() {
                     <div className="right-container">
                         <FormControl fullWidth error={Boolean(errors.supplier)} >
                             <InputLabel>Tipo de usuário</InputLabel>
-                            <Select defaultValue='' {...register('supplier')} >
-                                <MenuItem value={Boolean(true)}>Fornecedor</MenuItem>
-                                <MenuItem value={Boolean(false)}>Contratante</MenuItem>
+                            <Select 
+                                defaultValue=''
+                                {...register('supplier', { valueAsNumber: true }) } >
+                                <MenuItem value={1}>Fornecedor</MenuItem>
+                                <MenuItem value={0}>Contratante</MenuItem>
                             </Select>
                             <FormHelperText>{errors.supplier?.message}</FormHelperText>
                         </FormControl>
