@@ -251,10 +251,9 @@ export const StyledSearch = styled.div`
             display: flex;
             justify-content: space-around;
             align-items: center;
-            gap: 20px;
+            gap: 4%;
             flex-flow: wrap;
             flex: 7;
-            height: calc(100% - 40px);
             padding: 20px;
             overflow-y: scroll;
         }

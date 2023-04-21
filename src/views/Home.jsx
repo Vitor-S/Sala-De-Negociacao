@@ -40,7 +40,7 @@ export default function Home() {
                     </div>
                     <div className="tip-info">
                         <div className="tip-info-container">
-                            <span className='tip-title'>Conheça seu <span style={{ color: '#fff' }}>público-alvo</span></span>
+                            <span className='tip-title' style={{color: '#fff'}}>Conheça seu <span style={{ color: '#fd6e3a' }}>público-alvo</span></span>
                             <p style={{ color: '#fff' }}>
                             É importante conhecer seu público-alvo para identificar parceiros que também atuem nesse mercado. Dessa forma, será mais fácil estabelecer parcerias que tragam benefícios mútuos.
                             </p>
