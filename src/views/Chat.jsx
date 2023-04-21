@@ -111,7 +111,7 @@ export default function Chat() {
                                     </span>
                                 </>
                                 <>
-                                    <span>Você ainda não possui conversas </span>
+                                    <span>Precisa me mais parceiros ?</span>
                                     <Link to='/search'>clique aqui para procurar contatos</Link>
                                 </>
                         </div>
