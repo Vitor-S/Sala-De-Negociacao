@@ -85,11 +85,16 @@ export const Api = {
     },
 
     getDocById: async (userId, setState) => {
-        const db = getFirestore()
         const docRef = doc(db, 'users', userId)
         const docSnap = await getDoc(docRef)
         setState(docSnap.data())
-    } ,
+    },
+
+    returnDocById: async (userId) => {
+        const docRef = doc(db, 'users', userId)
+        const docSnap = await getDoc(docRef)
+        return docSnap.data()
+    },
 
     getAllDocs: async (col, setState) => {
         const colRef = collection(db, col)
@@ -115,6 +120,38 @@ export const Api = {
         setState(docs)
     },
 
+    handleWithConnections: async (id1, id2) => {
+        const ids = [id1, id2]
+        let myData = []
+
+        const promises = ids.map(async id => {
+            const myPromise = await Api.returnDocById(id)
+            return myPromise
+        })
+
+        myData = await Promise.all(promises)
+
+        if(myData[0].connections && !myData[0].connections.includes(myData[1].id)){
+            myData[0].connections = [...myData[0].connections, myData[1].id]
+        }
+        else if(myData[0].connections && myData[0].connections.includes(myData[1].id)){
+            myData[0].connections = myData[0].connections
+        }
+        else myData[0].connections = [myData[1].id]
+
+        await setDoc(doc(db, 'users', myData[0].id), myData[0])
+
+        if(myData[1].connections && !myData[1].connections.includes(myData[0].id)){
+            myData[1].connections = [...myData[1].connections, myData[0].id]
+        }
+        else if(myData[1].connections && myData[1].connections.includes(myData[0].id)){
+            myData[1].connections = myData[1].connections
+        }
+        else myData[1].connections = [myData[0].id]
+
+        await setDoc(doc(db, 'users', myData[1].id), myData[1])
+    },
+
     getCurrentUser: async(setState) => {
         setState(auth.currentUser)
     },
@@ -127,5 +164,24 @@ export const Api = {
             // An error happened.
             alert(error)
           });    
-    }
+    },
+
+    getConnections: async (id) => {
+        // As funções async retornam Promises, portanto, o loop forEach não aguardará a resolução das Promises antes de continuar para a próxima iteração
+
+        const userData = await Api.returnDocById(id)
+        let connectionsData = []
+
+        if (userData.connections) {
+            const promises = userData.connections.map(async con => {
+                const conData = await Api.returnDocById(con)
+                return conData
+            })
+
+            connectionsData = await Promise.all(promises)
+        }
+
+        return connectionsData
+    },
+
 }

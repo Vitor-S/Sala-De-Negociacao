@@ -398,6 +398,8 @@ export const StyledChat = styled.div`
     display: flex;
     flex-direction: column;
 
+    
+
     .container{
         position: absolute;
         top: 65px;
@@ -409,6 +411,7 @@ export const StyledChat = styled.div`
     .left{
         flex: 1;
         background-color: ${light};
+        overflow-y: scroll;
     }
 
     .right{
@@ -430,6 +433,25 @@ export const StyledChat = styled.div`
             justify-content: space-evenly;
             width: 100%;
             height: 20%;
+        }
+    }
+
+    .empty-right{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 10px;
+        align-items: center;
+    }
+
+    a{
+        font-family: 'Dosis';
+        font-size: 1.3em;
+        text-decoration: none;
+        color: ${middle};
+
+        &:hover{
+            font-weight: 500;
         }
     }
 `

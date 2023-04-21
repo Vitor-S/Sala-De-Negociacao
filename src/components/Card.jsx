@@ -19,7 +19,7 @@ export default function Card({ user }) {
                 className='card-motion-container' 
                 initial={{ scale: 0 }} 
                 animate={{ scale: 1 }}
-                transition={{ type: 'spring', damping: 8 }}>
+                transition={{ type: 'spring', damping: 12, duration: 0.3 }}>
                 <div className="photo-container">
                     <img src="https://marketplace.canva.com/EAFEits4-uw/1/0/1600w/canva-boy-cartoon-gamer-animated-twitch-profile-photo-oEqs2yqaL8s.jpg" alt="imagem de perfil" />
                 </div>

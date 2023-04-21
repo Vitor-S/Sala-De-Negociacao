@@ -1,4 +1,5 @@
 import styled from "styled-components"
+import { motion } from 'framer-motion'
 
 const light = '#8289f5'
 const middle = '#4a59e0'
@@ -308,5 +309,49 @@ export const StyledMessage = styled.div`
         background-color: ${props => props.owner ? middle : 'gray'};
         color: #fff;
         border-radius: 10px;
+    }
+`
+
+export const StyledContactCard = styled(motion.div)`
+    display: flex;
+    height: 10%;
+    padding: 10px;
+    border-bottom: 1px solid #000;
+
+    .contact-picture-container{
+        display: flex;
+        justify-content:center;
+        align-items: center;
+        flex: 1;
+
+        img{
+            aspect-ratio: 1/1;
+            border-radius: 50%;
+            width: 50%;
+        }
+    }
+
+    .contact-info{
+        position: relative;
+        gap: 10%;
+        flex: 2.5;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        h3{
+            font-size: 1.4em;
+            font-family: 'Dosis';
+        }
+        
+        .message-date{
+            font-family: 'Dosis';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.15em;
+            font-style: italic;
+        }
+        
     }
 `

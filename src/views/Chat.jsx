@@ -1,19 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react'
 
 import { StyledChat } from '../styles/styles'
-import { StyledMessage } from '../styles/components-styles'
+import { StyledContactCard, StyledMessage } from '../styles/components-styles'
 
 import Header from '../components/Header'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import { motion } from 'framer-motion'
 
-import { db } from '../service/Api'
-import { collection, addDoc, query, orderBy, getDocs, onSnapshot, limit } from 'firebase/firestore'
-import { useLocation } from 'react-router-dom'
+import { Api, db } from '../service/Api'
+import { doc, collection, addDoc, query, orderBy, onSnapshot } from 'firebase/firestore'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import HandshakeIcon from '@mui/icons-material/Handshake';
 
-
-export default function Chat({ userLogged, userClicked }) {
+export default function Chat() {
 
     const inputRef = useRef()
     const [text, setText] = useState()
@@ -23,6 +23,15 @@ export default function Chat({ userLogged, userClicked }) {
     const userLoggedId = new URLSearchParams(location.search).get("logged");
     const userReceiverId = new URLSearchParams(location.search).get("receiver");
 
+    const divMessagesRef = useRef()
+
+    //scroll end
+    useEffect(() => {
+        if (divMessagesRef.current)
+            divMessagesRef.current.scrollTop = divMessagesRef.current.scrollHeight
+    }, [messages])
+
+    //update messagem
     useEffect(() => {
         const collectionRef = collection(db, 'messages');
         const q = query(collectionRef, orderBy('createdAt'));
@@ -31,9 +40,11 @@ export default function Chat({ userLogged, userClicked }) {
             let myMessages = [];
 
             snapshot.forEach((doc) => {
-                if ((doc.data().sender == userLoggedId && doc.data().receiver == userReceiverId) ||
-                    (doc.data().sender == userReceiverId && doc.data().receiver == userLoggedId)) {
-                    myMessages.push({ ...doc.data(), id: doc.id });
+                const data = doc.data()
+
+                if ((data.sender == userLoggedId && data.receiver == userReceiverId) ||
+                    (data.sender == userReceiverId && data.receiver == userLoggedId)) {
+                    myMessages.push({ ...data, id: doc.id });
                 }
             });
 
@@ -41,7 +52,7 @@ export default function Chat({ userLogged, userClicked }) {
         });
 
         return () => unsubscribe();
-    }, []);
+    }, [userReceiverId]);
 
     const handleSendMessage = async (ev) => {
 
@@ -56,51 +67,118 @@ export default function Chat({ userLogged, userClicked }) {
 
         setText('');
         inputRef.current.value = ''
+
+        Api.handleWithConnections(userLoggedId, userReceiverId)
     };
 
     return (
         <StyledChat>
             <Header />
             <div className="container">
-                <div className="left"></div>
-                <div className="right">
-                    <div className="messages">
-                        {
-                            messages && messages.map(mess =>
-                                <Message key={mess.id} data={mess} logged={userLoggedId} />)
-                        }
-                    </div>
-                    <div className="options">
-                        <TextField
-                            onKeyUp={(ev) => {
-                                if (ev.key == 'Enter') handleSendMessage()
-                            }}
-                            inputRef={inputRef}
-                            onChange={(ev) => setText(ev.target.value)}
-                            sx={{ width: '80%', border: '1px solid #000' }} />
-                        <Button
-                            onClick={handleSendMessage}
-                            sx={{ height: '55px' }}
-                            variant='contained'
-                            color="primary">
-                            Enviar
-                        </Button>
-                    </div>
-                </div>
+                <ContactManager userLoggedId={userLoggedId} userReceiverId={userReceiverId} />
+                {
+                    userReceiverId ?
+                        <div className="right">
+                            <div ref={divMessagesRef} className="messages">
+                                {
+                                    messages && messages.map(mess =>
+                                        <Message key={mess.id} data={mess}
+                                            logged={userLoggedId} />)
+                                }
+                            </div>
+                            <div className="options">
+                                <TextField
+                                    onKeyUp={(ev) => {
+                                        if (ev.key == 'Enter') handleSendMessage()
+                                    }}
+                                    inputRef={inputRef}
+                                    onChange={(ev) => setText(ev.target.value)}
+                                    sx={{ width: '80%', border: '1px solid #000' }} />
+                                <Button
+                                    onClick={handleSendMessage}
+                                    sx={{ height: '55px' }}
+                                    variant='contained'
+                                    color="primary">
+                                    Enviar
+                                </Button>
+                            </div>
+                        </div> :
+                        <div className="right empty-right">
+                                <>
+                                    <HandshakeIcon fontSize='large' sx={{ color: 'gray' }} />
+                                    <span >
+                                        Sala de Negociação
+                                    </span>
+                                </>
+                                <>
+                                    <span>Você ainda não possui conversas </span>
+                                    <Link to='/search'>clique aqui para procurar contatos</Link>
+                                </>
+                        </div>
+                }
+
             </div>
         </StyledChat>
     )
 }
 
-function ContactManager(){
-    return(
-        <>
-        </>
+function ContactManager({ userLoggedId }) {
+
+    const [connections, setConnections] = useState()
+
+    useEffect(() => {
+        const unsubscribe = onSnapshot(doc(db, 'users', userLoggedId), () => {
+            (async () => {
+                const myConnections = await Api.getConnections(userLoggedId)
+                setConnections(myConnections)
+            })()
+        })
+
+        return unsubscribe
+    }, [])
+
+    return connections == undefined ?
+        <div className='left' onClick={() => console.log(connections)}
+            style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                fontStyle: 'italic'
+            }} />
+        :
+        <div className='left' onClick={() => console.log(connections.lenght)}>
+            {
+                connections && connections.map(con =>
+                    <ContactCard key={con.id} data={con} />)
+            }
+        </div>
+}
+
+function ContactCard({ data }) {
+
+    const navigate = useNavigate()
+    const userLoggedId = new URLSearchParams(window.location.search).get("logged");
+
+    return (
+        <StyledContactCard onClick={() => {
+            navigate(`/chat?logged=${userLoggedId}&receiver=${data.id}`)
+            // window.location.reload()
+        }}
+            whileHover={{ backgroundColor: '#636ed5', cursor: 'pointer' }}
+            initial={{ opacity: 0.5 }}
+            animate={{ opacity: 5 }}>
+            <div className="contact-picture-container">
+                <img src="https://pbs.twimg.com/media/FjU2lkcWYAgNG6d.jpg" alt="" />
+            </div>
+            <div className="contact-info">
+                <h3>{data.name} {data.surname}</h3>
+                <span className='message-date'>{data.city}</span>
+            </div>
+        </StyledContactCard>
     )
 }
 
 function Message({ data, logged }) {
-
     return (
         <StyledMessage owner={data.sender == logged}>
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
