@@ -68,12 +68,11 @@ export default function Calendar({ userLoggedId, profileOwner, disabled }) {
     for (let i = 1; i < daysInMonth + 1; i++) {
         days.push(
             <IconButton
+                sx={{ fontFamily: 'Dosis', fontSize: '1.2rem' }}
+                color="primary"
                 disabled={
                     (i < today.getDate() && date.getMonth() == today.getMonth() && date.getFullYear() == today.getFullYear()) || (date.getFullYear() < today.getFullYear()) || (date.getFullYear() == today.getFullYear() && date.getMonth() < today.getMonth()) || disabled
                 }
-                key={Math.random()}
-                sx={{ fontFamily: 'Dosis', fontSize: '1.2rem' }}
-                color="primary"
                 onClick={() => {
                     setDayClicked(new Date(date.getFullYear(), date.getMonth(), i))
                     setVisibleFront(false)

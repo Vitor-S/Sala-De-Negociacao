@@ -24,8 +24,10 @@ export default function Profile() {
     const [userLogged, setUserLogged] = useState()
     const [userLoggedData, setUserLoggedData] = useState()
 
+    const [pictureUrl, setPictureUrl] = useState('')
+
     const userId = useParams();
-    
+
     useEffect(() => {
         Api.getDocById(userId.id, setUser)
     }, [userId])
@@ -36,6 +38,13 @@ export default function Profile() {
             Api.getDocById(userLogged.uid, setUserLoggedData)
         });
     }, [])
+
+    useEffect(() => {
+        (async () => {
+            const imgUrl = await Api.getImage('images', userId.id)
+            if(imgUrl) setPictureUrl(imgUrl)
+        })()
+    }, [userId])
 
     const handleLocationClick = () => {
 
@@ -54,13 +63,17 @@ export default function Profile() {
                     <div className="info-container">
                         {
                             (userLogged.uid == user.id) ?
-                                <IconButton 
-                                    className='edit-profile' 
+                                <IconButton
+                                    className='edit-profile'
                                     onClick={() => setModalState(true)}>
                                     <EditIcon />
                                 </IconButton> : null
                         }
-                        <img src="https://pbs.twimg.com/media/FjU2lkcWYAgNG6d.jpg" alt="" className="profile-picture" />
+                        {
+                            pictureUrl ? 
+                            <img src={pictureUrl} alt="foto de perfil" className="profile-picture"/> :
+                            <img src='https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png' alt="foto de perfil" className="profile-picture"/>
+                        }
                         <h2>{`${user.name} ${user.surname}`}</h2>
                         <h3>Fornecedor de {user.area}</h3>
                         <div className="locale">
@@ -68,7 +81,7 @@ export default function Profile() {
                             <span >{`${user.city} ${user.state}`}</span>
                         </div>
                         <div className="social-medias">
-                            <IconButton 
+                            <IconButton
                                 onClick={() => navigate(`/chat?logged=${userLogged.uid}&receiver=${user.id}`)}>
                                 <ChatIcon color='primary' />
                             </IconButton>
@@ -99,36 +112,76 @@ export default function Profile() {
                 {
                     modalState ? <EditModal
                         setModal={setModalState}
-                        owner={user}
-                        profileOwner={userLogged} /> : null
+                        profileOwnerId={userId.id}
+                        currentPicture={pictureUrl} /> : null
                 }
             </div>
         </StyledProfile>
     ) : null
 }
 
-function EditModal({ setModal, owner, profileOwner }) {
+function EditModal({ setModal, profileOwnerId, currentPicture }) {
 
-    console.log(owner, profileOwner)
+    const [progress, setProgress] = useState(0)
+    const [imageUrl, setImageUrl] = useState('')
 
     function handleCloseModal(ev) {
-        if (ev.target.className.includes('modal-wrapper')) setModal(false)
-    }
+        if (ev.target.className.includes('modal-wrapper')) {
+            setModal(false)
+            window.location.reload()
+        }
+    }    
+
+    useEffect(() => {
+        (async () => {
+            const imgUrl = await Api.getImage('images', profileOwnerId)
+            if(imgUrl) setImageUrl(imgUrl)
+        })()
+    }, [profileOwnerId])
 
     return (
         <StyledEditModal className='modal-wrapper' onClick={handleCloseModal}>
             <div className="modal-container">
-                <h3>Atualize seus dados</h3>
-                <TextField fullWidth label="Nome" />
-                <TextField fullWidth label="Email" />
-                <TextField fullWidth label="Telefone" />
-                <TextField fullWidth label="Produto Fornecido" />
-                <TextField fullWidth label="Estado" />
-                <TextField fullWidth label="Cidade" />
-                <TextField fullWidth label="Bairro" />
-                <TextField fullWidth label="Rua" />
-                <div className="modal-options">
-                    <Button variant="contained" color='success'>
+                <h2>Atualize seus dados</h2>
+                <form 
+                    className="edit-picture" 
+                    onSubmit={async ev => await Api.handleSubmit(ev, setProgress, setImageUrl, 'images', profileOwnerId)}>
+                        <label for="teste">
+                            {
+                                imageUrl ? <img src={imageUrl} alt="" className="profile-picture"/>:
+                                <img src='https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png' alt="foto de perfil" className="profile-picture"/>
+                            }
+                            
+                        </label>
+                        <input type="file" id='teste'/>
+                        <Button type='submit' color="primary">
+                            Salvar Foto
+                        </Button>
+                </form>
+                <div className="edit-1">
+                    <TextField fullWidth label='Nome' />
+                    <TextField fullWidth label='Sobrenome' />
+                    <TextField fullWidth label='Email' />
+                    <TextField fullWidth label='Telefone' />
+                    <TextField fullWidth label='Tipo de usuário' />
+                </div>
+                <div className="edit-2">
+                    <TextField fullWidth label='Área de Atuação' />
+                    <TextField fullWidth label='Estado' />
+                    <TextField fullWidth label='Cidade' />
+                    <TextField fullWidth label='Bairro' />
+                    <TextField fullWidth label='Rua' />
+                </div>
+                <div className="edit-options">
+                    <Button 
+                        onClick={ev => {
+                            setModal(false)
+                            window.location.reload()
+                        }} 
+                        variant="outlined" color="error">
+                        Cancelar
+                    </Button>
+                    <Button variant="outlined" color="primary">
                         Salvar
                     </Button>
                 </div>

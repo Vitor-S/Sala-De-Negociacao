@@ -321,14 +321,6 @@ export const StyledProfile = styled.div`
                 padding: 5px;
                 background-color: #FFF;
                 transform: translateY(-50%);
-                
-                &:hover{
-                    cursor: pointer;
-                }
-                
-                &:hover svg{
-                    opacity: 0.6;
-                }
             }
 
             h2{
@@ -366,6 +358,8 @@ export const StyledProfile = styled.div`
 
 export const StyledEditModal = styled.div`
     position: absolute;
+    top: 0;
+    left: 0;
     width: 100vw;
     height: 100vh;
     display: flex;
@@ -373,19 +367,77 @@ export const StyledEditModal = styled.div`
     align-items: center;
     
     .modal-container{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-around;
-        padding: 20px 40px;
-        width: 25%;
+        display: grid;
+        grid-template-columns: 1fr 2fr 2fr;
+        grid-template-rows: 1fr 10fr 1fr;
+        padding: 40px;
+        width: 70%;
         min-width: 350px;
         height: 70%;
         background-color: #fff;
         ${shadow}
 
-        h3{
+        h2{
+            text-align: center;
+            grid-column: span 3;
             font-family: 'Dosis';
+            font-size: 2em;
+        }
+
+        .edit-picture{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 40px;
+            gap: 30px;
+            
+            label{
+                position: relative;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                
+                img{
+                    aspect-ratio: 1/1;
+                    width: 80%;
+                    border-radius: 50%;
+                    cursor: pointer;
+                    transition: 0.3s ease-out;
+                    border: 1px solid #000;
+
+                    &:hover{
+                        scale: 1.05;
+                    }
+                }
+            }
+
+            input{
+                display: none;
+            }
+            
+            
+        }
+
+        .edit-1{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            padding: 20px;
+        }
+        
+        .edit-2{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            padding: 20px;
+        }
+
+        .edit-options{
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            grid-column: span 3;
         }
     }
 `

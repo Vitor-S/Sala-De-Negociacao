@@ -1,8 +1,10 @@
 import { initializeApp } from 'firebase/app';
 import firebaseConfig from './firebaseConfig'
 import { getFirestore, doc, getDoc, setDoc, collection, getDocs } from 'firebase/firestore'
-import { 
-    getAuth, 
+import { getStorage } from 'firebase/storage'
+import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import {
+    getAuth,
     signInWithRedirect,
     signInWithPopup,
     GoogleAuthProvider,
@@ -14,15 +16,16 @@ import {
 const app = initializeApp(firebaseConfig)
 export const auth = getAuth();
 export const db = getFirestore(app)
+export const storage = getStorage(app)
 
 const createUserDocumentFromAuth = async (userAuth, data) => {
     const userDocRef = doc(db, 'users', userAuth.uid)
     const userSnapShot = await getDoc(userDocRef)
 
-    if(!userSnapShot.exists()){
+    if (!userSnapShot.exists()) {
         const { displayName, email } = userAuth
-        
-        try{
+
+        try {
             await setDoc(userDocRef, {
                 email,
                 id: userAuth.uid,
@@ -36,7 +39,7 @@ const createUserDocumentFromAuth = async (userAuth, data) => {
                 neighborhood: data.neighborhood,
                 street: data.street,
             })
-        }catch(error){
+        } catch (error) {
             alert(error)
         }
     }
@@ -81,7 +84,7 @@ export const Api = {
     },
 
     getDocumentFromCurrentUser: async () => {
-        
+
     },
 
     getDocById: async (userId, setState) => {
@@ -99,22 +102,22 @@ export const Api = {
     getAllDocs: async (col, setState) => {
         const colRef = collection(db, col)
         const snapShots = await getDocs(colRef)
-        
+
         let docs = []
         snapShots.forEach(doc => {
-            if(doc.id != auth.currentUser.uid) docs.push(doc.data())
+            if (doc.id != auth.currentUser.uid) docs.push(doc.data())
         })
 
         setState(docs)
     },
 
-    getReceivedMeetings: async(col, id, setState) => {
+    getReceivedMeetings: async (col, id, setState) => {
         const colRef = collection(db, col)
         const snapShots = await getDocs(colRef)
-        
+
         let docs = []
         snapShots.forEach(doc => {
-            if((doc.data().receiver == id) || (doc.data().sender == id) ) docs.push(doc.data())
+            if ((doc.data().receiver == id) || (doc.data().sender == id)) docs.push(doc.data())
         })
 
         setState(docs)
@@ -131,20 +134,20 @@ export const Api = {
 
         myData = await Promise.all(promises)
 
-        if(myData[0].connections && !myData[0].connections.includes(myData[1].id)){
+        if (myData[0].connections && !myData[0].connections.includes(myData[1].id)) {
             myData[0].connections = [...myData[0].connections, myData[1].id]
         }
-        else if(myData[0].connections && myData[0].connections.includes(myData[1].id)){
+        else if (myData[0].connections && myData[0].connections.includes(myData[1].id)) {
             myData[0].connections = myData[0].connections
         }
         else myData[0].connections = [myData[1].id]
 
         await setDoc(doc(db, 'users', myData[0].id), myData[0])
 
-        if(myData[1].connections && !myData[1].connections.includes(myData[0].id)){
+        if (myData[1].connections && !myData[1].connections.includes(myData[0].id)) {
             myData[1].connections = [...myData[1].connections, myData[0].id]
         }
-        else if(myData[1].connections && myData[1].connections.includes(myData[0].id)){
+        else if (myData[1].connections && myData[1].connections.includes(myData[0].id)) {
             myData[1].connections = myData[1].connections
         }
         else myData[1].connections = [myData[0].id]
@@ -152,7 +155,7 @@ export const Api = {
         await setDoc(doc(db, 'users', myData[1].id), myData[1])
     },
 
-    getCurrentUser: async(setState) => {
+    getCurrentUser: async (setState) => {
         setState(auth.currentUser)
     },
 
@@ -160,10 +163,10 @@ export const Api = {
         signOut(auth).then(() => {
             // Sign-out successful.
             navigate('/login')
-          }).catch((error) => {
+        }).catch((error) => {
             // An error happened.
             alert(error)
-          });    
+        });
     },
 
     getConnections: async (id) => {
@@ -184,4 +187,33 @@ export const Api = {
         return connectionsData
     },
 
+    handleSubmit: async (event, setPorgessPorcent, setImgURL, folder, userId) => {
+        event.preventDefault();
+
+        const file = event.target[0]?.files[0];
+        if (!file) return;
+
+        const storageRef = ref(storage, `${folder}/${userId}`);
+        const uploadTask = uploadBytesResumable(storageRef, file);
+
+        uploadTask.on("state_changed", (snapshot) => {
+            const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+            setPorgessPorcent(progress);
+        }, (error) => {
+            alert(error);
+        }, () => {
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                setImgURL(downloadURL);
+
+            });
+        }
+        )
+
+    },
+
+    getImage: async (folder, file) => {
+        const imageRef = ref(storage, `${folder}/${file}`)
+        const url = await getDownloadURL(imageRef);
+        return url
+    }
 }
