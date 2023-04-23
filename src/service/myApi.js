@@ -1,57 +1,43 @@
-import { initializeApp } from 'firebase/app';
-import firebaseConfig from './firebaseConfig'
-import { getFirestore, doc, getDoc, setDoc, collection, getDocs } from 'firebase/firestore'
-import { getStorage } from 'firebase/storage'
-import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
-import {
-    getAuth,
-    signInWithRedirect,
-    signInWithPopup,
-    GoogleAuthProvider,
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
-    signOut,
-} from "firebase/auth";
+import { db, auth, storage } from './myFirebaseConfig'
 
-const app = initializeApp(firebaseConfig)
-export const auth = getAuth();
-export const db = getFirestore(app)
-export const storage = getStorage(app)
+import { doc, getDoc, getDocs, setDoc, collection, query } from 'firebase/firestore'
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
+import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage'
 
-const createUserDocumentFromAuth = async (userAuth, data) => {
-    const userDocRef = doc(db, 'users', userAuth.uid)
-    const userSnapShot = await getDoc(userDocRef)
+const myApi = {
+    createUserDocumentFromAuth: async (userAuth, data) => {
+        const userDocRef = doc(db, 'users', userAuth.uid)
+        const userSnapShot = await getDoc(userDocRef)
 
-    if (!userSnapShot.exists()) {
-        const { displayName, email } = userAuth
+        if (!userSnapShot.exists()) {
+            const { displayName, email } = userAuth
 
-        try {
-            await setDoc(userDocRef, {
-                email,
-                id: userAuth.uid,
-                name: data.name,
-                surname: data.surname,
-                phone: data.phone,
-                supplier: Boolean(data.supplier),
-                area: data.area,
-                state: data.state,
-                city: data.city,
-                neighborhood: data.neighborhood,
-                street: data.street,
-            })
-        } catch (error) {
-            alert(error)
+            try {
+                await setDoc(userDocRef, {
+                    email,
+                    id: userAuth.uid,
+                    name: data.name,
+                    surname: data.surname,
+                    phone: data.phone,
+                    supplier: Boolean(data.supplier),
+                    area: data.area,
+                    state: data.state,
+                    city: data.city,
+                    neighborhood: data.neighborhood,
+                    street: data.street,
+                })
+            } catch (error) {
+                alert(error)
+            }
         }
-    }
-}
+    },
 
-export const Api = {
     createUserWithEmailAndPassword: async (data, navigate) => {
         createUserWithEmailAndPassword(auth, data.email, data.password)
             .then(async (userCredential) => {
                 // Signed in
                 const user = userCredential.user;
-                await createUserDocumentFromAuth(user, data)
+                await myApi.createUserDocumentFromAuth(user, data)
                 // ...
                 navigate('/login')
             })
@@ -74,7 +60,7 @@ export const Api = {
                 const userSnapShot = await getDoc(userDocRef)
 
                 //redirect
-                navigate('/')
+                navigate('/', { state: userSnapShot.data() })
             })
             .catch((error) => {
                 const errorCode = error.code;
@@ -83,52 +69,67 @@ export const Api = {
             });
     },
 
-    getDocumentFromCurrentUser: async () => {
-
+    signOut: async (navigate) => {
+        signOut(auth).then(() => {
+            // Sign-out successful.
+            navigate('/login')
+        }).catch((error) => {
+            // An error happened.
+            alert(error)
+        });
     },
 
-    getDocById: async (userId, setState) => {
-        const docRef = doc(db, 'users', userId)
-        const docSnap = await getDoc(docRef)
-        setState(docSnap.data())
-    },
-
-    returnDocById: async (userId) => {
-        const docRef = doc(db, 'users', userId)
+    getDocById: async (collectionName, userId) => {
+        const docRef = doc(db, collectionName, userId)
         const docSnap = await getDoc(docRef)
         return docSnap.data()
     },
 
-    getAllDocs: async (col, setState) => {
-        const colRef = collection(db, col)
-        const snapShots = await getDocs(colRef)
+    getMultiples: async (collectionName, wheres, op) => {
+        //para pegar todos os dados de uma coleção use where == []
 
-        let docs = []
-        snapShots.forEach(doc => {
-            if (doc.id != auth.currentUser.uid) docs.push(doc.data())
-        })
+        const colelctionRef = collection(db, collectionName)
+        let result = []
 
-        setState(docs)
+        if (op == '&&') {
+            const myQuery = query(colelctionRef, ...wheres)
+            const snapShots = await getDocs(myQuery)
+
+            snapShots.forEach((doc) => {
+                result.push(doc.data())
+            });
+
+            return result
+        }
+        else if (op == '||') {
+            for (let where of wheres) {
+                const snapshots = await getDocs(query(colelctionRef, where))
+
+                snapshots.forEach(doc => {
+                    result.push(doc.data())
+                })
+            }
+            return result
+        }
+        else if (wheres.length == 0) {
+            const myQuery = query(colelctionRef, ...wheres)
+            const snapShots = await getDocs(myQuery)
+
+            snapShots.forEach((doc) => {
+                result.push(doc.data())
+            });
+
+            return result
+        }
+
     },
 
-    getReceivedMeetings: async (col, id, setState) => {
-        const colRef = collection(db, col)
-        const snapShots = await getDocs(colRef)
-
-        let docs = []
-        snapShots.forEach(doc => {
-            if ((doc.data().receiver == id) || (doc.data().sender == id)) docs.push(doc.data())
-        })
-
-        setState(docs)
-    },
-
-    handleWithConnections: async (id1, id2) => {
+    setConnections: async (id1, id2) => {
         const ids = [id1, id2]
         let myData = []
 
         const promises = ids.map(async id => {
-            const myPromise = await Api.returnDocById(id)
+            const myPromise = await myApi.getDocById(id)
             return myPromise
         })
 
@@ -155,31 +156,17 @@ export const Api = {
         await setDoc(doc(db, 'users', myData[1].id), myData[1])
     },
 
-    getCurrentUser: async (setState) => {
-        setState(auth.currentUser)
-    },
-
-    signOut: async (navigate) => {
-        signOut(auth).then(() => {
-            // Sign-out successful.
-            navigate('/login')
-        }).catch((error) => {
-            // An error happened.
-            alert(error)
-        });
-    },
-
     getConnections: async (id) => {
         // As funções async retornam Promises, portanto, o loop forEach não aguardará a resolução das Promises antes de continuar para a próxima iteração
 
         //retorna todos os id ao qual o usuário(id) está connectado
 
-        const userData = await Api.returnDocById(id)
+        const userData = await myApi.getDocById('users', id)
         let connectionsData = []
 
         if (userData.connections) {
             const promises = userData.connections.map(async con => {
-                const conData = await Api.returnDocById(con)
+                const conData = await myApi.getDocById('users', con)
                 return conData
             })
 
@@ -187,6 +174,12 @@ export const Api = {
         }
 
         return connectionsData
+    },
+
+    getImage: async (folder, file) => {
+        const imageRef = ref(storage, `${folder}/${file}`)
+        const url = await getDownloadURL(imageRef);
+        return url
     },
 
     handleSubmit: async (event, setPorgessPorcent, setImgURL, folder, userId) => {
@@ -212,10 +205,6 @@ export const Api = {
         )
 
     },
-
-    getImage: async (folder, file) => {
-        const imageRef = ref(storage, `${folder}/${file}`)
-        const url = await getDownloadURL(imageRef);
-        return url
-    }
 }
+
+export default myApi

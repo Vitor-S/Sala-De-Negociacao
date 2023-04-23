@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Api, auth } from '../service/Api'
+import myApi from '../service/myApi';
 
 import { StyledProfile, StyledEditModal } from '../styles/styles'
 
@@ -18,30 +19,44 @@ import { useNavigate, useParams } from 'react-router-dom';
 export default function Profile() {
     const navigate = useNavigate()
 
+    //estado do modal de edição
     const [modalState, setModalState] = useState(false)
 
+    //dados do dono da página
     const [user, setUser] = useState(null);
+
+    //usuário logado(currentUser)
     const [userLogged, setUserLogged] = useState()
+    
+    //dados do usuário logado
     const [userLoggedData, setUserLoggedData] = useState()
 
+    //imagem do perfil atual
     const [pictureUrl, setPictureUrl] = useState('')
 
+    //id do dono da página vindo da URL
     const userId = useParams();
 
     useEffect(() => {
-        Api.getDocById(userId.id, setUser)
+        (async () => {
+            const data = await myApi.getDocById('users', userId.id)
+            setUser(data)
+        })()
     }, [userId])
 
     useEffect(() => {
         auth.onAuthStateChanged((userLogged) => {
             setUserLogged(userLogged);
-            Api.getDocById(userLogged.uid, setUserLoggedData)
+            (async() => {
+                const data = await myApi.getDocById('users', userLogged.uid)
+                setUserLoggedData(data)
+            })()
         });
     }, [])
 
     useEffect(() => {
         (async () => {
-            const imgUrl = await Api.getImage('images', userId.id)
+            const imgUrl = await myApi.getImage('images', userId.id)
             if(imgUrl) setPictureUrl(imgUrl)
         })()
     }, [userId])
@@ -52,7 +67,7 @@ export default function Profile() {
 
         const origin = userLoggedData.street.replaceAll(' ', '+') + '+' + userLoggedData.city.replaceAll(' ', '+') + '+' + userLoggedData.state.replaceAll(' ', '+')
 
-        window.location = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}`
+        window.open(`https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}`, '_blank')
     }
 
     return (user != null) ? (
@@ -76,27 +91,27 @@ export default function Profile() {
                         }
                         <h2>{`${user.name} ${user.surname}`}</h2>
                         <h3>Fornecedor de {user.area}</h3>
-                        <div className="locale">
+                        <div className="locale" onClick={() => window.open('', '_blank')}>
                             <LocationOnIcon />
                             <span >{`${user.city} ${user.state}`}</span>
                         </div>
                         <div className="social-medias">
                             <IconButton
                                 onClick={() => navigate(`/chat?logged=${userLogged.uid}&receiver=${user.id}`)}>
-                                <ChatIcon color='primary' />
+                                <ChatIcon fontSize='large' color='primary' />
                             </IconButton>
                             <IconButton onClick={() =>
                                 window.location.href = "mailto:" + user.email
                             }>
-                                <EmailIcon sx={{ color: '#f9aa2a' }} />
-                            </IconButton>
+                                <EmailIcon fontSize='large' sx={{ color: '#f9aa2a' }} />
+                            </IconButton >
                             <IconButton onClick={() =>
-                                window.location.href = `https://api.whatsapp.com/send?phone=${user.phone}`
+                                window.open(`https://api.whatsapp.com/send?phone=${user.phone}`, '_blank')
                             }>
-                                <WhatsAppIcon color='success' />
+                                <WhatsAppIcon fontSize='large' color='success' />
                             </IconButton>
                             <IconButton onClick={handleLocationClick}>
-                                <LocationOnIcon color='error' />
+                                <LocationOnIcon fontSize='large' color='error' />
                             </IconButton>
                         </div>
                     </div>
@@ -134,7 +149,7 @@ function EditModal({ setModal, profileOwnerId, currentPicture }) {
 
     useEffect(() => {
         (async () => {
-            const imgUrl = await Api.getImage('images', profileOwnerId)
+            const imgUrl = await myApi.getImage('images', profileOwnerId)
             if(imgUrl) setImageUrl(imgUrl)
         })()
     }, [profileOwnerId])
@@ -145,7 +160,7 @@ function EditModal({ setModal, profileOwnerId, currentPicture }) {
                 <h2>Atualize seus dados</h2>
                 <form 
                     className="edit-picture" 
-                    onSubmit={async ev => await Api.handleSubmit(ev, setProgress, setImageUrl, 'images', profileOwnerId)}>
+                    onSubmit={async ev => await myApi.handleSubmit(ev, setProgress, setImageUrl, 'images', profileOwnerId)}>
                         <label for="teste">
                             {
                                 imageUrl ? <img src={imageUrl} alt="" className="profile-picture"/>:

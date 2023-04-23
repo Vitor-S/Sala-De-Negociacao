@@ -4,7 +4,7 @@ import { register_validation } from '../utils/yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 //service
-import { Api } from '../service/Api';
+import myApi from '../service/myApi'
 
 //components
 import { TextField, Button, InputLabel, MenuItem, FormControl, Select, FormHelperText, Autocomplete } from '@mui/material';
@@ -40,7 +40,7 @@ export default function Register() {
             <form className="container"
                 onSubmit={handleSubmit((data) => {
                     data.supplier = JSON.parse(data.supplier)
-                    Api.createUserWithEmailAndPassword(data, navigate)
+                    myApi.createUserWithEmailAndPassword(data, navigate)
                     // console.log(data)
                 })}>
                 <div className='two-containers'>

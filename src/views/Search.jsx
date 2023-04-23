@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import { Api, auth } from '../service/Api'
+import myApi from '../service/myApi'
 
 import { getFirestore, collection, getDocs } from 'firebase/firestore'
 
@@ -28,22 +28,21 @@ export default function Search() {
     const [cities, setCities] = useState([])
     const [states, setStates] = useState([])
 
-    // const apllyFilters = () => {
-    //     const filters = [stateFilter, supplierFilter].filter(obj => obj != undefined)
+    const apllyFilters = () => {
+        const filters = [citiesFilter, statesFilter, supplierFilter].filter(obj => obj != undefined)
 
-    //     const wheres = filters.map(obj => {
-    //         return(
-    //             where(Object.keys(obj)[0], '==', Object.values(obj)[0])
-    //         )
-    //     })
+        console.log(filters)
 
-    //     FirebaseGet(query(collection(db, 'users'), ...wheres), setCurrentData)
-    // }
+        // const wheres = filters.map(obj => {
+        //     return(
+        //         where(Object.keys(obj)[0], '==', Object.values(obj)[0])
+        //     )
+        // })
+
+        // FirebaseGet(query(collection(db, 'users'), ...wheres), setCurrentData)
+    }
     
     useEffect(() => {
-        //autologout
-        // if(auth.currentUser == null) navigate('/login')
-
         //getting states for the filter
         axios.get('https://servicodados.ibge.gov.br/api/v1/localidades/estados').then(res => {
             const list = []
@@ -53,9 +52,10 @@ export default function Search() {
     }, [])
     
     useEffect(() => {
-
-        //get all docs
-        Api.getAllDocs('users', setCurrentData)
+        (async () => {
+            const data = await myApi.getMultiples('users', [], '')
+            setCurrentData(data)
+        })()
     }, [])
 
     return (
@@ -72,7 +72,6 @@ export default function Search() {
                     <div className="filters-area">
 
                         <Autocomplete 
-                            
                             name='supplier'
                             options={["Fornecedor", "Contratante"]}
                             sx={{ width: '80%' }}
@@ -95,7 +94,7 @@ export default function Search() {
                             sx={{ width: '80%' }}
                             renderInput={(params) => <TextField {...params} label="Estado" />}
                             onChange={(ev, value) => {
-                                setStatesFilter(value != null ? {'state': value} : undefined)
+                                if(value != null) setStatesFilter({'state': value})
 
                                 if(value != null){
                                     axios.get(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${value}/distritos`)
@@ -114,14 +113,16 @@ export default function Search() {
                             options={cities}
                             sx={{ width: '80%' }}
                             renderInput={(params) => <TextField {...params} label="Cidade" />}
-                            onChange={(ev, value) => setCitiesFilter(value != null ? value : undefined)}
+                            onChange={(ev, value) => {
+                                if(value != null) setStatesFilter({city: value})
+                            }}
                         />
 
                         <div className="handle-filters">
                             <Button 
                                 fullWidth
                                 color="primary"
-                                onClick={() => ''}>
+                                onClick={apllyFilters}>
                                     Aplicar Filtros
                             </Button>
                         </div>

@@ -1,17 +1,20 @@
 import React, { useEffect, useRef, useState } from 'react'
 
 import { StyledChat } from '../styles/styles'
-import { StyledContactCard, StyledMessage } from '../styles/components-styles'
+import { StyledChatHeader, StyledContactCard, StyledMessage } from '../styles/components-styles'
 
 import Header from '../components/Header'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import { motion } from 'framer-motion'
 
-import { Api, db } from '../service/Api'
+import myApi from '../service/myApi'
+import { db } from '../service/myFirebaseConfig'
 import { doc, collection, addDoc, query, orderBy, onSnapshot } from 'firebase/firestore'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import HandshakeIcon from '@mui/icons-material/Handshake';
+
+console.log(' '.trim())
 
 export default function Chat() {
 
@@ -24,6 +27,8 @@ export default function Chat() {
     const userReceiverId = new URLSearchParams(location.search).get("receiver");
 
     const divMessagesRef = useRef()
+
+    const [activeChatData, setActiveChatData] = useState()
 
     //scroll end
     useEffect(() => {
@@ -54,21 +59,32 @@ export default function Chat() {
         return () => unsubscribe();
     }, [userReceiverId]);
 
+    useEffect(() => {
+        (async() => {
+            if(userReceiverId){
+                const data = await myApi.getDocById('users', userReceiverId)
+                setActiveChatData(data)
+            }
+        })()
+    }, [userReceiverId])
+
     const handleSendMessage = async (ev) => {
 
-        const collectionRef = collection(db, 'messages')
-
-        await addDoc(collectionRef, {
-            sender: userLoggedId,
-            receiver: userReceiverId,
-            text: text,
-            createdAt: new Date()
-        })
-
-        setText('');
-        inputRef.current.value = ''
-
-        Api.handleWithConnections(userLoggedId, userReceiverId)
+        if(text.trim() != ''){
+            const collectionRef = collection(db, 'messages')
+    
+            await addDoc(collectionRef, {
+                sender: userLoggedId,
+                receiver: userReceiverId,
+                text: text,
+                createdAt: new Date()
+            })
+    
+            setText('');
+            inputRef.current.value = ''
+    
+            myApi.setConnections(userLoggedId, userReceiverId)
+        }
     };
 
     return (
@@ -79,6 +95,7 @@ export default function Chat() {
                 {
                     userReceiverId ?
                         <div className="right">
+                            <ChatHeader data={activeChatData}/>
                             <div ref={divMessagesRef} className="messages">
                                 {
                                     messages && messages.map(mess =>
@@ -89,7 +106,7 @@ export default function Chat() {
                             <div className="options">
                                 <TextField
                                     onKeyUp={(ev) => {
-                                        if (ev.key == 'Enter') handleSendMessage()
+                                        if (ev.key == 'Enter' && inputRef.current.value != '') handleSendMessage()
                                     }}
                                     inputRef={inputRef}
                                     onChange={(ev) => setText(ev.target.value)}
@@ -99,7 +116,7 @@ export default function Chat() {
                                     sx={{ height: '55px' }}
                                     variant='contained'
                                     color="primary">
-                                    Enviar
+                                        Enviar
                                 </Button>
                             </div>
                         </div> :
@@ -122,6 +139,16 @@ export default function Chat() {
     )
 }
 
+function ChatHeader({ data }){
+
+    return data ? (
+        <StyledChatHeader initial={{opacity: 0}} animate={{opacity: 1}}>
+            <img src="https://pbs.twimg.com/media/FjU2lkcWYAgNG6d.jpg" alt="" />
+            <h3>{data.name +' '+ data.surname}</h3>
+        </StyledChatHeader>
+    ) : null
+}
+
 function ContactManager({ userLoggedId }) {
 
     const [connections, setConnections] = useState()
@@ -129,7 +156,7 @@ function ContactManager({ userLoggedId }) {
     useEffect(() => {
         const unsubscribe = onSnapshot(doc(db, 'users', userLoggedId), () => {
             (async () => {
-                const myConnections = await Api.getConnections(userLoggedId)
+                const myConnections = await myApi.getConnections(userLoggedId)
                 setConnections(myConnections)
             })()
         })
@@ -138,7 +165,7 @@ function ContactManager({ userLoggedId }) {
     }, [])
 
     return connections == undefined ?
-        <div className='left' onClick={() => console.log(connections)}
+        <div className='left'
             style={{
                 display: 'flex',
                 justifyContent: 'center',
@@ -146,7 +173,7 @@ function ContactManager({ userLoggedId }) {
                 fontStyle: 'italic'
             }} />
         :
-        <div className='left' onClick={() => console.log(connections.lenght)}>
+        <div className='left'>
             {
                 connections && connections.map(con =>
                     <ContactCard key={con.id} data={con} />)

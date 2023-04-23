@@ -9,7 +9,7 @@ export default Error = () => {
             justifyContent: 'center',
             alignItems: 'center'
         }}>
-            View
+            Página não encontrada
         </div>
     )
 };

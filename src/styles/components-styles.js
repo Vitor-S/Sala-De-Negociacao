@@ -355,3 +355,22 @@ export const StyledContactCard = styled(motion.div)`
         
     }
 `
+
+export const StyledChatHeader = styled(motion.div)`
+    display: flex;
+    align-items: center;
+    height: 80px;
+    padding: 0 3%;
+    gap: 3%;
+    border-bottom: 1px solid #000;
+
+    img{
+        height: 70%;
+        border-radius: 50%;
+    }
+
+    h3{
+        font-family: 'Dosis';
+        font-size: 1.4em;
+    }
+`

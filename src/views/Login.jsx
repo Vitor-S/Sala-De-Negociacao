@@ -13,7 +13,7 @@ import { StyledLogin } from '../styles/styles';
 import login_bg from '../assets/login-bg.png'
 
 //service
-import { Api } from '../service/Api'
+import myApi from '../service/myApi'
 
 export default function Login() {    
     
@@ -31,7 +31,7 @@ export default function Login() {
                 </div>
                 <div className="form-container">
                     <form onSubmit={
-                        handleSubmit(data => Api.signInWithEmailAndPassword(data.email, data.password, navigate))
+                        handleSubmit(data => myApi.signInWithEmailAndPassword(data.email, data.password, navigate))
                     }>
                         <span>LOGIN</span>
 
