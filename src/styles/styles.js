@@ -379,10 +379,12 @@ export const StyledProfile = styled.div`
             .left-container{
                 padding: 0;
                 margin: 0;
+                
                 .info-container{
                     padding: 80px 0;
                     width: 350px;
-                    height: 50%;
+                    height: 400px;
+                    min-height: 400px;
                     margin-left: 0;
                 }
             }
