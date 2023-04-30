@@ -386,6 +386,10 @@ export const StyledProfile = styled.div`
                     height: auto;
                     margin-left: 0;
                 }
+
+                h2{
+                    font-size: 1.5rem;
+                }
             }
             
             .right-container{
