@@ -383,7 +383,7 @@ export const StyledProfile = styled.div`
                 .info-container{
                     background-color: transparent;
                     padding: 80px 0;
-                    width: 350px;
+                    width: 330px;
                     height: auto;
                     margin-left: 0;
                 }
