@@ -119,8 +119,8 @@ export default function Profile() {
                 <div className="right-container">
                     {
                         (userLogged.uid == user.id) ?
-                            <h2>Verifique suas reuniões, {user.name} </h2>
-                            : <h2>Marque uma reunião com {user.name} </h2>
+                            <h2 >Verifique suas reuniões, {user.name} </h2>
+                            : <h2 >Marque uma reunião com {user.name} </h2>
                     }
                     <Calendar userLoggedId={userLogged.uid} profileOwner={user} />
                 </div>

@@ -381,22 +381,22 @@ export const StyledProfile = styled.div`
                 margin: 0;
                 
                 .info-container{
+                    background-color: transparent;
                     padding: 80px 0;
                     width: 350px;
                     height: auto;
                     margin-left: 0;
-                }
-
-                h2{
-                    font-size: 1.5rem;
                 }
             }
             
             .right-container{
                 height: 80vh;
                 background-color: ${light};
-
                 padding-bottom: 50px;
+
+                h2{
+                    font-size: 1.3rem;
+                }
             }
         }
 
