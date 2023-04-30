@@ -65,7 +65,7 @@ export default function Search() {
                 <div className="search-filters">
                     <div className="search-area">
                         <TextField
-                            sx={{ width: '80% '}}
+                            sx={{ width: '80%'}}
                             label="Pesquisar"
                         />
                     </div>

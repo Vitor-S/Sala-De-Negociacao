@@ -10,13 +10,12 @@ const shadow = '-webkit-box-shadow: 0px 0px 4px 0px rgba(11,7,89,1); -moz-box-sh
 export const StyledCard = styled.div`
     @import url('https://fonts.googleapis.com/css?family=Dosis');
 
-    width: 27%;
+    width: 30%;
+    min-width: 222px;
     height: 150px;
 
     .card-motion-container{
         display: flex;
-        margin: 6px;
-        padding: 5px 10px;
         background-color: ${middle};
         ${shadow};
         border-radius: 2px;

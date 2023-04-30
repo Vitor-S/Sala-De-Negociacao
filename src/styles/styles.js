@@ -228,6 +228,7 @@ export const StyledSearch = styled.div`
             flex-direction: column;
             flex: 3;
             height: 100%;
+            min-width: 230px;
 
             div{
                 background-color: #FFF;
@@ -267,12 +268,56 @@ export const StyledSearch = styled.div`
             align-items: center;
             gap: 4%;
             flex-flow: wrap;
-            flex: 7;
             padding: 20px;
             overflow-y: scroll;
+            flex: 7;
         }
+    }
 
-        
+    @media(max-width: 530px){
+        .search-body{
+            flex-direction: column;
+
+            .search-filters{
+                display: flex;
+                flex-direction: row;
+                flex: 1;
+
+                .search-area{
+                    input{
+                        width: 100px;
+                    }
+                }
+
+                .filters-area{
+                    display: flex;
+                    flex-direction: row;
+                    overflow-x: scroll;
+                    gap: 5px;
+
+                    input{
+                        width: 100px;
+                    }
+
+                    .handle-filters{
+                        width: 100%;
+                        display: flex;
+                        justify-content: space-between;
+
+                        button{
+                            width: 130px;
+                            font-family: 'Dosis';
+                            font-size: 1rem;
+                            padding: 0;
+                        }
+                    }
+                }
+            }
+
+            /* .search-filters{
+                display: none;
+            } */
+        }
     }
 `
 
