@@ -14,8 +14,6 @@ import { Autocomplete, Button } from '@mui/material'
 //styled
 import { StyledSearch } from '../styles/styles'
 
-const db = getFirestore()
-
 export default function Search() {
     const navigate = useNavigate()
 
@@ -33,10 +31,8 @@ export default function Search() {
     const [areas, setAreas] = useState([])
 
     const applyFilters = async () => {
-        console.log(firstName)
-        console.log(secondName)
 
-        const filters = [firstName, secondName, citiesFilter, statesFilter, supplierFilter, areasFilter].filter(obj => obj != undefined)
+        const filters = [firstName, secondName, supplierFilter, citiesFilter, statesFilter, areasFilter].filter(obj => obj != undefined)
 
         const myWheres = filters.map(fil => {
             return where(Object.keys(fil)[0], '==', Object.values(fil)[0])
@@ -108,7 +104,8 @@ export default function Search() {
                             renderInput={(params) => <TextField {...params} label="Tipo" />}
                             onChange={(ev, value) =>
                                 setSupplierFilter(value == 'Fornecedor' ? { 'supplier': true } :
-                                    value == 'Contratante' ? { 'supplier': false } : undefined)}
+                                    value == 'Contratante' ? { 'supplier': false } : undefined)
+                            }
                         />
 
                         <Autocomplete
