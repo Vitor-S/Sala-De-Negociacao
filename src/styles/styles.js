@@ -283,7 +283,6 @@ export const StyledProfile = styled.div`
     height: 100vh;
     display: flex;
     flex-direction: column;
-    background-color: ${light};
 
     .profile-body{
         width: 100vw;
@@ -296,6 +295,7 @@ export const StyledProfile = styled.div`
             align-items: center;
             width: 100%;
             height: 100%;
+            background-color: ${light};
 
             .info-container{
                 position: relative;
@@ -306,8 +306,9 @@ export const StyledProfile = styled.div`
                 flex-direction: column;
                 align-items: center;
                 gap: 25px;
+                margin-left: 20%;
 
-                width: 80%;
+                width: 75%;
                 height: 75%;
                 border-radius: 10px;
 
@@ -359,6 +360,7 @@ export const StyledProfile = styled.div`
             font-size: 1rem;
             width: 100%;
             height: 100%;
+            background-color: ${light};
 
             h2{
                 color: #FFF;
@@ -367,6 +369,32 @@ export const StyledProfile = styled.div`
                 text-align: center;
             }
         }
+    }
+
+    @media(max-width: 900px){
+        .profile-body{
+            flex-direction: column;
+            height: auto;
+
+            .left-container{
+                padding: 0;
+                margin: 0;
+                .info-container{
+                    padding: 80px 0;
+                    width: 350px;
+                    height: 50%;
+                    margin-left: 0;
+                }
+            }
+            
+            .right-container{
+                height: 80vh;
+                background-color: ${light};
+
+                padding-bottom: 50px;
+            }
+        }
+
     }
 `
 
