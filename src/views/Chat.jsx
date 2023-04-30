@@ -10,8 +10,6 @@ import { motion } from 'framer-motion'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 
-import { Api } from '../service/Api'
-
 import myApi from '../service/myApi'
 import { db } from '../service/myFirebaseConfig'
 import { doc, collection, addDoc, query, orderBy, onSnapshot } from 'firebase/firestore'
@@ -33,8 +31,6 @@ export default function Chat() {
     const divMessagesRef = useRef()
 
     const [activeChatData, setActiveChatData] = useState()
-
-    console.log(activeChatData)
 
     //scroll end
     useEffect(() => {
@@ -105,7 +101,8 @@ export default function Chat() {
                             <div ref={divMessagesRef} className="messages">
                                 {
                                     viewContactsState ?
-                                        <MobileContactManager userLoggedId={userLoggedId} userReceiverId={userReceiverId} /> : messages && messages.map(mess => <Message key={mess.id} data={mess} logged={userLoggedId} />)
+                                        <MobileContactManager userLoggedId={userLoggedId} userReceiverId={userReceiverId} /> : 
+                                        messages && messages.map(mess => <Message key={mess.id} data={mess} logged={userLoggedId} />)
                                 }
                             </div>
                             <div className="options">
@@ -156,7 +153,10 @@ function ChatHeader({ data }) {
 
     return data ? (
         <StyledChatHeader initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            <img src="https://pbs.twimg.com/media/FjU2lkcWYAgNG6d.jpg" alt="" />
+            {
+                data.PhotoUrl ? <img src={data.PhotoUrl}/> : <img src="https://unicerrado.edu.br/wp-content/uploads/placeholder-unicerrado-redondo.png" alt="" />
+            }
+            
             <h3>{data.name + ' ' + data.surname}</h3>
         </StyledChatHeader>
     ) : null
@@ -189,7 +189,7 @@ function ContactManager({ userLoggedId }) {
         <div className='left'>
             {
                 connections && connections.map(con =>
-                    <ContactCard key={con.id} data={con} />)
+                    <ContactCard key={con.id} data={con}  />)
             }
         </div>
 }
@@ -208,7 +208,9 @@ function ContactCard({ data }) {
             initial={{ opacity: 0.5 }}
             animate={{ opacity: 5 }}>
             <div className="contact-picture-container">
-                <img src="https://pbs.twimg.com/media/FjU2lkcWYAgNG6d.jpg" alt="" />
+                {
+                    data.PhotoUrl ? <img src={data.PhotoUrl}/> : <img src="https://unicerrado.edu.br/wp-content/uploads/placeholder-unicerrado-redondo.png" alt="" />
+                }
             </div>
             <div className="contact-info">
                 <h3>{data.name} {data.surname}</h3>
