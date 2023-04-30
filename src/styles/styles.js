@@ -312,6 +312,10 @@ export const StyledProfile = styled.div`
                 height: 75%;
                 border-radius: 10px;
 
+                h3{
+                    width: 90%;
+                }
+
                 .edit-profile{
                     position: absolute;
                     top: 5px;
