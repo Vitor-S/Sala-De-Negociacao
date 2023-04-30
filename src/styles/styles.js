@@ -47,6 +47,7 @@ export const StyledRegister = styled.div`
 `
 
 export const StyledLogin = styled.div`
+    width: 100vw;
     height: 100vh;
     display: flex;
     justify-content: center;
@@ -54,8 +55,8 @@ export const StyledLogin = styled.div`
     background-color: ${middle};
     
     .form-wrapper{
-        width: 65%;
-        min-height: 502px;
+        width: 80%;
+        height: 60%;
         display: flex;
         ${shadow}
         
@@ -82,17 +83,23 @@ export const StyledLogin = styled.div`
                 flex-direction: column;
                 align-items: center;
                 justify-content: space-around;
-                padding: 0 20px;
-
+                
                 .inputs-container{
+                    width: 90%;
                     display: flex;
                     flex-direction: column;
                     gap: 40px;
                 }
+            }
+        }
+    }
 
-                input{
-                    min-width: 300px;
-                }
+    @media (max-width: 1100px) {
+        .form-wrapper{
+            width: 95%;
+
+            .form-bg{
+                display: none;
             }
         }
     }

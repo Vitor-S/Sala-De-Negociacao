@@ -36,13 +36,13 @@ export default function Login() {
                         <span>LOGIN</span>
 
                         <div className="inputs-container">
-                            <TextField error={Boolean(errors.email)}
+                            <TextField fullWidth error={Boolean(errors.email)}
                                 label="Email"
                                 variant="outlined"
                                 {...register('email')}
                                 helperText={errors.email?.message} />
 
-                            <TextField error={Boolean(errors.password)}
+                            <TextField fullWidth error={Boolean(errors.password)}
                                 type='password'
                                 label="Senha"
                                 variant="outlined"
