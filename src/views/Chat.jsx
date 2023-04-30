@@ -18,7 +18,6 @@ import { doc, collection, addDoc, query, orderBy, onSnapshot } from 'firebase/fi
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import HandshakeIcon from '@mui/icons-material/Handshake';
 
-
 export default function Chat() {
 
     const [viewContactsState, setViewContactsState] = useState(false)
@@ -132,7 +131,7 @@ export default function Chat() {
                                     Enviar
                                 </Button>
                             </div>
-                        </div> :
+                        </div> : window.innerWidth > 755 ?
                         <div className="right empty-right">
                             <>
                                 <HandshakeIcon fontSize='large' sx={{ color: 'gray' }} />
@@ -144,9 +143,8 @@ export default function Chat() {
                                 <span>Precisa me mais parceiros ?</span>
                                 <Link to='/search'>clique aqui para procurar contatos</Link>
                             </>
-                        </div>
+                        </div>  : <MobileContactManager userLoggedId={userLoggedId} userReceiverId={userReceiverId}/>
                 }
-
             </div>
         </StyledChat>
     )
@@ -251,7 +249,7 @@ function MobileContactManager({ userLoggedId }) {
             }} 
         /> :
         <motion.div initial={{y: 100}} animate={{y: 0}}>
-            <h4 style={{width: "100%", textAlign: "center", marginBottom: '10px'}}>Contatos</h4>
+            <h4 style={{width: "100%", textAlign: "center", margin: '10px 0'}}>Contatos</h4>
             {
                 connections && connections.map(con =>
                     <ContactCard key={con.id} data={con}/>)
