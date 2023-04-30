@@ -576,11 +576,23 @@ export const StyledChat = styled.div`
         }
         
         .options{
+            position: relative;
             display: flex;
             align-items: center;
             justify-content: space-evenly;
             width: 100%;
             height: 20%;
+
+            .view-contacts-button{
+                position: absolute;
+                top: -10px;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .input-message{
+                width: 80%;
+            }
         }
     }
 
@@ -602,4 +614,20 @@ export const StyledChat = styled.div`
             font-weight: 500;
         }
     }
+
+    @media(max-width: 755px){
+        .right{
+            .options{
+                .input-message{
+                    width: 70%;
+                }
+            }
+        }
+    }
+
+    @media(max-width: 550px){
+        .left{
+            display: none;
+        }
+    }    
 `

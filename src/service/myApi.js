@@ -129,7 +129,7 @@ const myApi = {
         let myData = []
 
         const promises = ids.map(async id => {
-            const myPromise = await myApi.getDocById(id)
+            const myPromise = await myApi.getDocById("users", id)
             return myPromise
         })
 
@@ -204,6 +204,18 @@ const myApi = {
         }
         )
 
+    },
+
+    getExcept: async (collectionName) => {
+        const colRef = collection(db, collectionName)
+        const snapShots = await getDocs(colRef)
+
+        let docs = []
+        snapShots.forEach(doc => {
+            if (doc.id != auth.currentUser.uid) docs.push(doc.data())
+        })
+
+        return docs
     },
 }
 

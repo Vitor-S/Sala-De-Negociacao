@@ -53,7 +53,7 @@ export default function Search() {
     
     useEffect(() => {
         (async () => {
-            const data = await myApi.getMultiples('users', [], '')
+            let data = await myApi.getExcept("users")
             setCurrentData(data)
         })()
     }, [])

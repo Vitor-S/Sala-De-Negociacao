@@ -344,14 +344,15 @@ export const StyledMessage = styled.div`
     justify-content: ${props => props.owner ? 'flex-end' : 'flex-start'};
 
     div{
-        max-width: 80%;
         display: inline-block;
-        flex-flow: flex-end;
+        max-width: 50%;
+        flex-flow: wrap;
         padding: 10px;
         width: auto;
         background-color: ${props => props.owner ? middle : 'gray'};
         color: #fff;
         border-radius: 10px;
+        word-break: break-all;
     }
 `
 
@@ -396,6 +397,10 @@ export const StyledContactCard = styled(motion.div)`
             font-style: italic;
         }
         
+    }
+
+    @media(max-width: 755px){
+        height: auto;
     }
 `
 

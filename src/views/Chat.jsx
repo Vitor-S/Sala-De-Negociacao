@@ -7,6 +7,10 @@ import Header from '../components/Header'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import { motion } from 'framer-motion'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+
+import { Api } from '../service/Api'
 
 import myApi from '../service/myApi'
 import { db } from '../service/myFirebaseConfig'
@@ -14,7 +18,10 @@ import { doc, collection, addDoc, query, orderBy, onSnapshot } from 'firebase/fi
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import HandshakeIcon from '@mui/icons-material/Handshake';
 
+
 export default function Chat() {
+
+    const [viewContactsState, setViewContactsState] = useState(false)
 
     const inputRef = useRef()
     const [text, setText] = useState()
@@ -58,8 +65,8 @@ export default function Chat() {
     }, [userReceiverId]);
 
     useEffect(() => {
-        (async() => {
-            if(userReceiverId){
+        (async () => {
+            if (userReceiverId) {
                 const data = await myApi.getDocById('users', userReceiverId)
                 setActiveChatData(data)
             }
@@ -68,19 +75,19 @@ export default function Chat() {
 
     const handleSendMessage = async (ev) => {
 
-        if(text.trim() != ''){
+        if (text.trim() != '') {
             const collectionRef = collection(db, 'messages')
-    
+
             await addDoc(collectionRef, {
                 sender: userLoggedId,
                 receiver: userReceiverId,
                 text: text,
                 createdAt: new Date()
             })
-    
+
             setText('');
             inputRef.current.value = ''
-    
+
             myApi.setConnections(userLoggedId, userReceiverId)
         }
     };
@@ -93,42 +100,50 @@ export default function Chat() {
                 {
                     userReceiverId ?
                         <div className="right">
-                            <ChatHeader data={activeChatData}/>
+                            <ChatHeader data={activeChatData} />
                             <div ref={divMessagesRef} className="messages">
                                 {
-                                    messages && messages.map(mess =>
-                                        <Message key={mess.id} data={mess}
-                                            logged={userLoggedId} />)
+                                    viewContactsState ? 
+                                    <MobileContactManager userLoggedId={userLoggedId} userReceiverId={userReceiverId}/> : messages && messages.map(mess => <Message key={mess.id} data={mess} logged={userLoggedId} />)
                                 }
                             </div>
                             <div className="options">
+                                <Button className='view-contacts-button'
+                                    onClick={() => setViewContactsState(!viewContactsState)}>
+                                    {
+                                        viewContactsState ?
+                                            <ExpandMoreIcon fontSize='large' style={{color: "#000"}} /> :
+                                            <ExpandLessIcon fontSize='large' style={{color: "#000"}} />
+                                    }
+                                </Button>
                                 <TextField
+                                    className='input-message'
                                     onKeyUp={(ev) => {
                                         if (ev.key == 'Enter' && inputRef.current.value != '') handleSendMessage()
                                     }}
                                     inputRef={inputRef}
                                     onChange={(ev) => setText(ev.target.value)}
-                                    sx={{ width: '80%', border: '1px solid #000' }} />
+                                    sx={{ border: '1px solid #000' }} />
                                 <Button
                                     onClick={handleSendMessage}
                                     sx={{ height: '55px' }}
                                     variant='contained'
                                     color="primary">
-                                        Enviar
+                                    Enviar
                                 </Button>
                             </div>
                         </div> :
                         <div className="right empty-right">
-                                <>
-                                    <HandshakeIcon fontSize='large' sx={{ color: 'gray' }} />
-                                    <span >
-                                        Sala de Negociação
-                                    </span>
-                                </>
-                                <>
-                                    <span>Precisa me mais parceiros ?</span>
-                                    <Link to='/search'>clique aqui para procurar contatos</Link>
-                                </>
+                            <>
+                                <HandshakeIcon fontSize='large' sx={{ color: 'gray' }} />
+                                <span >
+                                    Sala de Negociação
+                                </span>
+                            </>
+                            <>
+                                <span>Precisa me mais parceiros ?</span>
+                                <Link to='/search'>clique aqui para procurar contatos</Link>
+                            </>
                         </div>
                 }
 
@@ -137,12 +152,12 @@ export default function Chat() {
     )
 }
 
-function ChatHeader({ data }){
+function ChatHeader({ data }) {
 
     return data ? (
-        <StyledChatHeader initial={{opacity: 0}} animate={{opacity: 1}}>
+        <StyledChatHeader initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <img src="https://pbs.twimg.com/media/FjU2lkcWYAgNG6d.jpg" alt="" />
-            <h3>{data.name +' '+ data.surname}</h3>
+            <h3>{data.name + ' ' + data.surname}</h3>
         </StyledChatHeader>
     ) : null
 }
@@ -171,7 +186,7 @@ function ContactManager({ userLoggedId }) {
                 fontStyle: 'italic'
             }} />
         :
-        <div className='left'>
+        <div  className='left'>
             {
                 connections && connections.map(con =>
                     <ContactCard key={con.id} data={con} />)
@@ -197,7 +212,6 @@ function ContactCard({ data }) {
             </div>
             <div className="contact-info">
                 <h3>{data.name} {data.surname}</h3>
-                <span className='message-date'>{data.city}</span>
             </div>
         </StyledContactCard>
     )
@@ -211,4 +225,36 @@ function Message({ data, logged }) {
             </motion.div>
         </StyledMessage>
     )
+}
+
+function MobileContactManager({ userLoggedId }) {
+
+    const [connections, setConnections] = useState()
+
+    useEffect(() => {
+        const unsubscribe = onSnapshot(doc(db, 'users', userLoggedId), () => {
+            (async () => {
+                const myConnections = await myApi.getConnections(userLoggedId)
+                setConnections(myConnections)
+            })()
+        })
+
+        return unsubscribe
+    }, [])
+
+    return connections == undefined ?
+        <div style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                fontStyle: 'italic'
+            }} 
+        /> :
+        <motion.div initial={{y: 100}} animate={{y: 0}}>
+            <h4 style={{width: "100%", textAlign: "center", marginBottom: '10px'}}>Contatos</h4>
+            {
+                connections && connections.map(con =>
+                    <ContactCard key={con.id} data={con}/>)
+            }
+        </motion.div>
 }
