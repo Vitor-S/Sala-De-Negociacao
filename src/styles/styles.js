@@ -7,14 +7,15 @@ const middle_purple = '#4B31DE'
 const shadow = '-webkit-box-shadow: 0px 0px 19px 0px rgba(11,7,89,1); -moz-box-shadow: 0px 0px 19px 0px rgba(11,7,89,1); box-shadow: 0px 0px 19px 0px rgba(11,7,89,1);'
 
 export const StyledRegister = styled.div`
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: ${middle};
+    padding: 20px;
 
     .container{
-        width: 60%;
+        width: 80%;
         background-color: #fff;
 
         display: flex;
@@ -29,7 +30,7 @@ export const StyledRegister = styled.div`
         }
 
         .left-container, .right-container{
-            width: 50%;
+            flex: 1;
             display: flex;
             flex-direction: column;
             gap: 10px;
@@ -42,6 +43,12 @@ export const StyledRegister = styled.div`
             align-items: center;
             gap: 20px;
             grid-column: span 2;
+        }
+    }
+
+    @media (max-width: 500px) {
+        .two-containers{
+            flex-direction: column;
         }
     }
 `
