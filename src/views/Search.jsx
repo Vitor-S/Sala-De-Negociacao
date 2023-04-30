@@ -24,22 +24,42 @@ export default function Search() {
     const [statesFilter, setStatesFilter] = useState(undefined)
     const [supplierFilter, setSupplierFilter] = useState(undefined)
     const [citiesFilter, setCitiesFilter] = useState(undefined)
+    const [areasFilter, setAreasFilter] = useState(undefined)
 
     const [cities, setCities] = useState([])
     const [states, setStates] = useState([])
+    const [areas, setAreas] = useState([])
 
     const applyFilters = async () => {
-        const filters = [citiesFilter, statesFilter, supplierFilter].filter(obj => obj != undefined)
+
+        const filters = [citiesFilter, statesFilter, supplierFilter, areasFilter].filter(obj => obj != undefined)
 
         const myWheres = filters.map(fil => {
-            return (
-                where(Object.keys(fil)[0], '==', Object.values(fil)[0])
-            )
+            return where(Object.keys(fil)[0], '==', Object.values(fil)[0])
         })
 
         const data = await myApi.getConditional('users', myWheres, '')
         setCurrentData(data)
     }
+
+    const clearFilters = async() => {
+        const data = await myApi.getExcept('users')
+        console.log(data)
+        setCurrentData(data)
+    }
+
+    useEffect(() => {
+        (async() => {
+            const areas = await myApi.getAllAttributes('area')
+
+            const semRepeticoes = areas.filter((element, index, self) => {
+                return index === self.indexOf(element);
+            });
+
+            setAreas(semRepeticoes)
+        })()
+    }, [])
+    
 
     useEffect(() => {
         //getting states for the filter
@@ -82,9 +102,12 @@ export default function Search() {
 
                         <Autocomplete
                             name='area'
-                            options={["area1", "area2"]}
+                            options={areas}
                             sx={{ width: '80%' }}
                             renderInput={(params) => <TextField {...params} label="Área" />}
+                            onChange={(ev, value) => {
+                                if (value != null) setAreasFilter({ 'area': value })
+                            }}
                         />
 
                         <Autocomplete
@@ -118,6 +141,12 @@ export default function Search() {
                         />
 
                         <div className="handle-filters">
+                            <Button
+                                fullWidth
+                                color="error"
+                                onClick={clearFilters}>
+                                Limpar Filtros
+                            </Button>
                             <Button
                                 fullWidth
                                 color="primary"

@@ -233,6 +233,14 @@ const myApi = {
 
         return docs
     },
+
+    getAllAttributes: async(attribute) => {
+        let allUsers = await myApi.getExcept('users')
+        const areas = allUsers.map(user => {
+            return user[attribute]
+        })
+        return areas
+    }
 }
 
 export default myApi
