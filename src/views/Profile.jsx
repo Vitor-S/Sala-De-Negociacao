@@ -160,7 +160,7 @@ function EditModal({ setModal, profileOwnerId, currentPicture }) {
                 <h2>Atualize seus dados</h2>
                 <form 
                     className="edit-picture" 
-                    onSubmit={async ev => await myApi.handleSubmit(ev, setProgress, setImageUrl, 'images', profileOwnerId)}>
+                    onSubmit={async ev => await myApi.setImage(ev, setProgress, setImageUrl, 'images', profileOwnerId)}>
                         <label for="teste">
                             {
                                 imageUrl ? <img src={imageUrl} alt="" className="profile-picture"/>:
@@ -194,7 +194,7 @@ function EditModal({ setModal, profileOwnerId, currentPicture }) {
                             window.location.reload()
                         }} 
                         variant="outlined" color="error">
-                        Cancelar
+                        Voltar
                     </Button>
                     <Button variant="outlined" color="primary">
                         Salvar

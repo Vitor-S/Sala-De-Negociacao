@@ -34,6 +34,8 @@ export default function Chat() {
 
     const [activeChatData, setActiveChatData] = useState()
 
+    console.log(activeChatData)
+
     //scroll end
     useEffect(() => {
         if (divMessagesRef.current)

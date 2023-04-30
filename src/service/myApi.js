@@ -85,6 +85,19 @@ const myApi = {
         return docSnap.data()
     },
 
+    addURLToUserDoc: async (url) => {
+        const userDocRef = doc(db, 'users', auth.currentUser.uid)
+        const userSnapShot = await (await getDoc(userDocRef)).data()
+        userSnapShot.PhotoUrl = url
+
+        try {
+            await setDoc(userDocRef, userSnapShot)
+            console.log('ok')
+        } catch (error) {
+            alert(error)
+        }
+    },
+
     getConditional: async (collectionName, wheres) => {
         const colelctionRef = collection(db, collectionName)
         let result = []
@@ -93,7 +106,7 @@ const myApi = {
         const snapShots = await getDocs(myQuery)
 
         snapShots.forEach((doc) => {
-            if(doc.id != auth.currentUser.uid) result.push(doc.data())
+            if (doc.id != auth.currentUser.uid) result.push(doc.data())
         });
 
         return result
@@ -198,7 +211,7 @@ const myApi = {
         return url
     },
 
-    handleSubmit: async (event, setPorgessPorcent, setImgURL, folder, userId) => {
+    setImage: async (event, setPorgessPorcent, setImgURL, folder, userId) => {
         event.preventDefault();
 
         const file = event.target[0]?.files[0];
@@ -214,8 +227,8 @@ const myApi = {
             alert(error);
         }, () => {
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                myApi.addURLToUserDoc(downloadURL)
                 setImgURL(downloadURL);
-
             });
         }
         )
@@ -234,7 +247,7 @@ const myApi = {
         return docs
     },
 
-    getAllAttributes: async(attribute) => {
+    getAllAttributes: async (attribute) => {
         let allUsers = await myApi.getExcept('users')
         const areas = allUsers.map(user => {
             return user[attribute]
