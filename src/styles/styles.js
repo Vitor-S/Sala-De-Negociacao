@@ -584,6 +584,7 @@ export const StyledChat = styled.div`
             height: 20%;
 
             .view-contacts-button{
+                display: none;
                 position: absolute;
                 top: 0;
                 left: 50%;
@@ -637,6 +638,7 @@ export const StyledChat = styled.div`
                 bottom: 10px;
 
                 .view-contacts-button{
+                    display: block;
                     transform: translate(-50%, -100%);
                 }
             }
