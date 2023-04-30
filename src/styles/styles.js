@@ -576,12 +576,12 @@ export const StyledChat = styled.div`
         }
         
         .options{
-            position: relative;
+            position: absolute;
             display: flex;
             align-items: center;
             justify-content: space-evenly;
             width: 100%;
-            height: 20%;
+            bottom: 10px;
 
             .view-contacts-button{
                 position: absolute;
