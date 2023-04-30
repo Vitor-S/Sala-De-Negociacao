@@ -542,7 +542,7 @@ export const StyledEditModal = styled.div`
 export const StyledChat = styled.div`
     position: relative;
     width: 100vw;
-    height: 100vh;
+    height: calc(100vh - 70px);
     display: flex;
     flex-direction: column;
 
@@ -571,7 +571,7 @@ export const StyledChat = styled.div`
             gap: 10px;
             padding: 10px 30px;
             width: calc(100% - 60px);
-            height: calc(80% - 171px);
+            height: calc(80% - 101px);
             overflow-y: scroll;
         }
         
