@@ -56,7 +56,6 @@ export default function Header() {
                         <li><Link to={`/chat?logged=${userLogged.uid}`}>Conversas</Link></li>
                         <li><Link to={`/profile/${userLogged.uid}`}>Perfil</Link></li>
                         <li><a className='logout-link' onClick={() => Api.signOut(navigate)}>Sair</a></li>
-                        <Button variant="outlined">Fechar</Button>
                     </ul>
                 </motion.div> : null
             }
