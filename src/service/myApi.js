@@ -85,8 +85,24 @@ const myApi = {
         return docSnap.data()
     },
 
+    getConditional: async (collectionName, wheres) => {
+        const colelctionRef = collection(db, collectionName)
+        let result = []
+
+        const myQuery = query(colelctionRef, ...wheres)
+        const snapShots = await getDocs(myQuery)
+
+        snapShots.forEach((doc) => {
+            if(doc.id != auth.currentUser.uid) result.push(doc.data())
+        });
+
+        return result
+
+    },
+
     getMultiples: async (collectionName, wheres, op) => {
         //para pegar todos os dados de uma coleção use where == []
+        //se o 'op' estiver vazio sera considerado o como &&
 
         const colelctionRef = collection(db, collectionName)
         let result = []

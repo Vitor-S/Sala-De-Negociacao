@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import myApi from '../service/myApi'
 
-import { getFirestore, collection, getDocs } from 'firebase/firestore'
+import { getFirestore, collection, getDocs, where } from 'firebase/firestore'
 
 //components
 import TextField from '@mui/material/TextField'
@@ -28,20 +28,19 @@ export default function Search() {
     const [cities, setCities] = useState([])
     const [states, setStates] = useState([])
 
-    const apllyFilters = () => {
+    const applyFilters = async () => {
         const filters = [citiesFilter, statesFilter, supplierFilter].filter(obj => obj != undefined)
 
-        console.log(filters)
+        const myWheres = filters.map(fil => {
+            return (
+                where(Object.keys(fil)[0], '==', Object.values(fil)[0])
+            )
+        })
 
-        // const wheres = filters.map(obj => {
-        //     return(
-        //         where(Object.keys(obj)[0], '==', Object.values(obj)[0])
-        //     )
-        // })
-
-        // FirebaseGet(query(collection(db, 'users'), ...wheres), setCurrentData)
+        const data = await myApi.getConditional('users', myWheres, '')
+        setCurrentData(data)
     }
-    
+
     useEffect(() => {
         //getting states for the filter
         axios.get('https://servicodados.ibge.gov.br/api/v1/localidades/estados').then(res => {
@@ -50,7 +49,7 @@ export default function Search() {
             setStates(list.sort())
         })
     }, [])
-    
+
     useEffect(() => {
         (async () => {
             let data = await myApi.getExcept("users")
@@ -60,25 +59,25 @@ export default function Search() {
 
     return (
         <StyledSearch>
-            <Header/>    
+            <Header />
             <div className="search-body">
                 <div className="search-filters">
                     <div className="search-area">
                         <TextField
-                            sx={{ width: '80%'}}
+                            sx={{ width: '80%' }}
                             label="Pesquisar"
                         />
                     </div>
                     <div className="filters-area">
 
-                        <Autocomplete 
+                        <Autocomplete
                             name='supplier'
                             options={["Fornecedor", "Contratante"]}
                             sx={{ width: '80%' }}
                             renderInput={(params) => <TextField {...params} label="Tipo" />}
-                            onChange={(ev, value) => 
-                                setSupplierFilter(value == 'Fornecedor' ? {'supplier': true} :
-                                    value == 'Contratante' ? {'supplier': false} : undefined)}
+                            onChange={(ev, value) =>
+                                setSupplierFilter(value == 'Fornecedor' ? { 'supplier': true } :
+                                    value == 'Contratante' ? { 'supplier': false } : undefined)}
                         />
 
                         <Autocomplete
@@ -94,15 +93,15 @@ export default function Search() {
                             sx={{ width: '80%' }}
                             renderInput={(params) => <TextField {...params} label="Estado" />}
                             onChange={(ev, value) => {
-                                if(value != null) setStatesFilter({'state': value})
+                                if (value != null) setStatesFilter({ 'state': value })
 
-                                if(value != null){
+                                if (value != null) {
                                     axios.get(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${value}/distritos`)
-                                    .then((res) => {
-                                        const resList = []
-                                        res.data.forEach(obj => resList.push(obj.nome))
-                                        setCities(resList.sort())
-                                    })
+                                        .then((res) => {
+                                            const resList = []
+                                            res.data.forEach(obj => resList.push(obj.nome))
+                                            setCities(resList.sort())
+                                        })
                                 }
                             }}
                         />
@@ -114,24 +113,24 @@ export default function Search() {
                             sx={{ width: '80%' }}
                             renderInput={(params) => <TextField {...params} label="Cidade" />}
                             onChange={(ev, value) => {
-                                if(value != null) setStatesFilter({city: value})
+                                if (value != null) setCitiesFilter({ city: value })
                             }}
                         />
 
                         <div className="handle-filters">
-                            <Button 
+                            <Button
                                 fullWidth
                                 color="primary"
-                                onClick={apllyFilters}>
-                                    Aplicar Filtros
+                                onClick={applyFilters}>
+                                Aplicar Filtros
                             </Button>
                         </div>
                     </div>
                 </div>
                 <div className="search-results">
                     {
-                        typeof currentData != 'undefined' && 
-                        currentData.map(user => <Card key={user.id} user={user}/>)
+                        typeof currentData != 'undefined' &&
+                        currentData.map(user => <Card key={user.id} user={user} />)
                     }
                 </div>
             </div>
