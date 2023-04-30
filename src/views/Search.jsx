@@ -21,6 +21,8 @@ export default function Search() {
 
     const [currentData, setCurrentData] = useState([])
 
+    const [firstName, setFirstName] = useState(undefined)
+    const [secondName, setSecondName] = useState(undefined)
     const [statesFilter, setStatesFilter] = useState(undefined)
     const [supplierFilter, setSupplierFilter] = useState(undefined)
     const [citiesFilter, setCitiesFilter] = useState(undefined)
@@ -31,8 +33,10 @@ export default function Search() {
     const [areas, setAreas] = useState([])
 
     const applyFilters = async () => {
+        console.log(firstName)
+        console.log(secondName)
 
-        const filters = [citiesFilter, statesFilter, supplierFilter, areasFilter].filter(obj => obj != undefined)
+        const filters = [firstName, secondName, citiesFilter, statesFilter, supplierFilter, areasFilter].filter(obj => obj != undefined)
 
         const myWheres = filters.map(fil => {
             return where(Object.keys(fil)[0], '==', Object.values(fil)[0])
@@ -42,14 +46,13 @@ export default function Search() {
         setCurrentData(data)
     }
 
-    const clearFilters = async() => {
+    const clearFilters = async () => {
         const data = await myApi.getExcept('users')
-        console.log(data)
         setCurrentData(data)
     }
 
     useEffect(() => {
-        (async() => {
+        (async () => {
             const areas = await myApi.getAllAttributes('area')
 
             const semRepeticoes = areas.filter((element, index, self) => {
@@ -59,7 +62,7 @@ export default function Search() {
             setAreas(semRepeticoes)
         })()
     }, [])
-    
+
 
     useEffect(() => {
         //getting states for the filter
@@ -86,6 +89,14 @@ export default function Search() {
                         <TextField
                             sx={{ width: '80%' }}
                             label="Pesquisar"
+                            onChange={(ev) => {
+                                if (ev.target.value != null){
+                                    setFirstName({'name': ev.target.value.trim().split(" ")[0]})
+                                }
+                                if (ev.target.value.trim().split(" ")[1] != null){
+                                    setSecondName({'surname': ev.target.value.trim().split(" ")[1]})
+                                }
+                            }}
                         />
                     </div>
                     <div className="filters-area">
