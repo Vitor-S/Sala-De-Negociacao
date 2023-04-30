@@ -35,7 +35,7 @@ export default function Header() {
             <ul className="header-links">
                 <li><Link to='/'>Início</Link></li>
                 <li><Link to='/search'>Pesquisar</Link></li>
-                <li><Link to={`/chat?logged=${userLogged.uid}`}>Conversas</Link></li>
+                <li><Link to={`/chat?logged=${userLogged.uid}`}>Contatos</Link></li>
                 <li><Link to={`/profile/${userLogged.uid}`}>Perfil</Link></li>
                 <li><a className='logout-link' onClick={() => Api.signOut(navigate)}>Sair</a></li>
             </ul>

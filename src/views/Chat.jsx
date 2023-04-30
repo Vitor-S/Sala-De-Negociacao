@@ -102,8 +102,8 @@ export default function Chat() {
                             <ChatHeader data={activeChatData} />
                             <div ref={divMessagesRef} className="messages">
                                 {
-                                    viewContactsState ? 
-                                    <MobileContactManager userLoggedId={userLoggedId} userReceiverId={userReceiverId}/> : messages && messages.map(mess => <Message key={mess.id} data={mess} logged={userLoggedId} />)
+                                    viewContactsState ?
+                                        <MobileContactManager userLoggedId={userLoggedId} userReceiverId={userReceiverId} /> : messages && messages.map(mess => <Message key={mess.id} data={mess} logged={userLoggedId} />)
                                 }
                             </div>
                             <div className="options">
@@ -111,8 +111,8 @@ export default function Chat() {
                                     onClick={() => setViewContactsState(!viewContactsState)}>
                                     {
                                         viewContactsState ?
-                                            <ExpandMoreIcon fontSize='large' style={{color: "#000"}} /> :
-                                            <ExpandLessIcon fontSize='large' style={{color: "#000"}} />
+                                            <ExpandMoreIcon fontSize='large' style={{ color: "#000" }} /> :
+                                            <ExpandLessIcon fontSize='large' style={{ color: "#000" }} />
                                     }
                                 </Button>
                                 <TextField
@@ -132,18 +132,18 @@ export default function Chat() {
                                 </Button>
                             </div>
                         </div> : window.innerWidth > 755 ?
-                        <div className="right empty-right">
-                            <>
-                                <HandshakeIcon fontSize='large' sx={{ color: 'gray' }} />
-                                <span >
-                                    Sala de Negociação
-                                </span>
-                            </>
-                            <>
-                                <span>Precisa me mais parceiros ?</span>
-                                <Link to='/search'>clique aqui para procurar contatos</Link>
-                            </>
-                        </div>  : <MobileContactManager userLoggedId={userLoggedId} userReceiverId={userReceiverId}/>
+                            <div className="right empty-right">
+                                <>
+                                    <HandshakeIcon fontSize='large' sx={{ color: 'gray' }} />
+                                    <span >
+                                        Sala de Negociação
+                                    </span>
+                                </>
+                                <>
+                                    <span>Precisa me mais parceiros ?</span>
+                                    <Link to='/search'>clique aqui para procurar contatos</Link>
+                                </>
+                            </div> : <MobileContactManager userLoggedId={userLoggedId} userReceiverId={userReceiverId} />
                 }
             </div>
         </StyledChat>
@@ -184,7 +184,7 @@ function ContactManager({ userLoggedId }) {
                 fontStyle: 'italic'
             }} />
         :
-        <div  className='left'>
+        <div className='left'>
             {
                 connections && connections.map(con =>
                     <ContactCard key={con.id} data={con} />)
@@ -233,6 +233,11 @@ function MobileContactManager({ userLoggedId }) {
         const unsubscribe = onSnapshot(doc(db, 'users', userLoggedId), () => {
             (async () => {
                 const myConnections = await myApi.getConnections(userLoggedId)
+
+                myConnections.sort((a, b) => a.name.localeCompare(b.name, 'pt', { sensitivity: 'base' }));
+
+                console.log(myConnections)
+
                 setConnections(myConnections)
             })()
         })
@@ -242,17 +247,17 @@ function MobileContactManager({ userLoggedId }) {
 
     return connections == undefined ?
         <div style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                fontStyle: 'italic'
-            }} 
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            fontStyle: 'italic'
+        }}
         /> :
-        <motion.div initial={{y: 100}} animate={{y: 0}}>
-            <h4 style={{width: "100%", textAlign: "center", margin: '10px 0'}}>Contatos</h4>
+        <motion.div initial={{ y: 100 }} animate={{ y: 0 }}>
+            <h4 style={{ width: "100%", textAlign: "center", margin: '10px 0' }}>Contatos</h4>
             {
                 connections && connections.map(con =>
-                    <ContactCard key={con.id} data={con}/>)
+                    <ContactCard key={con.id} data={con} />)
             }
         </motion.div>
 }
