@@ -576,18 +576,18 @@ export const StyledChat = styled.div`
         }
         
         .options{
-            position: absolute;
+            position: relative;
             display: flex;
             align-items: center;
             justify-content: space-evenly;
             width: 100%;
-            bottom: 10px;
+            height: 20%;
 
             .view-contacts-button{
                 position: absolute;
                 top: 0;
                 left: 50%;
-                transform: translate(-50%, -100%);
+                transform: translate(-50%, -50%);
             }
 
             .input-message{
@@ -628,6 +628,18 @@ export const StyledChat = styled.div`
     @media(max-width: 550px){
         .left{
             display: none;
+        }
+
+        .right{
+            .options{
+                position: absolute;
+                height: auto;
+                bottom: 10px;
+
+                .view-contacts-button{
+                    transform: translate(-50%, -100%);
+                }
+            }
         }
     }    
 `
