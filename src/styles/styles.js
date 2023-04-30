@@ -282,9 +282,9 @@ export const StyledSearch = styled.div`
                 display: flex;
                 flex-direction: row;
                 flex: 1;
-                padding: 10px 0;
-
+                
                 .search-area{
+                    padding: 10px 0;
                     input{
                         width: 100px;
                     }
