@@ -98,20 +98,20 @@ export default function Profile() {
                         <div className="social-medias">
                             <IconButton
                                 onClick={() => navigate(`/chat?logged=${userLogged.uid}&receiver=${user.id}`)}>
-                                <ChatIcon fontSize='large' color='primary' />
+                                <ChatIcon fontSize='large' style={{color: '#0048ff'}} />
                             </IconButton>
                             <IconButton onClick={() =>
                                 window.location.href = "mailto:" + user.email
                             }>
-                                <EmailIcon fontSize='large' sx={{ color: '#f9aa2a' }} />
+                                <EmailIcon fontSize='large' sx={{ color: '#ffbe56' }} />
                             </IconButton >
                             <IconButton onClick={() =>
                                 window.open(`https://api.whatsapp.com/send?phone=${user.phone}`, '_blank')
                             }>
-                                <WhatsAppIcon fontSize='large' color='success' />
+                                <WhatsAppIcon fontSize='large' style={{color: '#36ff6f'}} />
                             </IconButton>
                             <IconButton onClick={handleLocationClick}>
-                                <LocationOnIcon fontSize='large' color='error' />
+                                <LocationOnIcon fontSize='large' style={{color: '#ff3a3a'}} />
                             </IconButton>
                         </div>
                     </div>
