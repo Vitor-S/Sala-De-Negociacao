@@ -421,4 +421,8 @@ export const StyledChatHeader = styled(motion.div)`
         font-family: 'Dosis';
         font-size: 1.4em;
     }
+
+    @media(max-width: 755px){
+        height: 50px;
+    }
 `

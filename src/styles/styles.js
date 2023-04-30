@@ -542,7 +542,7 @@ export const StyledEditModal = styled.div`
 export const StyledChat = styled.div`
     position: relative;
     width: 100vw;
-    height: calc(100vh - 70px);
+    height: 100vh;
     display: flex;
     flex-direction: column;
 
