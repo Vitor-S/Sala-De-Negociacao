@@ -108,7 +108,7 @@ export default function Profile() {
                             <IconButton onClick={() =>
                                 window.open(`https://api.whatsapp.com/send?phone=${user.phone}`, '_blank')
                             }>
-                                <WhatsAppIcon fontSize='large' style={{color: '#36ff6f'}} />
+                                <WhatsAppIcon fontSize='large' style={{color: '#2dfc68'}} />
                             </IconButton>
                             <IconButton onClick={handleLocationClick}>
                                 <LocationOnIcon fontSize='large' style={{color: '#ff3a3a'}} />
