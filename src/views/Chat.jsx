@@ -14,8 +14,6 @@ import { doc, collection, addDoc, query, orderBy, onSnapshot } from 'firebase/fi
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import HandshakeIcon from '@mui/icons-material/Handshake';
 
-console.log(' '.trim())
-
 export default function Chat() {
 
     const inputRef = useRef()

@@ -229,6 +229,7 @@ export const StyledHeader = styled.div`
     @import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&display=swap');
     @import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&family=Dancing+Script&display=swap');
 
+    position: relative;
     display: flex;
     min-height: 65px;
     height: 65px;
@@ -254,6 +255,7 @@ export const StyledHeader = styled.div`
         align-items: center;
         justify-content: flex-end;
         gap: 10%;
+        list-style: none;
     }
 
     a{
@@ -267,6 +269,48 @@ export const StyledHeader = styled.div`
             scale: 1.1;
         }
     }
+
+    .dropdown-button{
+        color: #fff;
+        display: none;
+    }
+
+    .dropdown-container{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100vw;
+        background-color: #4A59E0;
+        z-index: 5;
+        padding: 20px 0;
+
+        ul{
+            list-style: none;
+
+            li{
+                text-align: center;
+                padding: 10px 0;
+            }
+        }
+
+        button{
+            margin: 10px 0;
+        }
+    }
+
+    @media (max-width: 750px) {
+        .header-links{
+            display: none;
+        }
+
+        .dropdown-button{
+            display: flex;
+        }
+    }
+
 `
 
 export const StyledViewMeetings = styled.div`
