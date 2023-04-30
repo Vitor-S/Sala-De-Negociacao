@@ -63,6 +63,10 @@ export const StyledCard = styled.div`
         }
     }
 
+    @media(max-width: 755px){
+        width: 80%;
+    }
+
 `
 
 export const StyledCalendar = styled.div`
