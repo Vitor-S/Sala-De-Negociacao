@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { motion } from 'framer-motion'
+import errorManager from '../utils/errorManager'
 
 //components
 import Header from '../components/Header'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import image1 from '../assets/section1.png'
 import { Button } from '@mui/material'
 
@@ -28,7 +29,7 @@ export default function Home() {
                             Com a nossa sala de negociação, você pode formar sua própria rede de contatos facilmente, diretamente na palma da sua mão! Conecte-se com outros negociadores experientes, compartilhe conhecimento e aprenda com os melhores.
                         </p>
                         <Button variant="contained" color="primary"
-                        >
+                            onClick={() => navigate('/search')}>
                             Saber Mais
                         </Button>
                     </div>

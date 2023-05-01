@@ -6,7 +6,6 @@ import GlobalStyle from './styles/globalStyle'
 import Register from './views/Register'
 import Login from './views/Login'
 import Home from './views/Home'
-import Test from './views/Test'
 import Search from './views/Search'
 import Profile from './views/Profile'
 import Error from './views/Error'
@@ -21,7 +20,6 @@ export default function App() {
                 <Route path='/profile/:id' element={<Profile />} />
                 <Route path='/login' element={<Login />} />
                 <Route path='/register' element={<Register />} />
-                <Route path='/test' element={<Test />} />
                 <Route path='/chat' element={<Chat/>} />
                 <Route path='*' element={<Error/>}></Route>
             </Routes>

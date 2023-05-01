@@ -25,3 +25,16 @@ export const login_validation = yup.object().shape({
 export const meetingValidation = yup.object().shape({
     message: yup.string().required('Digite uma mensagem')
 })
+
+export const edit_data_validation = yup.object().shape({
+    name: yup.string().max(20, 'Máximo 20 letras'),
+    surname: yup.string().max(20, 'Máximo 20 letras'),
+    email: yup.string().email('Email inválido').lowercase(),
+    supplier: yup.string(),
+    area: yup.string().max(20, 'Máximo 20 letras'),
+    state: yup.string(),
+    city: yup.string(),
+    phone: yup.string(),
+    neighborhood: yup.string(),
+    street: yup.string(),
+})

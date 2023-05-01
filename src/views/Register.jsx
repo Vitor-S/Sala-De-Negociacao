@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import { register_validation } from '../utils/yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -41,7 +41,6 @@ export default function Register() {
                 onSubmit={handleSubmit((data) => {
                     data.supplier = JSON.parse(data.supplier)
                     myApi.createUserWithEmailAndPassword(data, navigate)
-                    // console.log(data)
                 })}>
                 <div className='two-containers'>
                     <div className="left-container">

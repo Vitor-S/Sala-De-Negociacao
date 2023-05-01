@@ -7,7 +7,8 @@ import Button from '@mui/material/Button'
 import { motion } from 'framer-motion'
 import MenuIcon from '@mui/icons-material/Menu';
 
-import { Api, auth } from '../service/Api'
+import myApi from '../service/myApi';
+import { auth } from '../service/myFirebaseConfig';
 import { onAuthStateChanged } from 'firebase/auth'
 
 
@@ -28,7 +29,7 @@ export default function Header() {
 
     return (userLogged != null && userLogged != undefined) ? (
         <StyledHeader className='header'>
-            <div className="header-logo">
+            <div className="header-logo" onClick={() => navigate('/')}>
                 <HandshakeIcon fontSize='large' sx={{ color: '#fff' }} />
                 <span>Sala de Negociação</span>
             </div>
@@ -37,7 +38,7 @@ export default function Header() {
                 <li><Link to='/search'>Pesquisar</Link></li>
                 <li><Link to={`/chat?logged=${userLogged.uid}`}>Contatos</Link></li>
                 <li><Link to={`/profile/${userLogged.uid}`}>Perfil</Link></li>
-                <li><a className='logout-link' onClick={() => Api.signOut(navigate)}>Sair</a></li>
+                <li><a className='logout-link' onClick={() => myApi.signOut(navigate)}>Sair</a></li>
             </ul>
 
             <Button className='dropdown-button'
@@ -55,7 +56,7 @@ export default function Header() {
                         <li><Link to='/search'>Pesquisar</Link></li>
                         <li><Link to={`/chat?logged=${userLogged.uid}`}>Conversas</Link></li>
                         <li><Link to={`/profile/${userLogged.uid}`}>Perfil</Link></li>
-                        <li><a className='logout-link' onClick={() => Api.signOut(navigate)}>Sair</a></li>
+                        <li><a className='logout-link' onClick={() => myApi.signOut(navigate)}>Sair</a></li>
                     </ul>
                 </motion.div> : null
             }

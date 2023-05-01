@@ -3,7 +3,9 @@ import { db, auth, storage } from './myFirebaseConfig'
 import { doc, getDoc, getDocs, setDoc, collection, query } from 'firebase/firestore'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail } from 'firebase/auth'
 import { ref, getDownloadURL, uploadBytesResumable, deleteObject } from 'firebase/storage'
+import ErrorManager from '../utils/errorManager'
 
+const manager = new ErrorManager()
 
 const myApi = {
     createUserDocumentFromAuth: async (userAuth, data) => {
@@ -28,7 +30,9 @@ const myApi = {
                     street: data.street,
                 })
             } catch (error) {
-                alert(error)
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                alert(manager.Message(errorCode))   
             }
         }
     },
@@ -45,8 +49,7 @@ const myApi = {
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
-                alert(errorMessage)
-                // ..
+                alert(manager.Message(errorCode))
             });
     },
 
@@ -66,7 +69,7 @@ const myApi = {
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
-                alert(errorMessage)
+                alert(manager.Message(errorCode))
             });
     },
 
@@ -76,7 +79,9 @@ const myApi = {
             navigate('/login')
         }).catch((error) => {
             // An error happened.
-            alert(error)
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            alert(manager.Message(errorCode)) 
         });
     },
 
@@ -94,7 +99,9 @@ const myApi = {
         try {
             await setDoc(userDocRef, userSnapShot)
         } catch (error) {
-            alert(error)
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            alert(manager.Message(errorCode)) 
         }
     },
 
@@ -224,7 +231,9 @@ const myApi = {
             const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
             setPorgessPorcent(progress);
         }, (error) => {
-            alert(error);
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            alert(manager.Message(errorCode)) 
         }, () => {
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
                 myApi.addURLToUserDoc(downloadURL)
@@ -263,11 +272,11 @@ const myApi = {
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
-                alert("Algo deu errado" +' '+ errorMessage)
+                alert(manager.Message(errorCode)) 
             });
     },
 
-    clearPhotoUrl: async() => {
+    clearPhotoUrl: async () => {
         const desertRef = ref(storage, `images/${auth.currentUser.uid}`);
 
         // Delete the file
@@ -282,7 +291,41 @@ const myApi = {
         try {
             await setDoc(doc(db, 'users', auth.currentUser.uid), userData)
         } catch (error) {
-            alert(error)
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            alert(manager.Message(errorCode)) 
+        }
+    },
+
+    updateUserData: async (newData) => {
+        const userDocRef = doc(db, 'users', auth.currentUser.uid)
+        const docData = await myApi.getDocById('users', auth.currentUser.uid)
+
+        Object.keys(newData).filter(key => newData[key].length === 0).forEach(key => delete newData[key]);
+
+        console.log(newData)
+
+        try {
+            await setDoc(userDocRef, {
+                id: docData.id,
+                name: newData.name || docData.name,
+                surname: newData.surname || docData.surname,
+                email: newData.email || docData.email,
+                phone: newData.phone || docData.phone,
+                supplier: newData.supplier || Boolean(docData.supplier),
+                area: newData.area || docData.area,
+                state: newData.state || docData.state,
+                city: newData.city || docData.city,
+                neighborhood: newData.neighborhood || docData.neighborhood,
+                street: newData.street || docData.street,
+                connections: docData.connections,
+            })
+
+            alert("Dados Atualizados Com Sucesso")
+        } catch (error) {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            alert(manager.Message(errorCode)) 
         }
     }
 }

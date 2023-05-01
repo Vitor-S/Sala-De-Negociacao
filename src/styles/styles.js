@@ -532,7 +532,7 @@ export const StyledEditModal = styled.div`
     
     .modal-container{
         display: grid;
-        grid-template-columns: 1fr 2fr 2fr;
+        grid-template-columns: 1fr 4fr;
         grid-template-rows: 1fr 10fr 1fr;
         padding: 40px;
         width: 70%;
@@ -577,24 +577,40 @@ export const StyledEditModal = styled.div`
             }
 
             input{
+
                 display: none;
             }
             
             
         }
 
+        .data-form{
+            flex: 1;
+            display: flex;
+        }
+
         .edit-1{
+            width: 100%;
             display: flex;
             flex-direction: column;
             justify-content: space-around;
             padding: 20px;
+
+            input{
+                width: 100%;
+            }
         }
         
         .edit-2{
+            width: 100%;
             display: flex;
             flex-direction: column;
             justify-content: space-around;
             padding: 20px;
+
+            input{
+                width: 100%;
+            }
         }
 
         .edit-options{

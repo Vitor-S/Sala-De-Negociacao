@@ -1,7 +1,6 @@
-import React, { Children } from 'react'
+import React from 'react'
 
 import { PopupStyle } from '../styles/components-styles'
-import { Button } from '@mui/material';
 
 export default function Popup({ state, children }) {
     return state ? (

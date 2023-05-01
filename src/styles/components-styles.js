@@ -246,6 +246,7 @@ export const StyledHeader = styled.div`
         display: flex;
         align-items: center;
         gap: 5%;
+        cursor: pointer;
 
         span{
             font-size: 1.7rem;

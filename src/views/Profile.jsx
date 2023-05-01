@@ -1,20 +1,23 @@
 import React, { useState, useEffect } from 'react'
-import { Api, auth } from '../service/Api'
 import myApi from '../service/myApi';
+import { auth } from '../service/myFirebaseConfig';
+import { edit_data_validation } from '../utils/yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import axios from 'axios';
 
+import { TextField, Button, Autocomplete }from '@mui/material';
 import { StyledProfile, StyledEditModal } from '../styles/styles'
-
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import Calendar from '../components/Calendar'
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import EmailIcon from '@mui/icons-material/Email';
 import { IconButton } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
-import { TextField, Button } from '@mui/material';
 import Header from '../components/Header'
 import ChatIcon from '@mui/icons-material/Chat';
 
 import { useNavigate, useParams } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 
 export default function Profile() {
     const navigate = useNavigate()
@@ -91,28 +94,49 @@ export default function Profile() {
                         }
                         <h2>{`${user.name} ${user.surname}`}</h2>
                         <h3>Fornecedor de {user.area}</h3>
-                        <div className="locale" onClick={() => window.open('', '_blank')}>
+                        <div className="locale">
                             <LocationOnIcon />
                             <span >{`${user.city} ${user.state}`}</span>
                         </div>
                         <div className="social-medias">
-                            <IconButton
-                                onClick={() => navigate(`/chat?logged=${userLogged.uid}&receiver=${user.id}`)}>
-                                <ChatIcon fontSize='large' style={{ color: '#0048ff' }} />
-                            </IconButton>
-                            <IconButton onClick={() =>
-                                window.location.href = "mailto:" + user.email
-                            }>
-                                <EmailIcon fontSize='large' sx={{ color: '#ffbe56' }} />
-                            </IconButton >
-                            <IconButton onClick={() =>
-                                window.open(`https://api.whatsapp.com/send?phone=${user.phone}`, '_blank')
-                            }>
-                                <WhatsAppIcon fontSize='large' style={{ color: '#2dfc68' }} />
-                            </IconButton>
-                            <IconButton onClick={handleLocationClick}>
-                                <LocationOnIcon fontSize='large' style={{ color: '#ff3a3a' }} />
-                            </IconButton>
+                            {
+                                userLogged.uid != user.id ?
+                                    <>
+                                        <IconButton
+                                            onClick={() => navigate(`/chat?logged=${userLogged.uid}&receiver=${user.id}`)}>
+                                            <ChatIcon fontSize='large' style={{ color: '#0048ff' }} />
+                                        </IconButton>
+                                        <IconButton onClick={() =>
+                                            window.location.href = "mailto:" + user.email
+                                        }>
+                                            <EmailIcon fontSize='large' sx={{ color: '#ffbe56' }} />
+                                        </IconButton >
+                                        <IconButton onClick={() =>
+                                            window.open(`https://api.whatsapp.com/send?phone=${user.phone}`, '_blank')
+                                        }>
+                                            <WhatsAppIcon fontSize='large' style={{ color: '#2dfc68' }} />
+                                        </IconButton>
+                                        <IconButton onClick={handleLocationClick}>
+                                            <LocationOnIcon fontSize='large' style={{ color: '#ff3a3a' }} />
+                                        </IconButton>
+                                    </> : 
+                                    <>
+                                        <IconButton>
+                                            <ChatIcon fontSize='large' style={{ color: '#0048ff' }} />
+                                        </IconButton>
+                                        <IconButton >
+                                            <EmailIcon fontSize='large' sx={{ color: '#ffbe56' }} />
+                                        </IconButton >
+                                        <IconButton>
+                                            <WhatsAppIcon fontSize='large' style={{ color: '#2dfc68' }} />
+                                        </IconButton>
+                                        <IconButton>
+                                            <LocationOnIcon fontSize='large' style={{ color: '#ff3a3a' }} />
+                                        </IconButton>
+                                    </>
+                                    
+
+                        }
                         </div>
                     </div>
                 </div>
@@ -124,21 +148,30 @@ export default function Profile() {
                     }
                     <Calendar userLoggedId={userLogged.uid} profileOwner={user} />
                 </div>
-                    {
-                        modalState ? <EditModal
-                            setModal={setModalState}
-                            profileOwnerId={userId.id}
-                            currentPicture={pictureUrl} /> : null
-                    }
-                </div>
+                {
+                    modalState ? <EditModal
+                        setModal={setModalState}
+                        profileOwnerId={userId.id}
+                        currentPicture={pictureUrl} /> : null
+                }
+            </div>
         </StyledProfile>
     ) : null
 }
 
-function EditModal({ setModal, profileOwnerId, currentPicture }) {
+function EditModal({ setModal, profileOwnerId }) {
 
     const [progress, setProgress] = useState(0)
     const [imageUrl, setImageUrl] = useState('')
+
+    const [states, setStates] = useState([])
+    const [cities, setCities] = useState([])
+
+    const [currentState, setCurrentState] = useState(undefined)
+
+    const { register, handleSubmit, formState: { errors } } = useForm({
+        resolver: yupResolver(edit_data_validation)
+    })
 
     function handleCloseModal(ev) {
         if (ev.target.className.includes('modal-wrapper')) {
@@ -153,6 +186,14 @@ function EditModal({ setModal, profileOwnerId, currentPicture }) {
             if (imgUrl) setImageUrl(imgUrl)
         })()
     }, [profileOwnerId, progress])
+
+    useEffect(() => {
+        axios.get('https://servicodados.ibge.gov.br/api/v1/localidades/estados').then(res => {
+            const list = []
+            res.data.forEach(obj => list.push(obj.sigla))
+            setStates(list.sort())
+        })
+    }, [])
 
     return (
         <StyledEditModal className='modal-wrapper' onClick={handleCloseModal}>
@@ -175,20 +216,58 @@ function EditModal({ setModal, profileOwnerId, currentPicture }) {
                         Remover Foto
                     </Button>
                 </form>
-                <div className="edit-1">
-                    <TextField fullWidth label='Nome' />
-                    <TextField fullWidth label='Sobrenome' />
-                    <TextField fullWidth label='Email' />
-                    <TextField fullWidth label='Telefone' />
-                    <TextField fullWidth label='Tipo de usuário' />
-                </div>
-                <div className="edit-2">
-                    <TextField fullWidth label='Área de Atuação' />
-                    <TextField fullWidth label='Estado' />
-                    <TextField fullWidth label='Cidade' />
-                    <TextField fullWidth label='Bairro' />
-                    <TextField fullWidth label='Rua' />
-                </div>
+                <form className='data-form'>
+                    <div className="edit-1">
+                        <TextField {...register("name")} fullWidth label='Nome' />
+                        <TextField {...register("surname")} fullWidth label='Sobrenome' />
+                        <TextField {...register("email")} fullWidth label='Email de Contato' />
+                        <TextField {...register("phone")} fullWidth label='Telefone' />
+
+                        <Autocomplete
+                            name='supplier'
+                            options={["Fornecedor", "Contratante"]}
+                            renderInput={(params) =>
+                                <TextField {...register('supplier')} {...params}
+                                    label="Tipo de usuário"
+                                />
+                            }
+                        />
+                    </div>
+                    <div className="edit-2">
+                        <TextField {...register("area")} fullWidth label='Área de Atuação' />
+
+                        <Autocomplete
+                            title='state'
+                            options={states}
+                            renderInput={(params) =>
+                                <TextField error={Boolean(errors.state)} helperText={errors.state?.message} {...register('state')} {...params} label="Estado"
+                                />}
+                            onChange={(ev, value) => {
+                                setCurrentState(value)
+                                if (value != null) {
+                                    axios.get(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${value}/distritos`)
+                                        .then((res) => {
+                                            const resList = []
+                                            res.data.forEach(obj => resList.push(obj.nome))
+                                            setCities(resList.sort())
+                                        })
+                                }
+                            }}
+                        />
+
+                        <Autocomplete
+                            name='city'
+                            disabled={currentState == null || currentState == undefined}
+                            options={cities}
+                            renderInput={(params) =>
+                                <TextField error={Boolean(errors.city)} helperText={errors.city?.message} {...register('city')} {...params} label="Cidade"
+                                />}
+                        />
+
+                        <TextField {...register("neighborhood")} fullWidth label='Bairro' />
+                        <TextField {...register("street")} fullWidth label='Rua' />
+                    </div>
+                </form>
                 <div className="edit-options">
                     <Button
                         onClick={ev => {
@@ -198,7 +277,16 @@ function EditModal({ setModal, profileOwnerId, currentPicture }) {
                         variant="outlined" color="error">
                         Voltar
                     </Button>
-                    <Button variant="outlined" color="primary">
+                    <Button variant="outlined" color="primary"
+                        onClick={handleSubmit(async (data) => {
+                            if (data.supplier && data.supplier == "Fornecedor") {
+                                data.supplier = true
+                            } else if (data.supplier && data.supplier == "Contratante") {
+                                data.supplier = false
+                            }
+
+                            await myApi.updateUserData(data)
+                        })}>
                         Salvar
                     </Button>
                 </div>

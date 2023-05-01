@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import myApi from '../service/myApi'
 
-import { getFirestore, collection, getDocs, where } from 'firebase/firestore'
+import { where } from 'firebase/firestore'
 
 //components
 import TextField from '@mui/material/TextField'
@@ -84,7 +84,7 @@ export default function Search() {
                     <div className="search-area">
                         <TextField
                             sx={{ width: '80%' }}
-                            label="Pesquisar"
+                            label="Nome"
                             onChange={(ev) => {
                                 if (ev.target.value != null){
                                     setFirstName({'name': ev.target.value.trim().split(" ")[0]})
