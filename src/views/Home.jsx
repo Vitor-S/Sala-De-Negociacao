@@ -20,7 +20,7 @@ export default function Home() {
             <section>
                 <div className="section-central">
                     <div className="section-info-container">
-                        <h1 className='section-title'>Crie Sua </h1>
+                        <div className='section-title'>Crie Sua </div>
                         <p className='section-subtext'>
                             Com a nossa sala de negociação, você pode formar sua própria rede de contatos facilmente, diretamente na palma da sua mão! Conecte-se com outros negociadores experientes, compartilhe conhecimento e aprenda com os melhores.
                         </p>

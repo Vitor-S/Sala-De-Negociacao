@@ -128,6 +128,7 @@ export const StyledHome = styled.div`
             justify-content: center;
             width: 70%;
             height: 70%;
+            gap: 5%;
             color: #fff;
 
             .section-info-container{
@@ -135,7 +136,6 @@ export const StyledHome = styled.div`
                 flex-direction: column;
                 gap: 7%;
                 width: 50%;
-                padding: 0 20px;
 
                 .section-title{
                     font-size: 4em;
@@ -148,6 +148,10 @@ export const StyledHome = styled.div`
 
                 .section-subtext{
                     font-size: 1.3em;
+                }
+
+                p{
+                    line-height: 30px;
                 }
 
                 button{
@@ -168,34 +172,48 @@ export const StyledHome = styled.div`
 
     @media(max-width: 900px){
         .section-central{
-            .section-image-container{
-                display: none;
+            width: 100%;
+        }
+
+        .section-image-container{
+            display: none;
+        }
+
+        .section-info-container{
+            min-width: 80%;
+
+            .section-title, .section-subtext{
+                text-align: center;
             }
 
-            .section-info-container{
-                min-width: 80%;
-
-                .section-title, .section-subtext{
-                    text-align: center;
-                }
-
-                button{
-                    min-width: 100%;
-                }
+            button{
+                min-width: 100%;
             }
         }
     }
 
-    @media(max-width: 500px){
+    @media screen and (max-width: 465px){
         .section-central{
-            .section-info-container{
-                .section-title{
-                    font-size: 2em;
-                }                
+            width: 100% !important;
+        }
 
-                .section-subtext{
-                    font-size: 1em;
-                }
+        .section-image-container{
+            display: none;
+        }
+
+        .section-info-container{
+            min-width: 80%;
+
+            .section-title{
+                font-size: 4em !important; /* definição de font-size dentro da regra de mídia */
+            }
+            
+            .section-subtext{
+                font-size: 1.15em; /* definição de font-size dentro da regra de mídia */
+            }
+
+            button{
+                min-width: 100%;
             }
         }
     }
