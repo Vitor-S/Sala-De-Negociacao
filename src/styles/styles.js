@@ -169,7 +169,7 @@ export const StyledHome = styled.div`
                 width: min-content;
 
                 img{
-                    width: 400px;
+                    width: 360px;
                 }
             }
         }
