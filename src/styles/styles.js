@@ -115,101 +115,90 @@ export const StyledLogin = styled.div`
 `
 
 export const StyledHome = styled.div`
-
-    *{
-        margin: 0;
-        padding: 0;
-    }
-
-    .home-body{
-        height: 100vh;
-    }
-
-    .main-tip{
+    section{
         display: flex;
-        height: 90%;
-        background-color: ${light};
+        justify-content: center;
+        align-items: center;
+        width: 100vw;
+        height: calc(100vh - 65px);
+        background-color: #4A59E0;
 
-        .tip-info{
+        .section-central{
             display: flex;
             justify-content: center;
-            align-items: center;
-            width: 90%;
+            width: 70%;
+            height: 70%;
+            color: #fff;
 
-            .tip-info-container{
+            .section-info-container{
                 display: flex;
                 flex-direction: column;
-                gap: 20px;
-                width: 90%;
-                height: 45%;
+                gap: 7%;
+                width: 50%;
+                padding: 0 20px;
 
-                span, p, a{
-                    
+                .section-title{
+                    font-size: 4em;
                 }
 
-                span{
-                    font-size: 5rem;
-
-                    span{
-                        color: blue;
-                    }
+                .section-title::after{
+                    content: "Network";
+                    color: #fc874c;
                 }
 
-                p{
-                    font-size: 1.5rem;
+                .section-subtext{
+                    font-size: 1.3em;
                 }
 
-                a{
-                    font-size: 1.6rem;
-                    color: blue;
-                    text-decoration: none;
+                button{
+                    width: 40%;
+                    height: 50px;
                 }
             }
-        }
 
-        .tip-image{
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 50%;
+            .section-image-container{
+                width: min-content;
 
-            .tip-image-container{
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                gap: 20px;
-                width: 70%;
-                height: 70%;
-
-                .section-image{
-                    aspect-ratio: 16/9;
-                    width: 100%;
-                    border-radius: 10px;
+                img{
+                    width: 400px;
                 }
             }
         }
     }
 
-    .second-tip{
-        background-color: ${middle_purple};
+    @media(max-width: 900px){
+        .section-central{
+            .section-image-container{
+                display: none;
+            }
 
-        .tip-info-container{
-            span{
-                span{
-                    color: #fff
+            .section-info-container{
+                min-width: 80%;
+
+                .section-title, .section-subtext{
+                    text-align: center;
+                }
+
+                button{
+                    min-width: 100%;
                 }
             }
         }
+    }
 
-        .second-tip-span{
-            color: #fff;
-        }
+    @media(max-width: 500px){
+        .section-central{
+            .section-info-container{
+                .section-title{
+                    font-size: 2em;
+                }                
 
-        .second-tip-link{
-            color: #fff;
+                .section-subtext{
+                    font-size: 1em;
+                }
+            }
         }
     }
-    
 `
 
 export const StyledSearch = styled.div`
