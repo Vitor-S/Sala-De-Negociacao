@@ -40,7 +40,7 @@ export default function Home() {
             <section>
                 <div className="tips-container">
                     <motion.div className="tip"
-                        initial={{ x: -200, opacity: 0 }}
+                        initial={{ x: -100, opacity: 0 }}
                         whileInView={{ x: 0, opacity: 1 }}
                         transition={{ delay: 0.2 }}>
                         <div className="tip-bg" />
@@ -50,7 +50,7 @@ export default function Home() {
                         </p>
                     </motion.div>
                     <motion.div className="tip"
-                        initial={{ x: -200, opacity: 0 }}
+                        initial={{ x: -100, opacity: 0 }}
                         whileInView={{ x: 0, opacity: 1 }}
                         transition={{ delay: 0.3 }}>
                         <div className="tip-bg" />
@@ -60,7 +60,7 @@ export default function Home() {
                         </p>
                     </motion.div>
                     <motion.div className="tip"
-                        initial={{ x: -200, opacity: 0 }}
+                        initial={{ x: -100, opacity: 0 }}
                         whileInView={{ x: 0, opacity: 1 }}
                         transition={{ delay: 0.4 }}>
                         <div className="tip-bg" />
