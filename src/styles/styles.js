@@ -65,7 +65,8 @@ export const StyledLogin = styled.div`
         width: 80%;
         height: 60%;
         display: flex;
-        ${shadow}
+        ${shadow};
+
         
         .form-bg{
             width: 100%;
@@ -83,6 +84,7 @@ export const StyledLogin = styled.div`
         .form-container{
             flex: 1;
             background-color: #fff;
+            padding: 20px 0;
 
             form{
                 height: 100%;
