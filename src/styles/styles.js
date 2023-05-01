@@ -119,7 +119,7 @@ export const StyledHome = styled.div`
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 100vw;
+        max-width: 100vw; 
         min-height: 100vh;
         background-color: #4A59E0;
 
@@ -128,7 +128,7 @@ export const StyledHome = styled.div`
             justify-content: center;
             width: 70%;
             height: 70%;
-            gap: 5%;
+            gap: 8%;
             color: #fff;
 
             .section-info-container{
@@ -170,7 +170,7 @@ export const StyledHome = styled.div`
         }
     }
 
-    @media(max-width: 900px){
+    @media(max-width: 1020px){
         .section-central{
             width: 100%;
         }
