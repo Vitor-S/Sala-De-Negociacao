@@ -137,9 +137,22 @@ export const StyledCalendar = styled.div`
     }
     
     .calendar-days{
+        height: calc(100% - 120px);
         display: grid;
-        /* grid-template-rows: 5fr; */
         grid-template-columns: repeat(7, 1fr);
+
+        .view-mettings-button-container{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 320px;
+            background-color: #1E88E5;
+
+            .view-mettings-button{
+                gap: 15px;
+                color: #FFF;
+            }
+        }
         
         div{
             text-align: center;
@@ -317,6 +330,7 @@ export const StyledHeader = styled.div`
 `
 
 export const StyledViewMeetings = styled.div`
+
     max-height: 100%;
     display: flex;
     flex-direction: column;
@@ -325,17 +339,21 @@ export const StyledViewMeetings = styled.div`
     width: 100%;
     min-height: 100%;
     overflow-y: scroll;
+    background-color: #1E88E5;
 `
 
 export const StyledMeetingCard = styled.div`
     width: calc(100% - 40px);
+    max-width: 350px;
     padding: 15px 20px 20px 20px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     text-align: center;
-    border-bottom :1px solid #000;
+    border-bottom :1px solid #fff;
     transition: 0.3s ease-out;
+    word-break: break-all;
+    color: #fff;
 
     &:hover{
         cursor: pointer;

@@ -12,28 +12,31 @@ import TrendingFlatIcon from '@mui/icons-material/TrendingFlat';
 import Chip from '@mui/material/Chip';
 import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 import { StyledCalendar, StyledCalendarBack, StyledMeetingCard, StyledViewMeetings } from '../styles/components-styles'
-import { Api, db } from '../service/Api';
 
 import { useForm } from 'react-hook-form'
 
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection, where } from 'firebase/firestore';
+import myApi from '../service/myApi';
+import { db } from '../service/myFirebaseConfig';
 
 
 export default function Calendar({ userLoggedId, profileOwner, disabled }) {
 
     const [userLoggedData, setUserLoggedData] = useState()
-
-    useEffect(() => {
-        Api.getDocById(userLoggedId, setUserLoggedData)
-    }, [])
-
-
-    const [date, setDate] = useState(new Date())
     const [visibleFront, setVisibleFront] = useState(true)
     const [dayClicked, setDayClicked] = useState()
 
+    useEffect(() => {
+        (async () => {
+            const doc = await myApi.getDocById('users', userLoggedId)
+            setUserLoggedData(doc)
+        })()
+    }, [])
+    
+    const [date, setDate] = useState(new Date())
     const today = new Date()
 
     function getDaysInMonth(month, year) {
@@ -93,9 +96,13 @@ export default function Calendar({ userLoggedId, profileOwner, disabled }) {
                                 <ArrowBackIosNewIcon fontSize='small' />
                             </button>
                             <button onClick={() => setDate(new Date())} className="back_today">Hoje</button>
-                            <span>
-                                {captalize(date.toLocaleString('default', { month: 'long' }))} {date.getFullYear()}
-                            </span>
+                            {
+                                userLoggedData && userLoggedId == profileOwner.id ?
+                                    <span>Reuniões de {userLoggedData.name}</span> :
+                                    <span>
+                                        {captalize(date.toLocaleString('default', { month: 'long' }))} {date.getFullYear()}
+                                    </span> 
+                            }
                             <button className='arrow' onClick={handleNextMonth}>
                                 <ArrowForwardIosIcon fontSize='small' />
                             </button>
@@ -110,14 +117,24 @@ export default function Calendar({ userLoggedId, profileOwner, disabled }) {
                             <div>Sab</div>
                         </div>
                         <div className="calendar-days">
-                            {days}
+                            {
+                                userLoggedId == profileOwner.id ?
+                                    <div className='view-mettings-button-container'>
+                                        <Button onClick={() => setVisibleFront(false)}
+                                            className='view-mettings-button' 
+                                            variant='contained' >
+                                            <VisibilityIcon /> Ver Reuniões
+                                        </Button>
+                                    </div>
+                                    : days
+                            }
                         </div>
                     </>
                 ) : <CalendarBack
-                        setVerse={setVisibleFront}
-                        day={dayClicked}
-                        sender={userLoggedData}
-                        receiver={profileOwner} />
+                    setVerse={setVisibleFront}
+                    day={dayClicked || today}
+                    sender={userLoggedData || ''}
+                    receiver={profileOwner || ''} />
             }
         </StyledCalendar>
     )
@@ -154,19 +171,19 @@ export function CalendarBack({ setVerse, day, sender, receiver }) {
                 </div>
                 <div className="calendarback-options">
 
-                    <Button 
+                    <Button
                         startIcon={<ArrowBackIosNewIcon fontSize='small' />}
-                        className="back" 
+                        className="back"
                         onClick={() => setVerse(true)}>
-                            Voltar
+                        Voltar
                     </Button>
                     {
                         sender.id != receiver.id ?
-                            <Button 
+                            <Button
                                 startIcon={<EventAvailableIcon />}
-                                className="add-event" 
+                                className="add-event"
                                 type='submit'>
-                                    Enviar
+                                Enviar
                             </Button> : null
                     }
                 </div>
@@ -210,38 +227,42 @@ export function ViewMeetings({ userLoggedId }) {
     const [myMeetings, setMyMeetings] = useState()
 
     useEffect(() => {
-        Api.getReceivedMeetings('meetings', userLoggedId, setMyMeetings)
+        (async () => {
+            const data = await myApi.getMultiples('meetings',
+                [where('sender', '==', userLoggedId), where('receiver', '==', userLoggedId)], '||')
+            setMyMeetings(data)
+        })()
     }, [])
-
-    let meetingComponents = []
-
-    if(myMeetings != null){
-         myMeetings.forEach(meeting => meetingComponents.push(<MeetingCard data={meeting} />))
-    }
 
     return (
         <StyledViewMeetings>
-            {meetingComponents}
+            {
+                myMeetings ?
+                    myMeetings && myMeetings.map(meet => <MeetingCard data={meet} />) :
+                    <div>Você não possu i reuniões</div>
+            }
         </StyledViewMeetings>
     )
 }
 
-
 export function MeetingCard({ data }) {
-
     const [senderData, setSenderData] = useState()
     const [receiverData, setReceiverData] = useState()
 
     useEffect(() => {
-        Api.getDocById(data.sender, setSenderData)
-        Api.getDocById(data.receiver, setReceiverData)
+        (async () => {
+            const docSender = await myApi.getDocById('users', data.sender)
+            setSenderData(docSender)
+            const docReceiver = await myApi.getDocById('users', data.receiver)
+            setReceiverData(docReceiver)
+        })()
     }, [])
 
     return (
         <>
             {
-                typeof senderData != 'undefined' ? 
-                <StyledMeetingCard>
+                senderData && receiverData ?
+                    <StyledMeetingCard>
                         <div>Solicitante: {senderData.name} {senderData.surname}</div>
                         <div>Destinatário: {receiverData.name} {receiverData.surname}</div>
                         <span>Data da reunião: {data.date.day}/{data.date.month}/{data.date.year}</span>
@@ -249,7 +270,7 @@ export function MeetingCard({ data }) {
                         <div>Mensagem: </div>
                         <span className='meeting-message'>{data.message}</span>
 
-                </StyledMeetingCard> : null
+                    </StyledMeetingCard> : null
             }
         </>
     )

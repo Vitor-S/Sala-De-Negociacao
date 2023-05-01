@@ -27,7 +27,7 @@ export default function Profile() {
 
     //usuário logado(currentUser)
     const [userLogged, setUserLogged] = useState()
-    
+
     //dados do usuário logado
     const [userLoggedData, setUserLoggedData] = useState()
 
@@ -47,7 +47,7 @@ export default function Profile() {
     useEffect(() => {
         auth.onAuthStateChanged((userLogged) => {
             setUserLogged(userLogged);
-            (async() => {
+            (async () => {
                 const data = await myApi.getDocById('users', userLogged.uid)
                 setUserLoggedData(data)
             })()
@@ -57,7 +57,7 @@ export default function Profile() {
     useEffect(() => {
         (async () => {
             const imgUrl = await myApi.getImage('images', userId.id)
-            if(imgUrl) setPictureUrl(imgUrl)
+            if (imgUrl) setPictureUrl(imgUrl)
         })()
     }, [userId])
 
@@ -85,9 +85,9 @@ export default function Profile() {
                                 </IconButton> : null
                         }
                         {
-                            pictureUrl ? 
-                            <img src={pictureUrl} alt="foto de perfil" className="profile-picture"/> :
-                            <img src='https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png' alt="foto de perfil" className="profile-picture"/>
+                            pictureUrl ?
+                                <img src={pictureUrl} alt="foto de perfil" className="profile-picture" /> :
+                                <img src='https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png' alt="foto de perfil" className="profile-picture" />
                         }
                         <h2>{`${user.name} ${user.surname}`}</h2>
                         <h3>Fornecedor de {user.area}</h3>
@@ -98,7 +98,7 @@ export default function Profile() {
                         <div className="social-medias">
                             <IconButton
                                 onClick={() => navigate(`/chat?logged=${userLogged.uid}&receiver=${user.id}`)}>
-                                <ChatIcon fontSize='large' style={{color: '#0048ff'}} />
+                                <ChatIcon fontSize='large' style={{ color: '#0048ff' }} />
                             </IconButton>
                             <IconButton onClick={() =>
                                 window.location.href = "mailto:" + user.email
@@ -108,10 +108,10 @@ export default function Profile() {
                             <IconButton onClick={() =>
                                 window.open(`https://api.whatsapp.com/send?phone=${user.phone}`, '_blank')
                             }>
-                                <WhatsAppIcon fontSize='large' style={{color: '#2dfc68'}} />
+                                <WhatsAppIcon fontSize='large' style={{ color: '#2dfc68' }} />
                             </IconButton>
                             <IconButton onClick={handleLocationClick}>
-                                <LocationOnIcon fontSize='large' style={{color: '#ff3a3a'}} />
+                                <LocationOnIcon fontSize='large' style={{ color: '#ff3a3a' }} />
                             </IconButton>
                         </div>
                     </div>
@@ -124,13 +124,13 @@ export default function Profile() {
                     }
                     <Calendar userLoggedId={userLogged.uid} profileOwner={user} />
                 </div>
-                {
-                    modalState ? <EditModal
-                        setModal={setModalState}
-                        profileOwnerId={userId.id}
-                        currentPicture={pictureUrl} /> : null
-                }
-            </div>
+                    {
+                        modalState ? <EditModal
+                            setModal={setModalState}
+                            profileOwnerId={userId.id}
+                            currentPicture={pictureUrl} /> : null
+                    }
+                </div>
         </StyledProfile>
     ) : null
 }
@@ -145,12 +145,12 @@ function EditModal({ setModal, profileOwnerId, currentPicture }) {
             setModal(false)
             window.location.reload()
         }
-    }    
+    }
 
     useEffect(() => {
         (async () => {
             const imgUrl = await myApi.getImage('images', profileOwnerId)
-            if(imgUrl) setImageUrl(imgUrl)
+            if (imgUrl) setImageUrl(imgUrl)
         })()
     }, [profileOwnerId])
 
@@ -158,20 +158,20 @@ function EditModal({ setModal, profileOwnerId, currentPicture }) {
         <StyledEditModal className='modal-wrapper' onClick={handleCloseModal}>
             <div className="modal-container">
                 <h2>Atualize seus dados</h2>
-                <form 
-                    className="edit-picture" 
+                <form
+                    className="edit-picture"
                     onSubmit={async ev => await myApi.setImage(ev, setProgress, setImageUrl, 'images', profileOwnerId)}>
-                        <label for="teste">
-                            {
-                                imageUrl ? <img src={imageUrl} alt="" className="profile-picture"/>:
-                                <img src='https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png' alt="foto de perfil" className="profile-picture"/>
-                            }
-                            
-                        </label>
-                        <input type="file" id='teste'/>
-                        <Button type='submit' color="primary">
-                            Salvar Foto
-                        </Button>
+                    <label for="teste">
+                        {
+                            imageUrl ? <img src={imageUrl} alt="" className="profile-picture" /> :
+                                <img src='https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png' alt="foto de perfil" className="profile-picture" />
+                        }
+
+                    </label>
+                    <input type="file" id='teste' />
+                    <Button type='submit' color="primary">
+                        Salvar Foto
+                    </Button>
                 </form>
                 <div className="edit-1">
                     <TextField fullWidth label='Nome' />
@@ -188,11 +188,11 @@ function EditModal({ setModal, profileOwnerId, currentPicture }) {
                     <TextField fullWidth label='Rua' />
                 </div>
                 <div className="edit-options">
-                    <Button 
+                    <Button
                         onClick={ev => {
                             setModal(false)
                             window.location.reload()
-                        }} 
+                        }}
                         variant="outlined" color="error">
                         Voltar
                     </Button>

@@ -9,12 +9,12 @@ import Button from '@mui/material/Button'
 import { motion } from 'framer-motion'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import HandshakeIcon from '@mui/icons-material/Handshake';
 
 import myApi from '../service/myApi'
 import { db } from '../service/myFirebaseConfig'
 import { doc, collection, addDoc, query, orderBy, onSnapshot } from 'firebase/firestore'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import HandshakeIcon from '@mui/icons-material/Handshake';
 
 export default function Chat() {
 
