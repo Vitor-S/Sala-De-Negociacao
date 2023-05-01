@@ -157,6 +157,11 @@ export const StyledHome = styled.div`
                 button{
                     width: 40%;
                     min-height: 50px;
+                    background-color: #fc874c;
+                    color: #000;
+                    font-weight: bold;
+                    font-size: 1.2;
+                    margin: 15px 0;
                 }
             }
 
@@ -170,7 +175,49 @@ export const StyledHome = styled.div`
         }
     }
 
-    @media(max-width: 1020px){
+    .tips-container{
+        display: flex;
+        max-width: 90%;
+        gap: 40px;
+
+        .tip-bg{
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: lightgreen;
+            opacity: 0.1;
+            border-radius: 10px;
+        }
+
+        .tip{
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            /* width: 100%; */
+            height: 100%;
+            min-height: 400px;
+            padding: 30px;
+            color: #fff;
+            gap: 30px;
+
+            .tip-title{
+                flex: 1;
+                font-size: 3em;
+            }
+
+            .tip-text{
+                flex: 2.5;
+                font-size: 1.25em;
+                text-align: start;
+                line-height: 27px;
+            }
+        }
+    }
+
+    @media(max-width: 1200px){
         .section-central{
             width: 100%;
         }
@@ -189,6 +236,10 @@ export const StyledHome = styled.div`
             button{
                 min-width: 100%;
             }
+        }
+
+        .tips-container{
+            flex-direction: column;
         }
     }
 
@@ -215,6 +266,14 @@ export const StyledHome = styled.div`
             button{
                 min-width: 100%;
             }
+        }
+
+        .tip-title{
+            font-size: 2em !important;
+        }
+
+        .tip-subtext{
+            font-size: 1.1em !important;
         }
     }
 `
