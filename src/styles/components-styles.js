@@ -469,3 +469,34 @@ export const PopupStyle = styled(motion.div)`
         height: 50%;
     }
 `
+
+export const StyledLoading = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: ${middle};
+    color: #FFF;
+    z-index: 200;
+
+    .animation-container{
+        position: relative;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        width: 8%;
+    }
+
+    span{
+        width: 15px;
+        height: 15px;
+        background-color: #FFF;
+        border-radius: 50%;
+    }
+`

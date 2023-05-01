@@ -6,6 +6,7 @@ import HandshakeIcon from '@mui/icons-material/Handshake';
 import Button from '@mui/material/Button'
 import { motion } from 'framer-motion'
 import MenuIcon from '@mui/icons-material/Menu';
+import Loading from './Loading';
 
 import myApi from '../service/myApi';
 import { auth } from '../service/myFirebaseConfig';
@@ -61,6 +62,5 @@ export default function Header() {
                 </motion.div> : null
             }
         </StyledHeader>
-
-    ) : null
+    ) : <Loading/>
 }

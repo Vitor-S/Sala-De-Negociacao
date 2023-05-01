@@ -15,6 +15,7 @@ import { IconButton } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import Header from '../components/Header'
 import ChatIcon from '@mui/icons-material/Chat';
+import Loading from '../components/Loading';
 
 import { useNavigate, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
@@ -156,7 +157,7 @@ export default function Profile() {
                 }
             </div>
         </StyledProfile>
-    ) : null
+    ) :  <Loading />
 }
 
 function EditModal({ setModal, profileOwnerId }) {

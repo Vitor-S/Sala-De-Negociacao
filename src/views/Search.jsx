@@ -13,6 +13,7 @@ import { Autocomplete, Button } from '@mui/material'
 
 //styled
 import { StyledSearch } from '../styles/styles'
+import Loading from '../components/Loading'
 
 export default function Search() {
     const navigate = useNavigate()
@@ -76,7 +77,7 @@ export default function Search() {
         })()
     }, [])
 
-    return (
+    return currentData ? (
         <StyledSearch>
             <Header />
             <div className="search-body">
@@ -174,5 +175,5 @@ export default function Search() {
                 </div>
             </div>
         </StyledSearch>
-    )
+    ) : <Loading/>
 }

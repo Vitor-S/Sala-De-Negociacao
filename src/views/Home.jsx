@@ -1,12 +1,12 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import errorManager from '../utils/errorManager'
 
 //components
 import Header from '../components/Header'
 import { useNavigate } from 'react-router-dom'
 import image1 from '../assets/section1.png'
 import { Button } from '@mui/material'
+import Loading from '../components/Loading'
 
 //styles
 import { StyledHome } from '../styles/styles'

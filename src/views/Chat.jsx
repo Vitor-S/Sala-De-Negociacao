@@ -177,15 +177,15 @@ function ContactManager({ userLoggedId }) {
         return unsubscribe
     }, [])
 
-    return connections == undefined ?
+    return connections == undefined ? 
         <div className='left'
             style={{
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
                 fontStyle: 'italic'
-            }} />
-        :
+            }} 
+        /> :
         <div className='left'>
             {
                 connections && connections.map(con =>
