@@ -84,7 +84,6 @@ export const StyledLogin = styled.div`
         .form-container{
             flex: 1;
             background-color: #fff;
-            padding: 20px 0;
 
             form{
                 height: 100%;
@@ -106,6 +105,7 @@ export const StyledLogin = styled.div`
     @media (max-width: 1100px) {
         .form-wrapper{
             width: 95%;
+            height: 80%;
 
             .form-bg{
                 display: none;
