@@ -459,6 +459,7 @@ export const PopupStyle = styled(motion.div)`
     background-color: #FFF;
     border-radius: 10px;
     z-index: 100;
+    min-height: 300px;
 
     -webkit-box-shadow: 0px 0px 50px 0px rgba(11,7,89,1); 
     -moz-box-shadow: 0px 0px 50px 0px rgba(11,7,89,1); 
@@ -478,5 +479,6 @@ export const PopupStyle = styled(motion.div)`
 
     @media(max-width: 700px){
         width: 80%;
+        height: 50%;
     }
 `
