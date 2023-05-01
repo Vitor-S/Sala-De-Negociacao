@@ -263,11 +263,11 @@ const myApi = {
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
-                alert("Algo deu errado" + ' ' + errorMessage)
+                alert("Algo deu errado" +' '+ errorMessage)
             });
     },
 
-    clearPhotoUrl: async () => {
+    clearPhotoUrl: async() => {
         const desertRef = ref(storage, `images/${auth.currentUser.uid}`);
 
         // Delete the file
@@ -275,6 +275,15 @@ const myApi = {
             // File deleted successfully
             alert('Foto removida, atualize a página')
         })
+
+        const userData = await myApi.getDocById('users', auth.currentUser.uid)
+        userData.PhotoUrl = ''
+
+        try {
+            await setDoc(doc(db, 'users', auth.currentUser.uid), userData)
+        } catch (error) {
+            alert(error)
+        }
     }
 }
 

@@ -154,7 +154,7 @@ function ChatHeader({ data }) {
     return data ? (
         <StyledChatHeader initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             {
-                data.PhotoUrl ? <img src={data.PhotoUrl}/> : <img src="https://unicerrado.edu.br/wp-content/uploads/placeholder-unicerrado-redondo.png" alt="" />
+                data.PhotoUrl != '' ? <img src={data.PhotoUrl}/> : <img src="https://unicerrado.edu.br/wp-content/uploads/placeholder-unicerrado-redondo.png" alt="" />
             }
             
             <h3>{data.name + ' ' + data.surname}</h3>
