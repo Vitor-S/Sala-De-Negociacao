@@ -325,7 +325,6 @@ export const StyledSearch = styled.div`
 `
 
 export const StyledProfile = styled.div`
-    @import url('https://fonts.googleapis.com/css2?family=Dosis&display=swap');
  
     width: 100vw;
     height: 100vh;

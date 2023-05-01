@@ -8,8 +8,6 @@ const middle_purple = '#4B31DE'
 const shadow = '-webkit-box-shadow: 0px 0px 4px 0px rgba(11,7,89,1); -moz-box-shadow: 0px 0px 19px 0px rgba(11,7,89,1); box-shadow: 0px 0px 4px 0px rgba(11,7,89,1);'
 
 export const StyledCard = styled.div`
-    @import url('https://fonts.googleapis.com/css?family=Dosis');
-
     width: 30%;
     min-width: 222px;
     height: 150px;
@@ -52,7 +50,6 @@ export const StyledCard = styled.div`
             height: 100%;
     
             h3, span{
-                font-family: 'Dosis';
                 font-size: 1.5rem;
                 text-align: center;
             }
@@ -70,14 +67,13 @@ export const StyledCard = styled.div`
 `
 
 export const StyledCalendar = styled.div`
-    @import url('https://fonts.googleapis.com/css?family=Dosis');
 
     -webkit-box-shadow: 0px 0px 10px 1px rgba(0,0,0,0.75);
     -moz-box-shadow: 0px 0px 10px 1px rgba(0,0,0,0.75);
     box-shadow: 0px 0px 10px 1px rgba(0,0,0,0.75);
     height: 430px;
     width: 350px;
-
+    font-family: 'Dosis', sans-serif;
     background-color: #fff;
 
     .calendar-header{
@@ -108,7 +104,7 @@ export const StyledCalendar = styled.div`
 
         .back_today{
             font-size: .95rem;
-            font-family: 'Dosis';
+            font-family: 'Dosis', sans-serif;
         }
 
         span{
@@ -116,7 +112,7 @@ export const StyledCalendar = styled.div`
             justify-content: center;
             align-items: center;
             min-width: 55%;
-            font-family: 'Dosis';
+            font-family: 'Dosis', sans-serif;
         }
     }
 
@@ -131,13 +127,13 @@ export const StyledCalendar = styled.div`
         div{
             text-align: center;
             padding: 5px 8px;
-            font-size: 1.1rem;
-            font-family: 'Dosis';            
+            font-size: 1.1rem;      
+            font-family: 'Dosis', sans-serif;     
         }
     }
     
     .calendar-days{
-        height: calc(100% - 120px);
+        height: calc(100% - 119px);
         display: grid;
         grid-template-columns: repeat(7, 1fr);
 
@@ -158,13 +154,12 @@ export const StyledCalendar = styled.div`
             text-align: center;
             padding: 12px 15px;
             font-size: 1.1rem;
-            font-family: 'Dosis';
+            font-family: 'Dosis', sans-serif;
         }
     }
 `
 
 export const StyledCalendarBack = styled.div`
-    @import url('https://fonts.googleapis.com/css?family=Dosis');
 
     -webkit-box-shadow: 0px 0px 48px 2px rgba(0,0,0,0.75);
     -moz-box-shadow: 0px 0px 48px 2px rgba(0,0,0,0.75);
@@ -182,7 +177,6 @@ export const StyledCalendarBack = styled.div`
         height: 80px;
         background-color: #1E88E5;
         color: #FFF;
-        font-family: 'Dosis';
         font-size: 1.3rem;
     }
 
@@ -231,8 +225,6 @@ export const StyledCalendarBack = styled.div`
                 gap: 10px;
                 padding-bottom: 10px;
             }
-
-            font-family: 'Dosis';
         }
 
         .message{
@@ -242,7 +234,6 @@ export const StyledCalendarBack = styled.div`
 `
 
 export const StyledHeader = styled.div`
-    @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&display=swap');
     position: relative;
     display: flex;
     min-height: 65px;
@@ -257,9 +248,9 @@ export const StyledHeader = styled.div`
         gap: 5%;
 
         span{
-            font-family: 'Dancing Script', cursive;
-            font-size: 1.4rem;
+            font-size: 1.7rem;
             color: #fff;
+            font-family: 'Dancing Script', cursive;
         }
     }
 
@@ -276,6 +267,7 @@ export const StyledHeader = styled.div`
         color: #fff;
         text-decoration: none;
         font-size: 1.3rem;
+        font-family: 'Dosis', sans-serif;
 
         &:hover{
             cursor: pointer;
@@ -404,11 +396,9 @@ export const StyledContactCard = styled(motion.div)`
 
         h3{
             font-size: 1.4em;
-            font-family: 'Dosis';
         }
         
         .message-date{
-            font-family: 'Dosis';
             position: absolute;
             top: 10px;
             right: 10px;
@@ -437,7 +427,6 @@ export const StyledChatHeader = styled(motion.div)`
     }
 
     h3{
-        font-family: 'Dosis';
         font-size: 1.4em;
     }
 
