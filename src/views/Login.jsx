@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup';
 import { login_validation } from '../utils/yup'
@@ -6,8 +6,7 @@ import { login_validation } from '../utils/yup'
 //components and icons
 import { Button, TextField } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
-import GoogleIcon from '@mui/icons-material/Google';
-
+import Popup from '../components/Popup';
 //styles and assets
 import { StyledLogin } from '../styles/styles';
 import login_bg from '../assets/login-bg.png'
@@ -15,8 +14,10 @@ import login_bg from '../assets/login-bg.png'
 //service
 import myApi from '../service/myApi'
 
-export default function Login() {    
-    
+export default function Login() {
+
+    const [popupState, setPopupState] = useState(false)
+
     const navigate = useNavigate()
 
     const { register, handleSubmit, formState: { errors } } = useForm({
@@ -54,9 +55,10 @@ export default function Login() {
                                 Entrar
                             </Button>
 
-                            {/* <Button onClick={() => Api.signInWithGooglePopup()} variant="outlined" startIcon={<GoogleIcon />}>
-                                Entrar com Google
-                            </Button> */}
+                            <Button variant="text" color="primary"
+                                onClick={() => setPopupState(!popupState)}>
+                                Esqueci minha senha
+                            </Button>
                         </div>
                         <div>
                             Crie já sua conta ! <Link to='/register'>Registre-se</Link>
@@ -64,6 +66,32 @@ export default function Login() {
                     </form>
                 </div>
             </div>
+            <Popup state={popupState} setState={setPopupState}>
+                <form className='children-container' onSubmit={(ev) => {
+                    ev.preventDefault();
+                    const formData = new FormData(ev.target);
+                    const email = formData.get('email');
+                    myApi.resetPassword(email)
+                }}>
+                    <TextField name="email" label="Digite seu Email" />
+                    <Button
+                        type="submit"
+                        sx={{ height: '50px' }}
+                        variant="outlined"
+                        color="primary"
+                    >
+                        Recuperar Email
+                    </Button>
+                    <Button
+                        sx={{ height: '50px' }}
+                        className='close-popup-button'
+                        variant="outlined" color="error"
+                        onClick={() => setPopupState(false)}
+                    >
+                        Fechar
+                    </Button>
+                </form>
+            </Popup>
         </StyledLogin>
     )
 }

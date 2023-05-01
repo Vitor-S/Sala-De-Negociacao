@@ -448,3 +448,35 @@ export const StyledChatHeader = styled(motion.div)`
         height: 50px;
     }
 `
+
+export const PopupStyle = styled(motion.div)`
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30%;
+    height: 40%;
+    background-color: #FFF;
+    border-radius: 10px;
+    z-index: 100;
+
+    -webkit-box-shadow: 0px 0px 50px 0px rgba(11,7,89,1); 
+    -moz-box-shadow: 0px 0px 50px 0px rgba(11,7,89,1); 
+    box-shadow: 0px 0px 50px 0px rgba(11,7,89,1);
+
+    .children-container{
+        width: 70%;
+        height: 70%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+    }
+    
+     @media(max-width: 1150px){
+        width: 50%;
+    }
+
+    @media(max-width: 700px){
+        width: 80%;
+    }
+`

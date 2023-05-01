@@ -15,7 +15,7 @@ export const StyledRegister = styled.div`
     padding: 20px;
 
     .container{
-        width: 80%;
+        width: 70%;
         background-color: #fff;
 
         display: flex;

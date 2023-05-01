@@ -1,8 +1,9 @@
 import { db, auth, storage } from './myFirebaseConfig'
 
 import { doc, getDoc, getDocs, setDoc, collection, query } from 'firebase/firestore'
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail } from 'firebase/auth'
 import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage'
+
 
 const myApi = {
     createUserDocumentFromAuth: async (userAuth, data) => {
@@ -253,6 +254,18 @@ const myApi = {
             return user[attribute]
         })
         return areas
+    },
+
+    resetPassword: (email) => {
+        sendPasswordResetEmail(auth, email)
+            .then(() => {
+                alert("Verifique seu email")
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                alert("Algo deu errado" +' '+ errorMessage)
+            });
     }
 }
 
