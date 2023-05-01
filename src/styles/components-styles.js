@@ -242,9 +242,7 @@ export const StyledCalendarBack = styled.div`
 `
 
 export const StyledHeader = styled.div`
-    @import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&display=swap');
-    @import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&family=Dancing+Script&display=swap');
-
+    @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&display=swap');
     position: relative;
     display: flex;
     min-height: 65px;
@@ -259,7 +257,7 @@ export const StyledHeader = styled.div`
         gap: 5%;
 
         span{
-            font-family: 'Dancing Script', cursive;
+            font-family: 'Dancing Script';
             font-size: 1.4rem;
             color: #fff;
         }
@@ -277,7 +275,6 @@ export const StyledHeader = styled.div`
     a{
         color: #fff;
         text-decoration: none;
-        font-family: 'Dosis';
         font-size: 1.3rem;
 
         &:hover{

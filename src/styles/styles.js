@@ -144,7 +144,7 @@ export const StyledHome = styled.div`
                 height: 45%;
 
                 span, p, a{
-                    font-family: 'Dosis', sans-serif;
+                    
                 }
 
                 span{
@@ -256,7 +256,7 @@ export const StyledSearch = styled.div`
                     justify-content: space-between;
 
                     button{
-                        font-family: 'Dosis';
+                        
                         font-size: 1rem;
                         padding: 0;
                     }
@@ -309,7 +309,7 @@ export const StyledSearch = styled.div`
 
                         button{
                             width: 130px;
-                            font-family: 'Dosis';
+                            
                             font-size: 1rem;
                             padding: 0;
                         }
@@ -392,13 +392,13 @@ export const StyledProfile = styled.div`
 
             h2{
                 text-align: center;
-                font-family: 'Dosis';
+                
                 font-size: 2rem;
             }
             
             h3{
                 text-align: center;
-                font-family: 'Dosis';
+                
                 font-size: 1.5rem;
             }
         }
@@ -416,7 +416,7 @@ export const StyledProfile = styled.div`
 
             h2{
                 color: #FFF;
-                font-family: 'Dosis';
+                
                 font-size: 1.6rem;
                 text-align: center;
             }
@@ -479,7 +479,7 @@ export const StyledEditModal = styled.div`
         h2{
             text-align: center;
             grid-column: span 3;
-            font-family: 'Dosis';
+            
             font-size: 2em;
         }
 
@@ -608,7 +608,7 @@ export const StyledChat = styled.div`
     }
 
     a{
-        font-family: 'Dosis';
+        
         font-size: 1.3em;
         text-decoration: none;
         color: ${middle};
@@ -646,4 +646,33 @@ export const StyledChat = styled.div`
             }
         }
     }    
+`
+
+export const StyledError = styled.div`
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #fe6969;
+    overflow: hidden;
+
+    h3{
+        position: absolute;
+        top: 0;
+        text-align: center;
+        padding: 20px;
+    }
+
+    img{
+        width: 35vw;
+        max-width: 560px;
+    }
+
+    @media(max-width: 800px){
+        img{
+            width: 70vw;
+        }
+    }
 `
