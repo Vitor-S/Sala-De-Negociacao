@@ -120,7 +120,7 @@ export const StyledHome = styled.div`
         justify-content: center;
         align-items: center;
         width: 100vw;
-        height: calc(100vh - 65px);
+        min-height: 100vh;
         background-color: #4A59E0;
 
         .section-central{
@@ -156,7 +156,7 @@ export const StyledHome = styled.div`
 
                 button{
                     width: 40%;
-                    height: 50px;
+                    min-height: 50px;
                 }
             }
 
