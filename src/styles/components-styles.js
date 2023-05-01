@@ -257,7 +257,7 @@ export const StyledHeader = styled.div`
         gap: 5%;
 
         span{
-            font-family: 'Dancing Script';
+            font-family: 'Dancing Script', cursive;
             font-size: 1.4rem;
             color: #fff;
         }
