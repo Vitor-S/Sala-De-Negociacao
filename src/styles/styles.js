@@ -105,7 +105,7 @@ export const StyledLogin = styled.div`
     @media (max-width: 1100px) {
         .form-wrapper{
             width: 95%;
-            height: 80%;
+            height: 72%;
 
             .form-bg{
                 display: none;
