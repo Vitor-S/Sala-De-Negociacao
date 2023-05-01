@@ -158,7 +158,10 @@ export default function Search() {
                             <Button
                                 fullWidth
                                 color="primary"
-                                onClick={applyFilters}>
+                                onClick={() => {
+                                    applyFilters()
+                                    console.log(currentData)
+                                }}>
                                 Aplicar Filtros
                             </Button>
                         </div>
@@ -166,8 +169,7 @@ export default function Search() {
                 </div>
                 <div className="search-results">
                     {
-                        typeof currentData != 'undefined' &&
-                        currentData.map(user => <Card key={user.id} user={user} />)
+                        currentData && currentData.map(user => <Card key={user.id} user={user} />)
                     }
                 </div>
             </div>

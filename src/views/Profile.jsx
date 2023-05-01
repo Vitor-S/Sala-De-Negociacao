@@ -152,7 +152,7 @@ function EditModal({ setModal, profileOwnerId, currentPicture }) {
             const imgUrl = await myApi.getImage('images', profileOwnerId)
             if (imgUrl) setImageUrl(imgUrl)
         })()
-    }, [profileOwnerId])
+    }, [profileOwnerId, progress])
 
     return (
         <StyledEditModal className='modal-wrapper' onClick={handleCloseModal}>
@@ -161,16 +161,18 @@ function EditModal({ setModal, profileOwnerId, currentPicture }) {
                 <form
                     className="edit-picture"
                     onSubmit={async ev => await myApi.setImage(ev, setProgress, setImageUrl, 'images', profileOwnerId)}>
-                    <label for="teste">
+                    <label htmlFor="teste">
                         {
                             imageUrl ? <img src={imageUrl} alt="" className="profile-picture" /> :
                                 <img src='https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png' alt="foto de perfil" className="profile-picture" />
                         }
-
                     </label>
                     <input type="file" id='teste' />
                     <Button type='submit' color="primary">
                         Salvar Foto
+                    </Button>
+                    <Button type='submit' color="error" onClick={() => myApi.clearPhotoUrl()}>
+                        Remover Foto
                     </Button>
                 </form>
                 <div className="edit-1">

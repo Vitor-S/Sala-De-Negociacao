@@ -2,7 +2,7 @@ import { db, auth, storage } from './myFirebaseConfig'
 
 import { doc, getDoc, getDocs, setDoc, collection, query } from 'firebase/firestore'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail } from 'firebase/auth'
-import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage'
+import { ref, getDownloadURL, uploadBytesResumable, deleteObject } from 'firebase/storage'
 
 
 const myApi = {
@@ -93,7 +93,6 @@ const myApi = {
 
         try {
             await setDoc(userDocRef, userSnapShot)
-            console.log('ok')
         } catch (error) {
             alert(error)
         }
@@ -264,8 +263,18 @@ const myApi = {
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
-                alert("Algo deu errado" +' '+ errorMessage)
+                alert("Algo deu errado" + ' ' + errorMessage)
             });
+    },
+
+    clearPhotoUrl: async () => {
+        const desertRef = ref(storage, `images/${auth.currentUser.uid}`);
+
+        // Delete the file
+        deleteObject(desertRef).then(() => {
+            // File deleted successfully
+            alert('Foto removida, atualize a página')
+        })
     }
 }
 
