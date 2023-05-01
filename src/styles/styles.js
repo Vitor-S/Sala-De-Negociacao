@@ -158,7 +158,7 @@ export const StyledHome = styled.div`
                     width: 40%;
                     min-height: 50px;
                     background-color: #fc874c;
-                    color: #000;
+                    color: #fff;
                     font-weight: bold;
                     font-size: 1.2;
                     margin: 15px 0;
