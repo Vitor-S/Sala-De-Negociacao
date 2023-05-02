@@ -49,7 +49,7 @@ const myApi = {
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
-                alert(manager.Message(errorCode))
+                alert(errorMessage)
             });
     },
 

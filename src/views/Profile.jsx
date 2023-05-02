@@ -5,7 +5,7 @@ import { edit_data_validation } from '../utils/yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
 
-import { TextField, Button, Autocomplete }from '@mui/material';
+import { TextField, Button, Autocomplete } from '@mui/material';
 import { StyledProfile, StyledEditModal } from '../styles/styles'
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import Calendar from '../components/Calendar'
@@ -94,7 +94,13 @@ export default function Profile() {
                                 <img src='https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png' alt="foto de perfil" className="profile-picture" />
                         }
                         <h2>{`${user.name} ${user.surname}`}</h2>
-                        <h3>Fornecedor de {user.area}</h3>
+                        {
+                            user.supplier ? 
+                            <h3>Fornecedor(a) na área de {user.area}</h3> :
+                            <h3>Lojista na área de {user.area}</h3>
+
+                        }
+                        
                         <div className="locale">
                             <LocationOnIcon />
                             <span >{`${user.city} ${user.state}`}</span>
@@ -120,7 +126,7 @@ export default function Profile() {
                                         <IconButton onClick={handleLocationClick}>
                                             <LocationOnIcon fontSize='large' style={{ color: '#ff3a3a' }} />
                                         </IconButton>
-                                    </> : 
+                                    </> :
                                     <>
                                         <IconButton>
                                             <ChatIcon fontSize='large' style={{ color: '#0048ff' }} />
@@ -135,9 +141,7 @@ export default function Profile() {
                                             <LocationOnIcon fontSize='large' style={{ color: '#ff3a3a' }} />
                                         </IconButton>
                                     </>
-                                    
-
-                        }
+                            }
                         </div>
                     </div>
                 </div>
@@ -157,7 +161,7 @@ export default function Profile() {
                 }
             </div>
         </StyledProfile>
-    ) :  <Loading />
+    ) : <Loading />
 }
 
 function EditModal({ setModal, profileOwnerId }) {

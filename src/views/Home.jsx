@@ -6,10 +6,10 @@ import Header from '../components/Header'
 import { useNavigate } from 'react-router-dom'
 import image1 from '../assets/section1.png'
 import { Button } from '@mui/material'
-import Loading from '../components/Loading'
 
 //styles
 import { StyledHome } from '../styles/styles'
+import myApi from '../service/myApi'
 
 export default function Home() {
 
@@ -20,9 +20,9 @@ export default function Home() {
             <Header />
             <section>
                 <motion.div className="section-central"
-                    initial={{ opacity: 0 }} 
+                    initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{delay: 0.3}}>
+                    transition={{ delay: 0.3 }}>
                     <div className="section-info-container">
                         <div className='section-title'>Crie Sua </div>
                         <p className='section-subtext'>
