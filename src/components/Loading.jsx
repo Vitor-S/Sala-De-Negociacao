@@ -12,7 +12,7 @@ export default function Loading() {
         <StyledLoading>
             <h2>Carregando</h2>
             <motion.div className="animation-container">
-                <motion.span animate={{ x: [-15, 15, -15] }}
+                <motion.span animate={{ y: [-15, 15, -15] }}
                     transition={{ duration: .5, repeat: Infinity, ease: "easeInOut", delay: 0 }} />
             </motion.div>
         </StyledLoading>
