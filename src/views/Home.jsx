@@ -6,10 +6,10 @@ import Header from '../components/Header'
 import { useNavigate } from 'react-router-dom'
 import image1 from '../assets/section1.png'
 import { Button } from '@mui/material'
+import Footer from '../components/Footer'
 
 //styles
 import { StyledHome } from '../styles/styles'
-import myApi from '../service/myApi'
 
 export default function Home() {
 
@@ -72,6 +72,7 @@ export default function Home() {
                     </motion.div>
                 </div>
             </section>
+            <Footer />
         </StyledHome>
     )
 }

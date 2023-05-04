@@ -19,11 +19,11 @@ export default function Card({ user }) {
                 className='card-motion-container'
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                transition={{ type: 'spring', damping: 12, duration: 0.3 }}>
+                transition={{ duration: 0.3, ease: "easeOut" }}>
                 <div className="photo-container">
                     {
                         user.PhotoUrl ? <img src={user.PhotoUrl} /> :
-                        <img src="https://unicerrado.edu.br/wp-content/uploads/placeholder-unicerrado-redondo.png"/>
+                            <img src="https://unicerrado.edu.br/wp-content/uploads/placeholder-unicerrado-redondo.png" />
                     }
                 </div>
                 <div className="info-container">

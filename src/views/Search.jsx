@@ -45,6 +45,14 @@ export default function Search() {
 
     const clearFilters = async () => {
         const data = await myApi.getExcept('users')
+
+        setFirstName(undefined)
+        setSecondName(undefined)
+        setStatesFilter(undefined)
+        setSupplierFilter(undefined)
+        setCitiesFilter(undefined)
+        setAreasFilter(undefined)
+
         setCurrentData(data)
     }
 

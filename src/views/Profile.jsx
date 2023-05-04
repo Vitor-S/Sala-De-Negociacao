@@ -16,6 +16,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import Header from '../components/Header'
 import ChatIcon from '@mui/icons-material/Chat';
 import Loading from '../components/Loading';
+import Footer from '../components/Footer';
 
 import { useNavigate, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
@@ -36,7 +37,7 @@ export default function Profile() {
     const [userLoggedData, setUserLoggedData] = useState()
 
     //imagem do perfil atual
-    const [pictureUrl, setPictureUrl] = useState('')
+    const [pictureUrl, setPictureUrl] = useState("https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png")
 
     //id do dono da página vindo da URL
     const userId = useParams();
@@ -45,6 +46,13 @@ export default function Profile() {
         (async () => {
             const data = await myApi.getDocById('users', userId.id)
             setUser(data)
+
+            try {
+                const imgUrl = await myApi.getImage('images', userId.id)
+                setPictureUrl(imgUrl)
+            } catch {
+                setPictureUrl("https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png")
+            }
         })()
     }, [userId])
 
@@ -56,17 +64,12 @@ export default function Profile() {
                 setUserLoggedData(data)
             })()
         });
+
     }, [])
 
-    useEffect(() => {
-        (async () => {
-            const imgUrl = await myApi.getImage('images', userId.id)
-            if (imgUrl) setPictureUrl(imgUrl)
-        })()
-    }, [userId])
+    // console.log(pictureUrl)
 
     const handleLocationClick = () => {
-
         const destination = user.street.replaceAll(' ', '+') + '+' + user.city.replaceAll(' ', '+') + '+' + user.state.replaceAll(' ', '+')
 
         const origin = userLoggedData.street.replaceAll(' ', '+') + '+' + userLoggedData.city.replaceAll(' ', '+') + '+' + userLoggedData.state.replaceAll(' ', '+')
@@ -88,19 +91,16 @@ export default function Profile() {
                                     <EditIcon />
                                 </IconButton> : null
                         }
-                        {
-                            pictureUrl ?
-                                <img src={pictureUrl} alt="foto de perfil" className="profile-picture" /> :
-                                <img src='https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/1200px-Default_pfp.svg.png' alt="foto de perfil" className="profile-picture" />
-                        }
+                        <img src={pictureUrl} className="profile-picture" />
+
                         <h2>{`${user.name} ${user.surname}`}</h2>
                         {
-                            user.supplier ? 
-                            <h3>Fornecedor(a) na área de {user.area}</h3> :
-                            <h3>Lojista na área de {user.area}</h3>
+                            user.supplier ?
+                                <h3>Fornecedor(a) na área de {user.area}</h3> :
+                                <h3>Lojista na área de {user.area}</h3>
 
                         }
-                        
+
                         <div className="locale">
                             <LocationOnIcon />
                             <span >{`${user.city} ${user.state}`}</span>

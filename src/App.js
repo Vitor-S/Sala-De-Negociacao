@@ -10,6 +10,7 @@ import Search from './views/Search'
 import Profile from './views/Profile'
 import Error from './views/Error'
 import Chat from './views/Chat'
+import Footer from './components/Footer'
 
 export default function App() {
     return (

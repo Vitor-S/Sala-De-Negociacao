@@ -500,3 +500,83 @@ export const StyledLoading = styled.div`
         border-radius: 50%;
     }
 `
+
+export const StyledFooter = styled.footer`
+
+    span{
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .disabled{
+        color: #d6d6d6;
+    }
+
+    .link-hover:hover{
+        opacity: 0.8;
+        cursor: pointer;
+    }
+
+    .footer-info-container{
+        display: flex;
+
+        .company-info{
+            display: none;
+            gap: 10px;
+
+            p{
+                width: 50%;
+                text-align: center;
+                line-height: 20px;
+            }
+        }
+
+        .contacts{
+            span{
+                display: flex;
+                align-items: center;
+                text-decoration: none;
+                color: #fff;
+            }
+        }
+
+        .footer-container{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            flex: 1;
+            background-color: #2c38a3;
+            padding: 30px 0;
+            gap: 10px;
+            color: #fff;
+        }
+    }
+
+    .copyright-container{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
+        padding: 15px 0;
+        background-color: #1f2878;
+    }
+
+    @media(max-width: 1000px){
+        .company-info{
+            display: none !important;
+        }
+    }
+
+    @media(max-width: 450px){
+        
+        .footer-container{
+            padding: 15px 0;
+        }
+        
+        span{
+            font-size: 0.8em !important;
+        }
+    }
+`
