@@ -11,7 +11,7 @@ export default function Footer() {
     <StyledFooter>
         <div className="footer-info-container">
             <div className="footer-container company-info">
-                <h4>Informações da Empresa</h4>
+                <h4>Sobre nós</h4>
                 <p>
                     Sala de negociações é um projeto que visa agilizar o processo de contato entre lojistas e fornecedores.
                 </p>
